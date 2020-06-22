@@ -93,47 +93,8 @@
         </div> 
         <!-- /. solicitud-->  
         </div>   
-        <solicitudInf></solicitudInf>
-        <!--div class="col-sm-12">
-          <div class="card">
-            <div class="card-header"><i class="fa fa-align-justify"></i><strong>Información de la Solicitud</strong> 
-                <button type="button" data-toggle="modal" data-target="#modalInformacionSol" @click="abrirModalInfSol('solicitud','registrar')" class="btn btn-info pull-right" style="right:0;">
-                    <font bold>+ Nuevo</font>
-                </button>
-            </div> 
-            <div class="card-body">
-                <table class="table table-responsive-sm table-bordered table-striped table-sm">
-                <thead>
-                    <tr>                    
-                    <th>Cantidad</th>
-                    <th>Flujo de muestras</th>
-                    <th>Matriz</th>
-                    <th>Analito de interés</th>
-                    <th>Descripción de la procedencia</th>                            
-                    <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="solicitud in arrayinfoSolicitud" :key="solicitud.id">                                    
-                        <td v-text="solicitud.cantidad"></td>
-                        <td v-text="solicitud.flujo"></td>
-                        <td v-text="solicitud.matriz"></td>
-                        <td v-text="solicitud.analito"></td>
-                        <td v-text="solicitud.des_procedencia"></td>
-                        <td>                            
-                            <a href="#" data-toggle="modal" data-target="#modalInformacionSol" @click="abrirModalInfSol('solicitud','actualizar',solicitud)">
-                                <i class="fa fa-edit info" style="font-size: 23px"></i>
-                            </a>                            
-                            <a href="#" @click="eliminarInfSol(solicitud.id)">
-                                <i class="fa fa-trash" style="font-size: 23px"></i>
-                            </a>
-                        </td>                                    
-                     </tr>                                                                                   
-                </tbody>
-                </table>                
-           </div>
-          </div>
-        </div-->
+        <solicitudInf @resultadosInf="resultadoInforSol"></solicitudInf>
+       
         <div class="col-sm-12">
           <div class="card">
             <div class="card-header"><strong>Revisión de la oferta</strong></div>
@@ -419,6 +380,26 @@
             </div>       
         </div>
         </div>
+
+   <form method="post" action="{{url('send')}}">
+    {{ csrf_field() }}
+    <div class="form-group">
+     <label>Nombre</label>
+     <input type="text" name="name" class="form-control" value="" />
+    </div>
+    <div class="form-group">
+     <label> Email</label>
+     <input type="text" name="email" class="form-control" value="" />
+    </div>
+    <div class="form-group">
+     <label>Mensaje</label>
+     <textarea name="message" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+     <input type="submit" name="send" class="btn btn-info" value="Enviar" />
+    </div>
+   </form>
+        
         <div class="col-sm-12" style="justify-content: center;">        
             <button type="button" class="btn btn-secondary" @click="cerrarModal()"><font color="white">Cancelar</font></button>
             <!--button type="button" class="btn btn-primary" ><font color="white">Guardar Datos</font></button-->
@@ -698,6 +679,7 @@
                des_procedencia:'',
                idActualizar: -1,
                solicitud_id:0,
+               datosInformacionSol: [],
 
               //revision
                personal_capacitado:'',
@@ -798,7 +780,13 @@
             },
             
         },
+        //props: ['olicitudInf'],
         methods : {
+            resultadoInforSol(v){
+                this.datosInformacionSol = v;
+                console.log(this.datosInformacionSol);
+            },
+
             customFormatterRecom(date) {
                 return moment(date).format('D/MM/YYYY');
             },
@@ -810,9 +798,9 @@
             },
             customFormatterSolici(date) {
                 return moment(date).format('D/MM/YYYY');
-            },                      
+            }, 
+                                 
             listarSolNroRegistro(){
-                
                 let me=this;
                 var url= '/solicitudSolEnsayo/nroRegistro';
                 axios.get(url).then(function (response) {
@@ -829,33 +817,7 @@
                     console.log(error);
                 });
             },
-            /*crearInfSolicitud () {                
-                if (this.validarInfSolicitud()){
-                    return;
-                }
-
-                this.arrayinfoSolicitud.push({
-                    cantidad: this.cantidad,
-                    flujo: this.flujo,
-                    matriz: this.matriz,
-                    analito: this.analito,
-                    des_procedencia: this.des_procedencia
-                });
-                this.modal2=0;
-            },
-              actualizarInfSolicitud (idsolicitud) {
-                    if (this.validarInfSolicitud()){
-                        return;
-                    }                 
-                    this.idActualizar = idsolicitud;
-                    this.cantidad= this.cantidad;
-                    this.flujo= this.flujo;
-                    this.matriz= this.matriz;
-                    this.analito= this.analito;
-                    this.des_procedencia= this.des_procedencia;
-                    this.formActualizar = true;
-                    this.modal2=0;
-            },*/
+          
             crearResultados() {
                /* if (this.validarResultados()){
                     return;
@@ -1057,43 +1019,6 @@
                     }
                 }
             },
-
-            //crearInfSolicitud
-           /* abrirModalInfSol(modelo, accion, data = []){
-                switch(modelo){
-                    case "solicitud":
-                    {
-                        switch(accion){
-                            case 'registrar':
-                            {
-                                this.modal2 = 1;
-                                this.tituloModal = 'Registrar solicitud';
-                                    this.cantidad='';
-                                    this.matriz='';
-                                    this.analito='';
-                                    this.flujo='';
-                                    this.des_procedencia='';
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            {
-                                //console.log(data);
-                                this.modal2=1;
-                                this.tituloModal='Actualizar solicitud';
-                                this.tipoAccion=2;
-                                this.solicitud_id=data['id'];
-                                this.cantidad = data['cantidad'];
-                                this.matriz = data['matriz'];
-                                this.analito = data['analito'];
-                                this.flujo = data['flujo'];
-                                this.des_procedencia = data['des_procedencia'];
-                                break;
-                            }
-                        }
-                    }
-                }
-            },*/
                  
              //crear Resultados
             abrirModalResul(modelo, accion, data = []){
@@ -1386,41 +1311,47 @@
                 //this.registrarSolEnsayo();
                 console.log('registro ..  fin');
               },
-            registrarInfSolicitud (){
+            registrarInfSolicitud(){
+                console.log('entra..**************');
+
                 let me=this;
                 var url= '/solicitudSolEnsayo';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arraySolEnsayo = respuesta.solicitud_ensayo.data;
-                    console.log(me.arraySolEnsayo,'array...');
+                    console.log(me.arraySolEnsayo,'array...'); 
                     for (let i = 0; i < me.arraySolEnsayo.length; i++) { 
                         if (me.arraySolEnsayo[i].nro_registro == me.nro_registro) {
                             me.idSolEnsayo = me.arraySolEnsayo[i].id;
                             console.log(me.arraySolEnsayo[i].nro_registro,'nro registro');
                             console.log(me.idSolEnsayo,'id solensayo');
-                            axios.post('/solicitud/registrarInfSolicitud',{
-                                'idsol_ensayo': me.idSolEnsayo,
-                                'cantidad' : me.cantidad,
-                                'matriz' : me.matriz,
-                                'analito' : me.analito,
-                                'flujo': me.flujo,
-                                'des_procedencia': me.des_procedencia,
-                                'usr_id':1,
-
-                            }).then(function (response) {
-                                console.log(response,'response inf solicitud');
+                            for (let i = 0; i < me.datosInformacionSol.length; i++) {                               
+                                axios.post('/solicitud/registrarInfSolicitud',{
+                                    'idsol_ensayo': me.idSolEnsayo,
+                                    'cantidad' : me.datosInformacionSol[i].cantidad,
+                                    'matriz' : me.datosInformacionSol[i].matriz,
+                                    'analito' : me.datosInformacionSol[i].analito,
+                                    'flujo': me.datosInformacionSol[i].flujo,
+                                    'des_procedencia': me.datosInformacionSol[i].des_procedencia,
+                                    'usr_id':1,
+                                }).then(function (response) {
+                                    console.log(response,'response inf solicitud');
+                                    
+                                    me.registraDatos=1;
+                                // me.resetDatos();                                                                   
+                                }).catch(function (error) {
+                                    console.log(error);
+                                    me.popToastError();
+                                });
+                            }
+                            if (me.registraDatos == 1) {
                                 me.registrarRevision();
                                 me.registrarResultado();
                                 me.registrarRecomendaciones();
                                 me.registrarConformidad();
-                                me.registraDatos=1;
-                               // me.resetDatos();
                                 me.popToastReg();
-                               // location.reload();                                
-                            }).catch(function (error) {
-                                console.log(error);
-                                me.popToastError();
-                            });
+                                location.reload();
+                            }
                         }                                                                       
                     }               
                  }).catch(function (error) {
@@ -1515,7 +1446,7 @@
                 }).then(function (response) {
                     console.log(response,'response conformidad');
                    // me.listarsolicitud(1,'','codigo');
-                   location.reload();
+                  // location.reload();
                 }).catch(function (error) {
                     me.popToastError();
                     console.log(error);

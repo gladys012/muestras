@@ -104,6 +104,13 @@ Route::group(['middleware'=>['auth']],function(){
         Route::get('/solicitud', 'RecomendacionesController@index');
         Route::get('/solicitud/registrar', 'RecomendacionesController@store');
 
+        Route::get('/solicitud/solPdf/{nro_reg}', 'Unidad_SolicitanteController@solPdf')->name('solicitud.pdf');
+        // ruta de formulario
+        Route::get('/solicitud', 'EmailController@index');
+        // ruta al enviar correo
+        Route::post('/send', 'EmailController@send');
+
+
         Route::get('/solicitud', 'GlosaController@index');
         Route::get('/solicitud/registrar', 'GlosaController@store');
 
@@ -133,7 +140,6 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/sulfatos_turb/actualizar', 'Sulfatos_TurbController@update');
         Route::put('/sulfatos_turb/desactivar', 'Sulfatos_TurbController@desactivar');
         Route::put('/sulfatos_turb/activar', 'Sulfatos_TurbController@activar');
-
 
         Route::get('/sulfatos_grav', 'Sulfatos_GravController@index');
         Route::post('/sulfatos_grav/registrar', 'Sulfatos_GravController@store');

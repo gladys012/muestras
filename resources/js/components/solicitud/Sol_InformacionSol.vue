@@ -360,30 +360,11 @@ export default {
         console.log(this.arrayAnalito,'arrayyyy');
       }
     },
-    listarSolNroRegistro() {
-      let me = this;
-      var url = "/solicitudSolEnsayo/nroRegistro";
-      axios
-        .get(url)
-        .then(function(response) {
-          var respuesta = response.data;
-          console.log(respuesta, "respuesta");
-          if (respuesta.solicitud_ensayo == null) {
-            me.nro_registro = 1;
-          } else {
-            me.nro_registro = respuesta.solicitud_ensayo;
-            me.nro_registro = me.nro_registro + 1;
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
+   
     crearInfSolicitud() {
       if (this.validarInfSolicitud()) {
         return;
       }
-
       this.arrayinfoSolicitud.push({
         cantidad: this.cantidad,
         flujo: this.flujo,
@@ -392,6 +373,8 @@ export default {
         des_procedencia: this.des_procedencia
       });
       this.modal2 = 0;
+      let datos = this.arrayinfoSolicitud;
+      this.$emit('resultadosInf', datos);
     },
     actualizarInfSolicitud(idsolicitud) {
       if (this.validarInfSolicitud()) {
@@ -438,38 +421,6 @@ export default {
           }
         }
       }
-    },
-    abrirModalInfSol(modelo, accion, data = []) {
-      switch (modelo) {
-        case "solicitud": {
-          switch (accion) {
-            case "registrar": {
-              this.modal2 = 1;
-              this.tituloModal = "Registrar solicitud";
-              this.cantidad = "";
-              this.matriz = "";
-              this.analito = "";
-              this.flujo = "";
-              this.des_procedencia = "";
-              this.tipoAccion = 1;
-              break;
-            }
-            case "actualizar": {
-              //console.log(data);
-              this.modal2 = 1;
-              this.tituloModal = "Actualizar solicitud";
-              this.tipoAccion = 2;
-              this.solicitud_id = data["id"];
-              this.cantidad = data["cantidad"];
-              this.matriz = data["matriz"];
-              this.analito = data["analito"];
-              this.flujo = data["flujo"];
-              this.des_procedencia = data["des_procedencia"];
-              break;
-            }
-          }
-        }
-      }
       this.selectAnalito();
     },
     validarInfSolicitud() {
@@ -480,8 +431,8 @@ export default {
         this.errorMostrarMsjSolicitud.push("Debe ingresar la cantidad.");
       if (!this.matriz)
         this.errorMostrarMsjSolicitud.push("Debe ingresar la matriz.");
-      if (!this.analito)
-        this.errorMostrarMsjSolicitud.push("Debe ingresar analito de interés.");
+     /* if (!this.analito)
+        this.errorMostrarMsjSolicitud.push("Debe ingresar analito de interés.");*/
       if (!this.des_procedencia)
         this.errorMostrarMsjSolicitud.push(
           "Debe ingresar la descripción de la procedencia."
@@ -492,9 +443,7 @@ export default {
 
     cerrarModal() {
       //this.data-dismiss="modal";
-      this.modal1 = 0;
       this.modal2 = 0;
-      this.modal3 = 0;
       this.modalInf = 0;
       this.errorSolicitud = 0;
     },
@@ -517,4 +466,4 @@ export default {
     }
   }
 };
-</script>E
+</script>

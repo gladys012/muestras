@@ -66,6 +66,36 @@ class Unidad_SolicitanteController extends Controller
          ->orderBy('personas.paterno','asc')->get();
          return['personas'=>$personas];
      }//*******************
+
+     public function solPdf(Request $request,$nro_reg){          
+        //$nro_reg = $request->nro_reg;       
+        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','like','%'. $nro_reg)
+        ->where('solicitud_ensayo.estado','=','1')
+        ->where('unidad_solicitud.estado','=','1')
+        ->where('personasE.estado','=','1')->where('personasR.estado','=','1')        
+         ->join('personas as personasR','unidad_solicitud.idresponsable','=','personasR.id')
+         ->join('personas as personasE','unidad_solicitud.idencargado','=','personasE.id')
+         ->join('solicitud_ensayo','unidad_solicitud.id','=','solicitud_ensayo.idunidad')
+         ->join('informacion_solicitud','informacion_solicitud.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('revision','revision.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('resultado','resultado.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('recomendaciones','recomendaciones.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('conformidad','conformidad.idsol_ensayo','=','solicitud_ensayo.id')
+        ->select('unidad_solicitud.id','unidad_solicitud.idresponsable','unidad_solicitud.idencargado','unidad_solicitud.telefono',
+                  'personasR.ci as ciR','personasE.ci as ciE','unidad_solicitud.unidad','personasR.nombre as nombreR','personasE.nombre as nombreE',
+                  'personasR.paterno as paternoR','personasE.paterno as paternoE','personasR.materno as maternoR',
+                  'personasE.materno as maternoE','unidad_solicitud.id as idUnidad_sol','personasR.id as idResponsable',
+                  'personasE.id as idEncargado','solicitud_ensayo.id as idSol_ensayo','solicitud_ensayo.nro_registro','solicitud_ensayo.fecha_registro','solicitud_ensayo.idunidad',
+                   'informacion_solicitud.id as idInforsol','revision.id as idRevision','resultado.id as idResultado','recomendaciones.id as idRecomendaciones',
+                   'conformidad.id as idConformidad')
+        ->orderBy('unidad_solicitud.id','asc')->take(1)->get();
+        //return['unidad_solicitante'=>$unidad_solicitante];
+        $pdf = \PDF::loadView('pdf.solicitudpdf',['unidad_solicitante'=>$unidad_solicitante]);
+        return $pdf->download('solicitud.pdf');
+//        return $pdf->download('solicitud-'.$nro_reg.'.pdf');
+    }
+
+
     public function selectDatosBusqueda(Request $request){  
         $unidad = $request->unidad;        
         $idpaterno = $request->idpaterno;
