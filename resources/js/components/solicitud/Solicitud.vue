@@ -380,25 +380,20 @@
             </div>       
         </div>
         </div>
-
-   <form method="post" action="{{url('send')}}">
-    {{ csrf_field() }}
+<!--form action={{route('contact')}} method="POST">
+     {{ csrf_field() }}
     <div class="form-group">
-     <label>Nombre</label>
-     <input type="text" name="name" class="form-control" value="" />
+        <label for="name">Nombre</label>
+        <input name="name" type="text">
     </div>
     <div class="form-group">
-     <label> Email</label>
-     <input type="text" name="email" class="form-control" value="" />
+        <label for="name">Mensaje</label>
+                                <input name="msg" type="text">
     </div>
     <div class="form-group">
-     <label>Mensaje</label>
-     <textarea name="message" class="form-control"></textarea>
+        <button type="submit" id='btn-contact' class="btn">Enviar</button>
     </div>
-    <div class="form-group">
-     <input type="submit" name="send" class="btn btn-info" value="Enviar" />
-    </div>
-   </form>
+</form-->                                     
         
         <div class="col-sm-12" style="justify-content: center;">        
             <button type="button" class="btn btn-secondary" @click="cerrarModal()"><font color="white">Cancelar</font></button>

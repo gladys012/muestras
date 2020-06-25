@@ -275,6 +275,7 @@ export default {
       nombre: "",
       nameState: null,
       submittedNames: [],
+      datosAnalito:[],
       //nuevo analito
       nombreAnalito: "",
       modalInf: 0,
@@ -313,6 +314,7 @@ export default {
       console.log('entra array');
       const criteria = this.criteria;
       // Filter out already selected options
+     // console.log(this.value,'123456789');
       const options = this.arrayA.filter(
         opt => this.value.indexOf(opt) === -1
       );
@@ -337,20 +339,9 @@ export default {
   methods: {
     onOptionClick({ option, addTag }) {
       addTag(option.nombre);
-      console.log("entro");
       console.log(option,'option');
       console.log(option.nombre,'nombre option jkgjh');
-      console.log(addTag,'option analitoDatos');
-      console.log(this.value,'analito');
-      var datos  = [];
-      var miObjeto = [];
-      for (let i = 0; i < this.value.length; i++) {
-       // json['datos'].push({"nombre":this.value[i]});
-       // console.log(datos,'datos 0');
- //      =("nombre":this.value[i]);
-        
-      }
-  
+      console.log(this.value,'analito');  
       this.search = "";
     },
     adicionAnalito() {
@@ -365,11 +356,22 @@ export default {
       if (this.validarInfSolicitud()) {
         return;
       }
+      var datosA  = [];
+      console.log(this.value,'analito 123');
+            for (let i = 0; i < this.value.length; i++) {
+               datosA.push({
+                "nombre": this.value[i]
+              });        
+      } 
+      
+      console.log(datosA,'datos **********'); 
+      this.datosAnalito = JSON.stringify(datosA);
+      console.log(this.datosAnalito,'datos ******123 OBJETO ****'); 
       this.arrayinfoSolicitud.push({
         cantidad: this.cantidad,
         flujo: this.flujo,
         matriz: this.matriz,
-        analito: this.analito,
+        analito: this.datosAnalito,
         des_procedencia: this.des_procedencia
       });
       this.modal2 = 0;
@@ -384,7 +386,7 @@ export default {
       this.cantidad = this.cantidad;
       this.flujo = this.flujo;
       this.matriz = this.matriz;
-      this.analito = this.analito;
+      this.analito = this.datosAnalito;
       this.des_procedencia = this.des_procedencia;
       this.formActualizar = true;
       this.modal2 = 0;
