@@ -133,14 +133,14 @@
                     <b-form @submit="onSubmit" v-if="show">
                        <div class="row">
                          <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-1"  label="Fecha:" label-for="input-2" >
+                            <b-form-group id="input-group-1"  label="Fecha Recepción:" label-for="input-2" >
                                 <datepicker 
                                     :bootstrap-styling="true"
                                     :language="es"                                     
                                     calendar-class="datepicker1"                            
                                     :open-date="openDate"
                                     format="dd/MM/yyyy"
-                                    v-model="fechaD"  
+                                    v-model="fechaR"  
                                     calendar-button
                                     calendar-button-icon="fa fa-calendar"   
                                 ></datepicker>
@@ -152,22 +152,41 @@
                             </b-form-group>
                          </div> 
                          <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
-                                <b-form-input id="input-4" v-model="cantidad" placeholder="Cantidad" required                            
+                            <b-form-group id="input-group-4"  label="Cod. cliente:" label-for="input-4" >
+                                <b-form-input id="input-4" v-model="codigo_cliente" placeholder="Cod. cliente" required                            
                                 ></b-form-input>
                             </b-form-group>
                          </div>                                                
-                       </div>                    
-                       <div class="row">                                                                              
-                                                     
-                          <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-3"  label="Cliente:" label-for="input-2" >
-                                <b-form-input id="input-3" v-model="cliente" placeholder="Cliente" required                            
+                       </div>
+                        <div class="row">
+                         <div class="form-group col-sm-4">
+                            <b-form-group id="input-group-1"  label="Fecha Muestra:" label-for="input-2" >
+                                <datepicker 
+                                    :bootstrap-styling="true"
+                                    :language="es"                                     
+                                    calendar-class="datepicker1"                            
+                                    :open-date="openDate"
+                                    format="dd/MM/yyyy"
+                                    v-model="fechaM"  
+                                    calendar-button
+                                    calendar-button-icon="fa fa-calendar"   
+                                ></datepicker>
+                            </b-form-group>
+                         </div>
+                         <div class="form-group col-sm-4">
+                            <b-form-group id="input-group-4"  label="Cod. muestra:" label-for="input-4" >
+                                <b-form-input id="input-4" v-model="codigo_muestra" placeholder="Cod. muestra" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                                                                                                                                
-                       </div>
-                       <div class="row">
+                         </div>
+                         <div class="form-group col-sm-4">
+                            <b-form-group id="input-group-4"  label="Nombre persona entrega:" label-for="input-4" >
+                                <b-form-input id="input-4" v-model="persona_entrega" placeholder="Nombre persona entrega" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div>                                                
+                       </div>  
+                       <div class="row">                                                                                                                                                            
                            <div class="form-group col-sm-4">                           
                             <div class="container">
                                 <div class="box">
@@ -180,7 +199,53 @@
                                 </div>
                             </div> 
                          </div>
-                          <div class="form-group col-sm-8">
+                         <div class="form-group col-sm-4">
+                            <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
+                                <b-form-input id="input-4" type="number" v-model="cantidad" placeholder="Cantidad" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div>
+                         <div class="form-group col-sm-4">
+                            <b-form-group id="input-group-4"  label="Código laboratorio:" label-for="input-4" >
+                                <b-form-input id="input-4" v-model="codigo_lab" placeholder="Código laboratorio" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div> 
+                       </div>                       
+                       <div class="row">                                                                                                                                   
+                            <div class="form-group col-sm-4">
+                                <b-form-group id="input-group-2"  label="Procedencia o Unidad:" label-for="input-2" >                                                              
+                                  <b-form-select v-model="idunidad" class="mb-3" required>
+                                      <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                      <b-form-select-option v-for="unidad in arrayUnidad" :key="unidad.id" :value="unidad.id" v-text="unidad.unidad"></b-form-select-option>
+                                  </b-form-select> 
+                               </b-form-group>
+                            </div> 
+                            <div class="form-group col-sm-4">                           
+                                <div class="container">
+                                    <div class="box">
+                                        <div class="checkbox-group">
+                                        <input id="checkboxName3" type="checkbox" v-model="cristales"/>
+                                        <label for="checkboxName3" class="ta">Cristales</label>
+                                        <input id="checkboxName4" type="checkbox" v-model="salmueras"/>
+                                        <label for="checkboxName4" class="ta">Salmueras</label> 
+                                        <input id="checkboxName5" type="checkbox" v-model="aguas"/>
+                                        <label for="checkboxName5" class="ta">Aguas</label> 
+                                        </div>
+                                    </div>
+                                </div> 
+                         </div>
+                         <div class="form-group col-sm-4">
+                             <b-form-group id="input-group-2"  label="Diluciones:" label-for="input-2" >                                                              
+                                <b-form-select v-model="idunidad" class="mb-3" required>
+                                    <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                    <b-form-select-option v-for="unidad in arrayUnidad" :key="unidad.id" :value="unidad.id" v-text="unidad.unidad2"></b-form-select-option>
+                                </b-form-select> 
+                            </b-form-group>
+                         </div>                          
+                        </div> 
+                       <div class="row">
+                           <div class="form-group col-sm-12">
                               <b-form-group id="input-group-8" label="Observaciones:" label-for="input-6">                                
                                 <b-form-textarea
                                     id="textarea"
@@ -189,33 +254,7 @@
                                     rows="3" max-rows="4"
                                     ></b-form-textarea>
                             </b-form-group>
-                          </div>
-                       </div> 
-                       <div class="row">
-                           <div class="form-group col-sm-4">
-                                <label for="">Persona entrega </label>
-                                <v-select
-                                    :on-search="selectPersona"
-                                    label="ci"
-                                    :options="arrayPersonaci"
-                                    placeholder="Buscar Personas por CI."
-                                    :onChange="getDatosPersona"    
-                                    v-model="ciEntrega"                                        
-                                >
-                                <span slot="no-options">No existen registros</span>
-                                <!--input slot="no-options" v-if="responsable==1" @click="abrirModalPersonaRes('solicitud','registrarResponsable')" class="form-control btn btn-info" type="button" value="Adicionar Persona" /-->
-                                </v-select>  
-                            </div>
-                            <b-form-group id="input-group-4"  label="Nombre:" label-for="input-4" >
-                                <b-form-input id="input-4" v-model="nombrePersona" placeholder="Nombre" disabled                            
-                                ></b-form-input>
-                            </b-form-group>
-                            <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-5"  label="Código muestra:" label-for="input-5" >
-                                <b-form-input id="input-5" v-model="codigo" placeholder=" Código muestra" disabled                            
-                                ></b-form-input>
-                            </b-form-group>
-                         </div>                             
+                          </div>                       
                        </div>                                
                       <div class="modal-footer">
                         <b-button type="reset" variant="secondary" @click="cerrarModal()">Cerrar</b-button>
@@ -246,44 +285,37 @@
                 openDate: new Date(),
 
                 recepcion_id: 0,
-                fechaD: new Date(),
+                fechaR: new Date(),
+                fechaM: new Date(),
                 hora:'',
-                codigo : '',
+                codigo_cliente: '',
+                codigo_muestra: '',
+                codigo_lab: '',
                 observaciones: '',
                 identrega:1,
                 cliente:'',
                 cantidad:'',
-                paterno:'',
-                materno:'',
-                nombre:'',
+                persona_entrega:'',
                 liquido:'',
                 solido:'',
-                cliente:'',
-                direccion:'',
-                telefono:'',
-                email:'',
-                errorPersona:'',
-                ci:'',
+                unidad:'',
+                cristales:'',
+                salmueras:'',
+                aguas:'',
+                dato_dilucion:'',
+
+                idunidad:0,
+                arrayUnidad:[],
                 arrayRecepcion : [],
                 arrayPreparacion :[],
                 errorMostrarMsjPersona:[],
                 tituloModal : '',
 
                 modal : 0,                
-                modal2 : 0,                
                 tipoAccion : 0,
                 errorRecepcion: 0,
                 errorMostrarMsjRecepcion:[],
-                arrayPersonaci:[],
-                idresponsable:1, 
-                responsable:0,
-                nombrePersona:'',
-                ciEntrega:'',
-                errorPersona:'',
-
-                personaEntrega:'',
-                nroEntregaPersona:'',
-               
+                         
                 dismissSecs: 5,
                 dismissCountDown: 0,
                 show: true,
@@ -339,9 +371,9 @@
                 evt.preventDefault()  //val. form
             },
             registrarRecepcion(){ 
-                console.log(this.fechaD,'entra fecha');
-                this.fechaD = moment(this.fechaD).format('D/MM/YYYY');
-                console.log(this.fechaD,'fechaaaaaa');
+                console.log(this.fechaR,'entra fecha');
+                this.fechaR = moment(this.fechaR).format('D/MM/YYYY');
+                console.log(this.fechaR,'fechaaaaaa');
                 let me = this;
                         axios.post('/recepcion/registrar',{
                             'codigo': this.codigo,
@@ -367,7 +399,7 @@
             
             actualizarRecepcion(){             
                 let me = this;
-                this.fechaD = moment(this.fechaD).format('D/MM/YYYY');
+                this.fechaR = moment(this.fechaR).format('D/MM/YYYY');
                 axios.put('/recepcion/actualizar',{
                     'codigo': this.codigo,
                     'cantidad': this.cantidad,
@@ -387,38 +419,30 @@
                     console.log(error);
                 });               
             },
-            
-              actualizarDatoPersona(){             
-                let me = this;                 
-                axios.put('/persona/actualizar',{
-                    //'idpersona': this.idpersona, 
-                    'nro_entrega': this.nroEntregaPersona,
-                    'usr_id':1,
-                    'id': this.idresponsable                    
-                }).then(function (response) {
-                    me.cerrarModal();
-                }).catch(function (error) {
+            selectUnidad(){
+                let me=this;
+                var url= '/recepcion/selectUnidad';
+                axios.get(url).then(function (response) {
+                    console.log(response,'select');
+                    var respuesta= response.data;                                        
+                    me.arrayUnidad = respuesta.unidad_solicitante;
+                    console.log(me.arrayUnidad,'unidad');
+                })
+                .catch(function (error) {
                     console.log(error);
-                });                
+                });
             },
+            
             cerrarModal(){
                 this.modal=0;
-                this.modal2=0;
                 this.tituloModal='';
-                this.fecha = new Date();
+                //this.fechaR = new Date();
                 this.hora='';
                 this.codigo='';
                 this.cantidad=0;
                 this.liquido='';
                 this.solido='';
-                this.nombre='';                
-                this.paterno='';
-                this.materno='';
-                this.ci='';
-                this.direccion='';
-                this.telefono='';
-                this.email='';
-                this.observaciones='';
+                this.persona_entrega='';                
                 this.errorRecepcion=0;
             },
             abrirModal(modelo, accion, data = []){
@@ -466,155 +490,9 @@
                         }
                     }
                 }
+                this.selectUnidad();
             },
-            abrirModalPersona(modelo, accion, data = []){
-
-                switch(modelo){
-                    case "recepcion":
-                    {
-                        switch(accion){
-                            case 'registrar':
-                            {
-                                this.modal2 = 1;
-                                this.tituloModal = 'Registrar Recepcion';
-                                    this.fecha= new Date();
-                                    this.hora='';
-                                    this.codigo='';
-                                    this.cantidad=0;
-                                    this.liquido='';
-                                    this.solido='';
-                                    this.cliente='';
-                                    this.direccion='';
-                                    this.telefono='';
-                                    this.email='';
-                                    this.observaciones='';
-                                    this.identrega=1;
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            {
-                                this.modal2=1;
-                                this.tituloModal='Actualizar Recepcion';
-                                this.tipoAccion=2;
-                                this.recepcion_id=data['id'];
-                                this.codigo = data['codigo'];
-                                this.cantidad = data['cantidad'];
-                                this.liquido = data['liquido'];
-                                this.solido = data['solido'];
-                                this.fecha = data['fecha'];
-                                this.hora = data['hora'];
-                                this.identrega = 1;
-                                this.cliente = data['cliente'];
-                                this.observaciones = data['observaciones'];
-                                this.usr_id = data['usr_id'];
-                                break;
-                            }
-                        }
-                    }
-                }
-            },
-            selectPersona(search,loading){
-                let me=this;
-                loading(true)
-
-                var url= '/solicitudPersona/selectPersonaCi?filtro='+search;
-                axios.get(url).then(function (response) {
-                  console.log(response,'res');
-                    let respuesta= response.data;
-                    console.log(respuesta,'respuesta');
-                    q: search
-                    me.arrayPersonaci= respuesta.personas;
-                    if (me.arrayPersonaci!='') {
-                      me.responsable=1;
-                    }
-                    console.log(me.arrayPersonaci,'select 3');
-                    loading(false);
-                    me.ciPersona = search;
-                    console.log(me.ciPersona);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
-            getDatosPersona(val1){
-              console.log(val1,'dato val1');
-              console.log(val1.nro_entrega,'nro entrega');
-              let me = this;
-              me.loading = true;
-              me.idresponsable = val1.id;
-              if (val1 =='') {
-                 me.nombrePersona='';
-              }else{
-                   if (val1.materno=='' || val1.materno==null) {
-                    me.nombrePersona = val1.paterno +' '+ val1.nombre;   
-                  }else{
-                 me.nombrePersona = val1.paterno +' '+ val1.materno +' '+ val1. nombre;
-                 console.log(me.nombrePersona,'nom per');
-                    console.log(val1.paterno.substring(0,1),'***********');
-                    let persona = val1.paterno.substring(0,1) + val1.materno.substring(0,1) + val1.nombre.substring(0,1)
-                   
-                    this.personaEntrega = persona.toUpperCase();
-                    console.log(persona,'persona');
-                    if (val1.nro_entrega=='' || val1.nro_entrega==null) {
-                        this.nroEntregaPersona=1;
-                        this.personaEntrega=this.personaEntrega+this.nroEntregaPersona;
-                        console.log(this.personaEntrega,'123 codigo');
-                    }else{
-                         this.nroEntregaPersona = val1.nro_entrega+1;
-                         console.log(this.nroEntregaPersona,'nrooooo');
-                         this.personaEntrega=this.personaEntrega+this.nroEntregaPersona;
-                         console.log(this.personaEntrega,'codigo +1');
-                    }
-                    this.codigo=this.personaEntrega;
-
-                  }             
-              }              
-            },
-            validarPersona(){
-                this.errorPersona=0;
-                this.errorMostrarMsjPersona =[];
-                if (!this.nombre) this.errorMostrarMsjPersona.push("Debe ingresar el nombre de la persona.");
-                if (!this.ciEntrega) this.errorMostrarMsjPersona.push("Debe ingresar el C.I. de la persona.");
-                if (!this.paterno) this.errorMostrarMsjPersona.push("Debe ingresar el apellido paterno de la persona.");
-                if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
-                return this.errorPersona;
-            },
-             // Registro --->BD  
-             registrarPersona(){
-                if (this.validarPersona()){
-                    return;
-                }                
-                let me = this;
-
-                  
-                axios.post('/persona/registrar',{
-                    'nombre': this.nombre,
-                    'paterno': this.paterno,
-                    'materno' : this.materno,
-                    'ci' : this.ciEntrega,
-                    'telefono' : this.telefono,
-                    'email' : this.email,
-                    'direccion' : this.direccion,
-                    'usr_id':1,
-
-                }).then(function (response) {
-                    console.log(me.nombrePersona,'123');
-                    if (me.nombrePersona !='') {
-                        me.nombrePersona=me.nombre+' '+ me.paterno+' '+me.materno
-                        console.log(me.nombrePersona,'res123');
-                        me.ciRes = me.ciEntrega;
-                    }else if (me.nombrePersona !='') {
-                        me.nombrePersona=me.nombre+' '+ me.paterno+' '+me.materno
-                         me.ciRes = me.ciEntrega;  
-                    }          
-              
-                me.cerrarModal();
-               }).catch(function (error) {
-                    console.log(error);
-            });
-
-           },
+           
         },
         mounted() {            
             this.listarRecepcion();            

@@ -162,10 +162,10 @@
                          </div>
                          <div class="form-group col-sm-4">
                             <b-form-group id="input-group-2"  label="Recepción:" label-for="input-2" >                                                              
-                            <b-form-select v-model="idrecepcion" class="mb-3" required>
-                                <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
-                                <b-form-select-option v-for="recepcion in arrayRecepcion" :key="recepcion.id" :value="recepcion.id" v-text="recepcion.codigo"></b-form-select-option>
-                            </b-form-select> 
+                                <b-form-select v-model="idrecepcion" class="mb-3" required>
+                                    <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                    <b-form-select-option v-for="recepcion in arrayRecepcion" :key="recepcion.id" :value="recepcion.id" v-text="recepcion.codigo"></b-form-select-option>
+                                </b-form-select> 
                             </b-form-group>
                          </div>                                                 
                        </div>                    

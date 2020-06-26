@@ -21,7 +21,9 @@
         "sass-loader": "^8.0.0",
         "vue": "^2.6.11",
         "vue-template-compiler": "^2.6.10",
-        "bootstrap-sass": "^3.3.7"
+        "bootstrap-sass": "^3.3.7",
+        "browser-sync": "^2.26.7",
+        "browser-sync-webpack-plugin": "^2.0.1"
     },
     "dependencies": {
         "@coreui/coreui": "^3.0.0",

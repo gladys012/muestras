@@ -53,25 +53,12 @@
       </div>
     </div>
     <!--Inicio del modal agregar/actualizar  solicitud-->
-    <div
-      class="modal fade"
-      :class="{'mostrarr' : modal2}"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="modalInformacionSolTit"
-      aria-hidden="true"
-    >
+    <div class="modal fade" :class="{'mostrarr' : modal2}" tabindex="-1" role="dialog" aria-labelledby="modalInformacionSolTit" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              @click="cerrarModal()"
-              aria-label="Close"
-            >
+            <button  type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close" >
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -134,7 +121,7 @@
                         <template v-slot:button-content>
                           <b-icon icon="tag-fill"></b-icon>Seleccionar
                         </template>
-                        <b-dropdown-form @submit.stop.prevent="() => {}">
+                        <b-dropdown-form @submit.prevent="() => {}">
                           <b-form-group
                             label-for="tag-search-input"
                             label="Buscar"
@@ -150,13 +137,16 @@
                               type="search"
                               size="sm"
                               autocomplete="off"
+                              @keyup="arrayAnalitob"
                             ></b-form-input>
                           </b-form-group>
                         </b-dropdown-form>
+
+
                         <b-dropdown-divider></b-dropdown-divider>
                         <b-dropdown-item-button
                           v-for="option in arrayAnalito"
-                          :key="option"
+                          :key="option.id"
                           @click="onOptionClick({ option, addTag })"
                         >{{ option.nombre }}</b-dropdown-item-button>
                         <b-dropdown-text v-if="arrayAnalito.length === 0">
@@ -270,6 +260,7 @@ export default {
       search: "",
       value: [],
       arrayA:[],
+      columnAnalito:[],
 
       //modal
       nombre: "",
@@ -302,41 +293,34 @@ export default {
     vSelect
   },
   computed: {
-
-    criteria() {
-      console.log('entra crit');
-      console.log(this.search,'search');
-      // Compute the search criteria
-      return this.search.trim().toLowerCase();
-      //this.arrayAnalito();
-    },
-    arrayAnalito() {
-      console.log('entra array');
-      const criteria = this.criteria;
-      // Filter out already selected options
-     // console.log(this.value,'123456789');
-      const options = this.arrayA.filter(
-        opt => this.value.indexOf(opt) === -1
-      );
-      if (this.nombreAnalito > 1) {
-        const options = this.nombreAnalito;
-      }
-      if (criteria) {
-        // Show only options that match criteria
-        return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1);
-      }
-      // Show all options available
-      console.log(options,'options');
-      return options;
-    },
     searchDesc() {
-      if (this.criteria && this.arrayAnalito.length === 0) {
+      console.log('ntra ......');
+      if (this.criteria && this.arrayAnalito.nombre.length === 0) {
         return "No hay datos con sus criterios de búsqueda";
       }
       return "";
     }
   },
   methods: {
+    arrayAnalitob() {
+      const criteria = this.search.trim().toLowerCase();
+			if(criteria!==null){
+        let options = this.arrayA.filter(
+          opt => opt.nombre.indexOf(criteria) > -1
+        );
+				if(options.length>0){
+					this.arrayAnalito=options
+				}
+				return options;
+      }
+       else{
+        //this.arrayAnalito=
+        this.searchDesc();
+        return "No hay datos con sus criterios de búsqueda";
+      } 
+    },
+
+
     onOptionClick({ option, addTag }) {
       addTag(option.nombre);
       console.log(option,'option');
@@ -358,12 +342,15 @@ export default {
       }
       var datosA  = [];
       console.log(this.value,'analito 123');
-            for (let i = 0; i < this.value.length; i++) {
-               datosA.push({
-                "nombre": this.value[i]
-              });        
-      } 
-      
+      //this.columnAnalito = this.value[i],
+        for (let i = 0; i < this.value.length; i++) {
+          this.columnAnalito = this.value[i];
+            datosA.push({
+            "nombre": this.value[i]
+          });        
+              
+         } 
+      console.log(this.columnAnalito,'this.columnAnalito---------');
       console.log(datosA,'datos **********'); 
       this.datosAnalito = JSON.stringify(datosA);
       console.log(this.datosAnalito,'datos ******123 OBJETO ****'); 

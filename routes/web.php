@@ -119,7 +119,8 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/recepcion/actualizar', 'RecepcionController@update');
         Route::put('/recepcion/desactivar', 'RecepcionController@desactivar');
         Route::put('/recepcion/activar', 'RecepcionController@activar');
-        Route::get('/recepcion/selectRecepcion', 'RecepcionController@index');
+        Route::get('/recepcion/selectRecepcion', 'RecepcionController@index'); 
+        Route::get('/recepcion/selectUnidad', 'Unidad_SolicitanteController@selectUnidad2');      
                 
         Route::get('/preparacion', 'PreparacionController@index');
         Route::post('/preparacion/registrar', 'PreparacionController@store');

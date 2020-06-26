@@ -46,6 +46,12 @@ class Unidad_SolicitanteController extends Controller
        
         return['personas'=>$personas];
     } 
+    public function selectUnidad2(Request $request){
+        if(!$request->ajax()) return redirect('/');
+        $unidad_solicitante = Unidad_Solicitante::where('estado','=','true')
+        ->select('id','unidad')->orderBy('unidad','asc')->get();
+        return['unidad_solicitante'=>$unidad_solicitante];
+    }
     public function selectUnidad(Request $request){
         //if(!$request->ajax()) return redirect('/');
         $filtro = $request->filtro; 
