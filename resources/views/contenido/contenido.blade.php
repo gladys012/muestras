@@ -88,6 +88,9 @@
         <template v-if="menu==30">
                 <personas></personas>
         </template>
+        <template v-if="menu==31">
+                <analitos></analitos>
+        </template>
         <template v-if="menu==40">
                 <rol></rol>
         </template>

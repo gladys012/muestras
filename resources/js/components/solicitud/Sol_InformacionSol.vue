@@ -242,10 +242,7 @@ import inf from "moment";
 export default {
   data() {
     return {
-      es: es,
-      openDate: new Date(),
-      selectedDate: "",
-
+      
       //Informacion solicitud
       arrayinfoSolicitud: [],
       cantidad: "",
@@ -265,7 +262,6 @@ export default {
       //modal
       nombre: "",
       nameState: null,
-      submittedNames: [],
       datosAnalito:[],
       //nuevo analito
       nombreAnalito: "",
@@ -274,16 +270,11 @@ export default {
 
       //prueba select
       arrayAnalito: [],
-      analitoDatos: "",
-      idanalito:"",
 
-      modal1: 0,
       modal2: 0,
-      modal3: 0,
       tituloModal: "",
       tipoAccion: 0,
       errorSolicitud: 0,
-      errorPersona: 0,
       errorInfSolicitud: 0,
       errorMostrarMsjSolicitud: [],
       verificaError: 0
@@ -294,11 +285,10 @@ export default {
   },
   computed: {
     searchDesc() {
-      console.log('ntra ......');
-      if (this.criteria && this.arrayAnalito.nombre.length === 0) {
+      if (this.criteria && this.arrayAnalitob.nombre.length === 0) {
         return "No hay datos con sus criterios de búsqueda";
       }
-      return "";
+      return "";  
     }
   },
   methods: {
@@ -310,16 +300,15 @@ export default {
         );
 				if(options.length>0){
 					this.arrayAnalito=options
-				}
+				}else{
+        this.arrayAnalito='';
+        /*this.searchDesc();
+        return "No hay datos con sus criterios de búsqueda";*/
+      } 
 				return options;
       }
-       else{
-        //this.arrayAnalito=
-        this.searchDesc();
-        return "No hay datos con sus criterios de búsqueda";
-      } 
+      
     },
-
 
     onOptionClick({ option, addTag }) {
       addTag(option.nombre);

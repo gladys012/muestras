@@ -41,7 +41,7 @@ class RecepcionController extends Controller
     }
     public function selectRecepcion(Request $request){
         if(!$request->ajax()) return redirect('/');
-        $recepcion = Recepcion::where('estado','=','TRUE')
+        $recepcion = Recepcion::where('estado','=','true')
         ->select('id','codigo')->orderBy('codigo','asc')->get();
         return['recepcion'=>$recepcion];
     } 

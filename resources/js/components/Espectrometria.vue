@@ -156,44 +156,68 @@
                          </div>                                                 
                        </div>                    
                        <div class="row">                           
-                          <div class="form-group col-sm-4">
+                          <div class="form-group col-sm-2">
                             <b-form-group id="input-group-3"  label="Litio (li):" label-for="input-2" >
                                 <b-form-input id="input-3" v-model="litio" placeholder="Litio (li)" required                            
                                 ></b-form-input>
                             </b-form-group>
                          </div> 
-                          <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-1">                            
+                             <b-form-group id="input-group-3"  label="dilucion:" label-for="input-2" >
+                                <b-form-input id="input-3" placeholder="dilucion" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div> 
+                          <div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Magnesio (mg):" label-for="input-4" >
                                 <b-form-input id="input-4" v-model="magnesio" placeholder="Magnesio (mg)" required                            
                                 ></b-form-input>
                             </b-form-group>
                          </div> 
-                         <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-1">                            
+                             <b-form-group id="input-group-3"  label="dilucion:" label-for="input-2" >
+                                <b-form-input id="input-3" placeholder="dilucion" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div>
+                         <div class="form-group col-sm-2">
                             <b-form-group id="input-group-5"  label="Potasio (k):" label-for="input-5" >
                                 <b-form-input id="input-5" v-model="potasio" placeholder=" Potasio (k)" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                                                                           
+                         </div> 
+                         <div class="form-group col-sm-1">                            
+                             <b-form-group id="input-group-3"  label="dilucion:" label-for="input-2" >
+                                <b-form-input id="input-3" placeholder="dilucion" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div>                                                                          
                        </div>
                        <div class="row">                           
-                          <div class="form-group col-sm-4">
+                          <div class="form-group col-sm-2">
                             <b-form-group id="input-group-3"  label="Sodio:" label-for="input-2" >
                                 <b-form-input id="input-3" v-model="sodio" placeholder="Sodio" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div> 
-                          <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-4"  label="Lectura 2:" label-for="input-4" >
-                                <b-form-input id="input-4" v-model="calcio" placeholder="Lectura 2" required                            
+                         </div>
+                         <div class="form-group col-sm-1">                            
+                             <b-form-group id="input-group-3"  label="dilucion:" label-for="input-2" >
+                                <b-form-input id="input-3" placeholder="dilucion" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div> 
-                         <div class="form-group col-sm-4">
+                         </div>                            
+                         <div class="form-group col-sm-3">
                             <b-form-group id="input-group-5"  label="Calcio (Ca):" label-for="input-5" >
                                 <b-form-input id="input-5" v-model="ecuac2" placeholder=" Calcio (Ca)" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                                                                           
+                         </div> 
+                         <div class="form-group col-sm-1">                            
+                             <b-form-group id="input-group-3"  label="dilucion:" label-for="input-2" >
+                                <b-form-input id="input-3" placeholder="dilucion" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div>                                                                          
                        </div>
                        <div class="row">
                           <div class="form-group col-sm-12">
@@ -256,7 +280,7 @@
                   { key: 'fecha', label: 'Fecha', sortable: true, sortDirection: 'desc' },
                   { key: 'codigo_lab', label: 'Cod. laboratorio', sortable: true, class: 'text-justify' },                 
                   { key: 'litio', label: 'Litio (li)', sortable: true },                 
-                  { key: 'magnesio', label: 'Lectura 1', sortable: true },                 
+                  { key: 'magnesio', label: 'Magnesio (mg)', sortable: true },                 
                   { key: 'potasio', label: 'Potasio (k)', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
                 ],

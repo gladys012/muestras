@@ -121,9 +121,9 @@
                             <li @click="menu=30" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-circle"></i> Personas</a>
                             </li>
-                            <!--li @click="menu=31" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-user-following"></i> Roles</a>
-                            </li-->
+                            <li @click="menu=31" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-circle"></i> Analitos</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">

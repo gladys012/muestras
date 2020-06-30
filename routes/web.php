@@ -277,6 +277,13 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/persona/desactivar', 'PersonaController@desactivar');
         Route::put('/persona/activar', 'PersonaController@activar');
         Route::get('/persona/selectpersona', 'PersonaController@index');        
+        
+        Route::get('/analito', 'AnalitoController@index');
+        Route::post('/analito/registrar', 'AnalitoController@store');
+        Route::put('/analito/actualizar', 'AnalitoController@update');
+        Route::put('/analito/desactivar', 'AnalitoController@desactivar');
+        Route::put('/analito/activar', 'AnalitoController@activar');
+        Route::get('/analito/selectanalito', 'AnalitoController@index');        
 
 
         Route::get('/recepcion', 'RecepcionController@index');
