@@ -75,10 +75,10 @@
                         <template v-slot:head(fecha_muestreo)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
-                        <template v-slot:head(codigo_recepcion)="data">
+                        <template v-slot:head(codigo)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
-                        <template v-slot:head(codigo_lab)="data">
+                        <template v-slot:head(codigo_laboratorio)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
                         <template v-slot:head(peso)="data">
@@ -161,21 +161,30 @@
                             </b-form-group>
                          </div>
                          <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-2"  label="Recepción:" label-for="input-2" >                                                              
-                                <b-form-select v-model="idrecepcion" class="mb-3" required>
+                            <b-form-group id="input-group-2"  label="Codigo recepción:" label-for="input-2" >                                                              
+                                <b-form-select v-model="idrecepcion" class="mb-3" @change="selectCodigoLab(idrecepcion)" required>
                                     <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
-                                    <b-form-select-option v-for="recepcion in arrayRecepcion" :key="recepcion.id" :value="recepcion.id" v-text="recepcion.codigo"></b-form-select-option>
+                                    <b-form-select-option v-for="recepcion in arrayRecepcion" :key="recepcion.id" :value="recepcion.id" v-text="recepcion.codigo_cliente"></b-form-select-option>
                                 </b-form-select> 
                             </b-form-group>
                          </div>                                                 
                        </div>                    
-                       <div class="row">                           
-                          <div class="form-group col-sm-4">
+                       <div class="row">    
+                       <div class="form-group col-sm-4">
+                            <b-form-group id="input-group-2"  label="Codigo laboratorio:" label-for="input-2" >                                                              
+                                <b-form-select v-model="idcodigo_lab" class="mb-3" required>
+                                    <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                    <b-form-select-option v-for="codigo in arrayCodigoLab" :key="codigo.id" :value="codigo.id" v-text="codigo.codigo_lab"></b-form-select-option>
+                                </b-form-select> 
+                            </b-form-group>
+                         </div>                       
+                          <!--div class="form-group col-sm-4">
+                          
                             <b-form-group id="input-group-3"  label="Código Laboratorio:" label-for="input-2" >
                                 <b-form-input id="input-3" v-model="codigo_lab" placeholder="Código Laboratorio" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div> 
+                         </div--> 
                          <div class="form-group col-sm-4">
                             <b-form-group id="input-group-3"  label="Peso:" label-for="input-2" >
                                 <b-form-input id="input-3" v-model="peso" placeholder="Peso" required                            
@@ -235,14 +244,16 @@
 
                 preparacion_id: 0,
                 idrecepcion : 0,
+                idcodigo_lab:0,
                 codigo_lab:'',
                 fecha_analisis: new Date(),
                 fecha_muestreo: new Date(),
-                codigo_lab:'',
+                idcodigo_lab:'',
                 vs : '',
                 observaciones: '',
                 vh:'',
                 peso:'',
+                arrayCodigoLab:[],
                 arrayPreparacion : [],
                 arrayRecepcion :[],
                 tituloModal : '',
@@ -255,8 +266,8 @@
                 columnas: [
                   { key: 'fecha_analisis', label: 'Fecha análisis', sortable: true, sortDirection: 'desc' },
                   { key: 'fecha_muestreo', label: 'Fecha muestreo', sortable: true, sortDirection: 'desc' },
-                  { key: 'codigo_recepcion', label: 'Cod. recepción', sortable: true, class: 'text-justify' },                 
-                  { key: 'codigo_lab', label: 'Código laboratorio', sortable: true },                 
+                  { key: 'codigo', label: 'Cod. recepción', sortable: true, class: 'text-justify' },                 
+                  { key: 'codigo_laboratorio', label: 'Código laboratorio', sortable: true },                 
                   { key: 'peso', label: 'Peso', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
                 ],
@@ -311,7 +322,7 @@
                     console.log('entra 0');
                         axios.post('/preparacion/registrar',{
                         'idrecepcion': this.idrecepcion, 
-                        'codigo_lab': this.codigo_lab,
+                        'idcodigo_lab': this.idcodigo_lab,
                         'fecha_analisis': this.fecha_analisis,
                         'fecha_muestreo': this.fecha_muestreo,
                         'peso': this.peso,
@@ -333,7 +344,7 @@
                 this.fecha_analisis = moment(this.fecha_analisis).format('D/MM/YYYY');
                 axios.put('/preparacion/actualizar',{
                     'idrecepcion': this.idrecepcion,
-                    'codigo_lab': this.codigo_lab,
+                    'idcodigo_lab': this.idcodigo_lab,
                     'fecha_analisis': this.fecha_analisis,
                     'fecha_muestreo': this.fecha_muestreo,
                     'peso': this.peso,
@@ -356,8 +367,37 @@
                 axios.get(url).then(function (response) {
                     console.log(response,'select');
                     var respuesta= response.data;                                        
-                    me.arrayRecepcion = respuesta.recepcion.data;
-                    console.log(me.arrayRecepcion,'select 3');
+                    me.arrayRecepcion = respuesta.recepcion;
+                    console.log('ENTRO A ARRAY');
+                    console.log(me.arrayRecepcion,'select 3 array ');
+                   // console.log(me.arrayRecepcion.filter(distinct),'unique ......');
+
+                   
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+
+            selectCodigoLab(idcodigo_lab){
+                console.log(idcodigo_lab,'idcodigo_lab codigo+++++');  
+               // var c=0;
+                for (let i = 0; i < this.arrayRecepcion.length; i++) {
+                    console.log(this.arrayRecepcion[i].id,'arrary id');
+                    if (idcodigo_lab == this.arrayRecepcion[i].id) {
+                        var codigo = this.arrayRecepcion[i].codigo_cliente;   
+                        
+                        console.log(codigo,'codigo.');                     
+                    }                    
+                }
+                console.log(codigo,'codigo--');
+                let me=this;
+                var url= '/recepcion/selectCodigoLab?filtro='+codigo;
+                axios.get(url).then(function (response) {
+                    console.log(response,'select');
+                    var respuesta= response.data;                                        
+                    me.arrayCodigoLab = respuesta.recepcion;
+                    console.log(me.arrayCodigoLab,'select 4     cod lab');
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -368,7 +408,7 @@
                 this.modal=0;
                 this.tituloModal='';
                 this.idrecepcion= 0;
-                this.codigo_lab = '';
+                this.idcodigo_lab = '';
                 this.codigo_recepcion = '';
                 this.peso = '';
                 this.fecha_muestreo = '';
@@ -387,11 +427,11 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Preparación';
                                 this.idrecepcion= 0;
-                                this.codigo_lab = '';
-                                this.codigo_recepcion = '';
+                                this.idcodigo_lab = 0;
+                              //  this.codigo_recepcion = '';
                                 this.peso = '';
-                                this.fecha_muestreo = '';
-                                this.fecha_analisis = '';
+                                this.fecha_muestreo = new Date();
+                                this.fecha_analisis = new Date();
                                 this.vh= '';
                                 this.vs='';
                                 this.observaciones='';
@@ -405,12 +445,11 @@
                                 this.tipoAccion=2;
                                 this.preparacion_id=data['id'];
                                 this.idrecepcion=data['idrecepcion'];
-                                this.codigo_analisis=data['codigo_analisis'];
-                                this.codigo_lab = data['codigo_lab'];
+                               // this.codigo_analisis=data['codigo_analisis'];
+                                this.idcodigo_lab = data['idcodigo_lab'];
                                 this.peso=data['peso'];
                                 this.fecha_analisis=data['fecha_analisis'];
                                 this.fecha_muestreo=data['fecha_muestreo'];
-                                this.fecha_analisis=data['fecha_analisis'];
                                 this.vs= data['vs'];
                                 this.vh= data['vh'];
                                 this.observaciones= data['observaciones'];

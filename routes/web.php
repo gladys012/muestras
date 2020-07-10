@@ -110,6 +110,13 @@ Route::group(['middleware'=>['auth']],function(){
         // ruta al enviar correo
         Route::post('/send', 'EmailController@send');
 
+        Route::get('/unidad_codigo', 'Unidad_CodigoController@index');
+        Route::post('/unidad_codigo/registrar', 'Unidad_CodigoController@store');
+        Route::put('/unidad_codigo/actualizar', 'Unidad_CodigoController@update');
+        Route::put('/unidad_codigo/desactivar', 'Unidad_CodigoController@desactivar');
+        Route::put('/unidad_codigo/activar', 'Unidad_CodigoController@activar');
+        Route::get('/unidad_codigo/selectUnidadCodigo', 'Unidad_CodigoController@selectUnidadCodigo');
+
 
         Route::get('/solicitud', 'GlosaController@index');
         Route::get('/solicitud/registrar', 'GlosaController@store');
@@ -119,8 +126,9 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/recepcion/actualizar', 'RecepcionController@update');
         Route::put('/recepcion/desactivar', 'RecepcionController@desactivar');
         Route::put('/recepcion/activar', 'RecepcionController@activar');
-        Route::get('/recepcion/selectRecepcion', 'RecepcionController@index'); 
+        Route::get('/recepcion/selectRecepcion', 'RecepcionController@selectRecepcion'); 
         Route::get('/recepcion/selectUnidad', 'Unidad_SolicitanteController@selectUnidad2');      
+        Route::get('/recepcion/selectCodigoLab', 'RecepcionController@selectCodigoLab');      
                 
         Route::get('/preparacion', 'PreparacionController@index');
         Route::post('/preparacion/registrar', 'PreparacionController@store');
@@ -291,7 +299,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/recepcion/actualizar', 'RecepcionController@update');
         Route::put('/recepcion/desactivar', 'RecepcionController@desactivar');
         Route::put('/recepcion/activar', 'RecepcionController@activar');
-        Route::get('/recepcion/selectRecepcion', 'RecepcionController@index');
+        Route::get('/recepcion/selectRecepcion', 'RecepcionController@selectRecepcion');
                 
         Route::get('/preparacion', 'PreparacionController@index');
         Route::post('/preparacion/registrar', 'PreparacionController@store');
@@ -473,7 +481,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/recepcion/actualizar', 'RecepcionController@update');
         Route::put('/recepcion/desactivar', 'RecepcionController@desactivar');
         Route::put('/recepcion/activar', 'RecepcionController@activar');
-        Route::get('/recepcion/selectRecepcion', 'RecepcionController@index');
+        Route::get('/recepcion/selectRecepcion', 'RecepcionController@selectRecepcion');
                 
         Route::get('/preparacion', 'PreparacionController@index');
         Route::post('/preparacion/registrar', 'PreparacionController@store');

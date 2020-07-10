@@ -75,7 +75,7 @@ class Unidad_SolicitanteController extends Controller
 
      public function solPdf(Request $request,$nro_reg){          
         //$nro_reg = $request->nro_reg;       
-        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','like','%'. $nro_reg)
+        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=', $nro_reg)
         ->where('solicitud_ensayo.estado','=','1')
         ->where('unidad_solicitud.estado','=','1')
         ->where('personasE.estado','=','1')->where('personasR.estado','=','1')        
@@ -133,8 +133,8 @@ class Unidad_SolicitanteController extends Controller
                   'personasR.paterno as paternoR','personasE.paterno as paternoE','personasR.materno as maternoR',
                   'personasE.materno as maternoE','unidad_solicitud.id as idUnidad_sol','personasR.id as idResponsable',
                   'personasE.id as idEncargado','solicitud_ensayo.id as idSol_ensayo','solicitud_ensayo.nro_registro','solicitud_ensayo.fecha_registro','solicitud_ensayo.idunidad',
-                   'informacion_solicitud.id as idInforsol','revision.id as idRevision','resultado.id as idResultado','recomendaciones.id as idRecomendaciones',
-                   'conformidad.id as idConformidad')
+                   'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito', 'revision.id as idRevision','resultado.id as idResultado',
+                   'recomendaciones.id as idRecomendaciones','conformidad.id as idConformidad')
         ->orderBy('unidad_solicitud.id','asc')->get();
         return['unidad_solicitante'=>$unidad_solicitante];
     }

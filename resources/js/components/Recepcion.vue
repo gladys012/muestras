@@ -69,19 +69,19 @@
                         :sort-desc.sync="sortDesc"
                         :sort-direction="sortDirection"                     
                     >
-                        <template v-slot:head(fecha)="data">
+                        <template v-slot:head(fecha_recepcion)="data">
+                            <span class="text-primary">{{ data.label }}</span>
+                        </template>
+                        <template v-slot:head(fecha_muestra)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
                         <template v-slot:head(codigo_lab)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
-                        <template v-slot:head(nro_vaso)="data">
+                        <template v-slot:head(codigo_muestra)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
                         <template v-slot:head(cantidad)="data">
-                            <span class="text-primary">{{ data.label }}</span>
-                        </template>   
-                        <template v-slot:head(codigo)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>   
                         <template v-slot:head(acciones)="data">
@@ -132,7 +132,7 @@
                 <div class="modal-body">
                     <b-form @submit="onSubmit" v-if="show">
                        <div class="row">
-                         <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-3">
                             <b-form-group id="input-group-1"  label="Fecha Recepción:" label-for="input-2" >
                                 <datepicker 
                                     :bootstrap-styling="true"
@@ -142,24 +142,41 @@
                                     format="dd/MM/yyyy"
                                     v-model="fechaR"  
                                     calendar-button
-                                    calendar-button-icon="fa fa-calendar"   
+                                    calendar-button-icon="fa fa-calendar"  
+                                    disabled 
                                 ></datepicker>
                             </b-form-group>
                          </div>
-                         <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-3">
                             <b-form-group id="input-group-2"  label="Hora:" label-for="input-2" >
                                 <b-form-timepicker v-model="hora" placeholder="Seleccione hora" local="es"></b-form-timepicker> 
                             </b-form-group>
                          </div> 
-                         <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-3">
+                                <b-form-group id="input-group-2"  label="Procedencia o Unidad:" label-for="input-2" >                                                              
+                                  <b-form-select v-model="idunidad" class="mb-3" @change="selectUnidadCodigo(idunidad)" required>
+                                      <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                      <b-form-select-option v-for="unidad in arrayUnidad" :key="unidad.id" :value="unidad.id" v-text="unidad.unidad" ></b-form-select-option>
+                                  </b-form-select> 
+                               </b-form-group>
+                            </div> 
+                            <div class="form-group col-sm-3">
+                                <b-form-group id="input-group-2"  label="Codigo cliente:" label-for="input-2" >                                                              
+                                  <b-form-select v-model="idcod" class="mb-3" @change="nroCodigoLab(idcod)" required >
+                                      <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                      <b-form-select-option v-for="codigo in arrayCodigo" :key="codigo.id" :value="codigo.id" v-text="codigo.codigo"></b-form-select-option>
+                                  </b-form-select> 
+                               </b-form-group>
+                            </div> 
+                         <!--div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Codigo cliente:" label-for="input-4" >
                                 <b-form-input id="input-4" v-model="codigo_cliente" placeholder="Cod. cliente" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                                                
+                         </div-->                                                
                        </div>
                         <div class="row">
-                         <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-3">
                             <b-form-group id="input-group-1"  label="Fecha Muestra:" label-for="input-2" >
                                 <datepicker 
                                     :bootstrap-styling="true"
@@ -169,59 +186,40 @@
                                     format="dd/MM/yyyy"
                                     v-model="fechaM"  
                                     calendar-button
-                                    calendar-button-icon="fa fa-calendar"   
+                                    calendar-button-icon="fa fa-calendar"                                       
                                 ></datepicker>
                             </b-form-group>
                          </div>                         
-                         <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-4"  label="Nombre persona entrega:" label-for="input-4" >
-                                <b-form-input id="input-4" v-model="persona_entrega" placeholder="Nombre persona entrega" required                            
+                         <div class="form-group col-sm-3">                           
+                            <div class="container">
+                                <div class="box">
+                                    <div class="checkbox-group">
+                                    <input id="checkboxName1" type="checkbox" v-model="liquido" @change="checkBoxSol(0)"/>
+                                    <label for="checkboxName1" class="ta">Líquido</label>
+                                    <input id="checkboxName2" type="checkbox" v-model="solido" @change="checkBoxSol(1)"/>
+                                    <label for="checkboxName2" class="ta">Sólido</label> 
+                                    </div>
+                                </div>
+                            </div> 
+                         </div>
+                         <div class="form-group col-sm-3">
+                            <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
+                                <b-form-input id="input-4" type="number" v-model="cantidad" placeholder="Cantidad" required                            
                                 ></b-form-input>
                             </b-form-group>
                          </div>
-                         <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Cod. muestra:" label-for="input-4" >
                                 <b-form-input id="input-4" v-model="codigo_muestra" placeholder="Cod. muestra" required                            
                                 ></b-form-input>
                             </b-form-group>
                          </div>                                                
                        </div>  
-                       <div class="row">                                                                                                                                                            
-                           <div class="form-group col-sm-4">                           
-                            <div class="container">
-                                <div class="box">
-                                    <div class="checkbox-group">
-                                    <input id="checkboxName1" type="checkbox" v-model="liquido"/>
-                                    <label for="checkboxName1" class="ta">Líquido</label>
-                                    <input id="checkboxName2" type="checkbox" v-model="solido"/>
-                                    <label for="checkboxName2" class="ta">Sólido</label> 
-                                    </div>
-                                </div>
-                            </div> 
-                         </div>
-                         <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
-                                <b-form-input id="input-4" type="number" v-model="cantidad" placeholder="Cantidad" required                            
-                                ></b-form-input>
-                            </b-form-group>
-                         </div>
-                         <div class="form-group col-sm-4">
-                            <b-form-group id="input-group-4"  label="Código laboratorio:" label-for="input-4" >
-                                <b-form-input id="input-4" v-model="codigo_lab" placeholder="Código laboratorio" disabled                            
-                                ></b-form-input>
-                            </b-form-group>
-                         </div> 
+                       <div class="row">                                                                                                                                                                                                               
+                         
                        </div>                       
                        <div class="row">                                                                                                                                   
-                            <div class="form-group col-sm-3">
-                                <b-form-group id="input-group-2"  label="Procedencia o Unidad:" label-for="input-2" >                                                              
-                                  <b-form-select v-model="idunidad" class="mb-3" required>
-                                      <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
-                                      <b-form-select-option v-for="unidad in arrayUnidad" :key="unidad.id" :value="unidad.id" v-text="unidad.unidad" :onChange="buscarDatosSolicitud(unidad.unidad)"></b-form-select-option>
-                                  </b-form-select> 
-                               </b-form-group>
-                            </div> 
-                            <div class="form-group col-sm-4">                           
+                            <!--div class="form-group col-sm-4">                           
                                 <div class="container">
                                     <div class="box">
                                         <div class="checkbox-group">
@@ -242,10 +240,10 @@
                                     <b-form-select-option v-for="unidad in arrayUnidad" :key="unidad.id" :value="unidad.id" v-text="unidad.unidad2"></b-form-select-option>
                                 </b-form-select> 
                             </b-form-group>
-                         </div>                          
+                         </div-->                          
                         </div> 
                        <div class="row">
-                        <div class="form-group col-sm-12">
+                        <div class="form-group col-sm-9">
                             <b-form-group label="Analito de interés">
                                 <b-form-tags v-model="value" no-outer-focus class="mb-2">
                                     <template
@@ -324,9 +322,15 @@
                                 </b-form-group>
                             
                         </div>
+                        <div class="form-group col-sm-3">
+                            <b-form-group id="input-group-4"  label="Código laboratorio:" label-for="input-4" >
+                                <b-form-input id="input-4" v-model="codigo_lab" placeholder="Código laboratorio" disabled                          
+                                ></b-form-input>
+                            </b-form-group>
+                         </div> 
                        </div> 
                        <div class="row">
-                           <div class="form-group col-sm-12">
+                           <div class="form-group col-sm-9">
                               <b-form-group id="input-group-8" label="Observaciones:" label-for="input-6">                                
                                 <b-form-textarea
                                     id="textarea"
@@ -335,7 +339,13 @@
                                     rows="3" max-rows="4"
                                     ></b-form-textarea>
                             </b-form-group>
-                          </div>                       
+                          </div> 
+                          <div class="form-group col-sm-3">
+                            <b-form-group id="input-group-4"  label="Nombre persona entrega:" label-for="input-4" >
+                                <b-form-input id="input-4" v-model="cliente" placeholder="Nombre persona entrega" required                            
+                                ></b-form-input>
+                            </b-form-group>
+                         </div>                       
                        </div>                                
                       <div class="modal-footer">
                         <b-button type="reset" variant="secondary" @click="cerrarModal()">Cerrar</b-button>
@@ -368,7 +378,7 @@
                 recepcion_id: 0,
                 fechaR: new Date(),
                 fechaM: new Date(),
-                hora:'',
+                hora: new Date(),
                 codigo_cliente: '',
                 codigo_muestra: '',
                 codigo_lab: '',
@@ -380,11 +390,15 @@
                 liquido:'',
                 solido:'',
                 unidad:'',
+                
+                //esta por verse
                 cristales:'',
                 salmueras:'',
                 aguas:'',
                 dato_dilucion:'',
 
+                idcod:'',
+                arrayCodigo:[],
                 idunidad:0,
                 arrayUnidad:[],
                 arrayRecepcion : [],
@@ -415,10 +429,11 @@
                 dismissCountDown: 0,
                 show: true,
                 columnas: [
-                  { key: 'fecha', label: 'Fecha', sortable: true, sortDirection: 'desc' },
-                  { key: 'codigo', label: 'Cod. muestra', sortable: true, class: 'text-justify' },                 
+                  { key: 'fecha_recepcion', label: 'Fecha recepcion', sortable: true, sortDirection: 'desc' },
+                  { key: 'fecha_muestra', label: 'Fecha muestra', sortable: true, sortDirection: 'desc' },
+                  { key: 'codigo_lab', label: 'Cod. laboratorio', sortable: true, class: 'text-justify' },                 
+                  { key: 'codigo_muestra', label: 'Cod. muestra', sortable: true },                 
                   { key: 'cantidad', label: 'Cantidad', sortable: true },                 
-                  { key: 'codigo', label: 'Código muestra', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
                 ],
                 perPage: 10,
@@ -444,7 +459,7 @@
             }
             return "";  
             }
-        },
+       },
         methods : {
 
             onFiltered(filteredItems) {
@@ -462,28 +477,25 @@
                                 this.arrayAnalito=options
                             }else{
                     this.arrayAnalito='';
-                    /*this.searchDesc();
-                    return "No hay datos con sus criterios de búsqueda";*/
-                } 
+                        } 
                             return options;
-                }
-                
+                    }                
                 },
 
-                onOptionClick({ option, addTag }) {
+            onOptionClick({ option, addTag }) {
                 addTag(option.nombre);
                 console.log(option,'option');
                 console.log(option.nombre,'nombre option jkgjh');
-                console.log(this.value,'analito');  
+                //console.log(this.value,'analito');  
                 this.search = "";
-                },
-                adicionAnalito() {
+            },
+            adicionAnalito() {
                 this.inputAnalito = 1;
                 if (this.nombreAnalito > 1) {
                     this.arrayAnalito();
                     console.log(this.arrayAnalito,'arrayyyy');
                 }
-                },
+            },
             
             listarRecepcion (){
                 let me=this;
@@ -504,30 +516,47 @@
                 evt.preventDefault()  //val. form
             },
             registrarRecepcion(){ 
-                console.log(this.fechaR,'entra fecha');
                 this.fechaR = moment(this.fechaR).format('D/MM/YYYY');
                 console.log(this.fechaR,'fechaaaaaa');
                 let me = this;
-                        axios.post('/recepcion/registrar',{
-                            'codigo': this.codigo,
-                            'cantidad': 5,
-                            'fecha' : this.fecha,
-                            'hora' : this.hora,
-                            'liquido' : this.liquido,
-                            'solido' : this.solido,
-                            'usr_id':1,
-                            'identrega': 1,
-                            'cliente':this.idresponsable,
-                            'observaciones': this.observaciones,
+                var datosA  = [];
+                    for (let i = 0; i < this.value.length; i++) {
+                        datosA.push({
+                        "nombre": this.value[i]
+                    });                                
+                    }      
+                   /* for (let i = 0; i < this.arrayUnidad_Codigo.length; i++) {
+                        const cod = this.arrayUnidad_Codigo[i].codigo;
+                        console.log(cod,'cod ........');
+                        if (cod == this.codigo) {
+                            this.verificaCod = 1;   
+                        }                        
+                    }*/  
+                    this.datosAnalito = JSON.stringify(datosA);
+                    axios.post('/recepcion/registrar',{
+                        'fecha_recepcion' : this.fechaR,
+                        'fecha_muestra' : this.fechaM,
+                        'hora' : this.hora,
+                        'codigo_cliente': this.codigo_cliente,
+                        'codigo_muestra': this.codigo_muestra,
+                        'codigo_lab': this.codigo_lab,
+                        'cantidad': this.cantidad,
+                        'liquido' : this.liquido,
+                        'solido' : this.solido,
+                        'usr_id':1,
+                        'idunidadcod': this.idunidad,
+                        'analito': this.datosAnalito,
+                        'cliente':this.cliente,
+                        'observaciones': this.observaciones,
 
-                        }).then(function (response) { 
-                       // me.actualizarDatoPersona();                      
-                        me.listarRecepcion();
+                    }).then(function (response) { 
+                    // me.actualizarDatoPersona();                      
+                    me.listarRecepcion();
 
-                         me.cerrarModal();
-                    }).catch(function (error) {
-                        console.log(error);
-                    });                                  
+                        me.cerrarModal();
+                }).catch(function (error) {
+                    console.log(error);
+                });                                  
             },
             
             actualizarRecepcion(){             
@@ -565,19 +594,7 @@
                     console.log(error);
                 });
             },
-            
-            cerrarModal(){
-                this.modal=0;
-                this.tituloModal='';
-                //this.fechaR = new Date();
-                this.hora='';
-                this.codigo='';
-                this.cantidad=0;
-                this.liquido='';
-                this.solido='';
-                this.persona_entrega='';                
-                this.errorRecepcion=0;
-            },
+                        
             abrirModal(modelo, accion, data = []){
                 switch(modelo){
                     case "recepcion":
@@ -585,10 +602,14 @@
                         switch(accion){
                             case 'registrar':
                             {
+                                
+                                const moment = require('moment');
+                                this.hora = moment().format('hh:mm:ss');
+
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Recepción';
-                                this.fecha=new Date();
-                                this.hora='';
+                                this.fecha_recepcion = new Date();
+                                this.fecha_muestra = new Date();
                                 this.codigo='';
                                 this.cantidad=0;
                                 this.liquido='';
@@ -604,6 +625,10 @@
                             }
                             case 'actualizar':
                             {
+                                /*var datoA = this.datosAnalito;
+                                this.datosAnalito = JSON.parse(datoA);
+                                console.log(this.datosAnalito,'datos aaaaaanalito');
+                                */
                                 this.modal=1;
                                 this.tituloModal='Actualizar Recepción';
                                 this.tipoAccion=2;
@@ -626,47 +651,135 @@
                 this.selectUnidad();
                 this.selectAnalito();
             },
-                selectAnalito() {
-                let me = this;
-                var url = "/solicitud/selectAnalito";
-                axios
-                    .get(url)
-                    .then(function(response) {
-                    console.log(response, "select");
-                    var respuesta = response.data;
-                    me.arrayAnalito = respuesta.analito.data;
-                    me.arrayA = respuesta.analito.data;
-                    console.log(me.arrayAnalito, "select 3");
-                    })
-                    .catch(function(error) {
-                    console.log(error);
-                    });
-                },
-                buscarDatosSolicitud(unidad){
-                console.log('entra11', unidad);
-                var ci = '';
-                var idpaterno = '';
-                var nro_reg = '';
-                /*if (unidad=='') {
-                     this.dismissCountDown = this.dismissSecs
-                }    */           
-                let me=this;
-                if (unidad!='') {
-                    var url= '/solicitudModificacion/busquedaDatos?unidad='+ unidad + '&idpaterno='+ idpaterno + '&ci='+ ci + '&nro_reg=' + nro_reg;
-                axios.get(url).then(function (response) {
-                    var respuesta= response.data;
-                    console.log(respuesta,'respuesta');
-                    me.arrayBusqueda = respuesta.unidad_solicitante;
-                    console.log(me.arrayBusqueda,'respuesta busq');
-                   /* if (me.arrayBusqueda=='') {
-                        me.dismissCountDown2 = me.dismissSecs;
-                    }*/
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-                }                
+            cerrarModal(){
+                this.modal=0;
+                this.tituloModal='';
+                //this.fechaR = new Date();
+               // this.hora='';
+                this.codigo='';
+                this.cantidad=0;
+                this.liquido='';
+                this.solido='';
+                this.persona_entrega='';                
+                this.errorRecepcion=0;
             },
+
+            selectAnalito() {
+            let me = this;
+            var url = "/solicitud/selectAnalito";
+            axios
+                .get(url)
+                .then(function(response) {
+                console.log(response, "select");
+                var respuesta = response.data;
+                me.arrayAnalito = respuesta.analito.data;
+                me.arrayA = respuesta.analito.data;
+                console.log(me.arrayAnalito, "select 3");
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            },
+            buscarDatosSolicitud(unidad){
+            console.log('entra11', unidad);
+            var ci = '';
+            var idpaterno = '';
+            var nro_reg = '';
+            /*if (unidad=='') {
+                    this.dismissCountDown = this.dismissSecs
+            }    */           
+            let me=this;
+            if (unidad!='') {
+                var url= '/solicitudModificacion/busquedaDatos?unidad='+ unidad + '&idpaterno='+ idpaterno + '&ci='+ ci + '&nro_reg=' + nro_reg;
+            axios.get(url).then(function (response) {
+                var respuesta= response.data;
+                console.log(respuesta,'respuesta');
+                me.arrayBusqueda = respuesta.unidad_solicitante;
+                console.log(me.arrayBusqueda,'respuesta busq');
+                /* if (me.arrayBusqueda=='') {
+                    me.dismissCountDown2 = me.dismissSecs;
+                }*/
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            }                
+        },
+        selectUnidadCodigo(cod){
+            console.log(cod,'cod');
+            let me=this;
+            //var url= '/solicitudPersona/selectPersonaCi?filtro='+search;
+            var url= '/unidad_codigo/selectUnidadCodigo?filtro='+cod;
+            axios.get(url).then(function (response) {
+                console.log(response,'select');
+                var respuesta= response.data;                                        
+                me.arrayCodigo = respuesta.unidad_codigo;
+                console.log(me.arrayCodigo,'unidad codigo');
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        nroCodigoLab(idcod){
+            console.log(idcod,'cod.......');
+            this.codigo_lab='';
+            for (let i = 0; i < this.arrayCodigo.length; i++) {
+                if (idcod == this.arrayCodigo[i].id) {
+                    this.codigo_cliente = this.arrayCodigo[i].codigo;
+                    console.log(this.codigo_cliente,'this.codigo_vliente');
+                    
+                    if (this.arrayRecepcion.length>0) {  
+                        console.log('entra if**');                      
+                        for (let j = 0; j < this.arrayRecepcion.length; j++) {
+                            //var cod_labCorr = this.arrayRecepcion[i].codigo_lab.substring(0,2);
+
+                                    console.log(this.arrayRecepcion[j].codigo_lab,'000000000000000000000000000 cod lab ');                
+                                    var cod_lab_corr = this.arrayRecepcion[j].codigo_lab;
+                                if (this.codigo_lab=='') {    
+                                    console.log(cod_lab_corr,'corrrrrr');
+                                    var parteCod = cod_lab_corr.split("-",1);
+                                    parteCod = parteCod[0];                            
+                                    console.log(parteCod,'parte cod');
+                                    if (this.codigo_cliente == parteCod && this.arrayRecepcion.length) {
+                                        var parteNum = cod_lab_corr.split("-",2);
+                                        var nro = parteNum[1];
+                                        console.log(nro,'parte parteNum');
+                                        nro = Number(nro)+1;                                
+                                        console.log(nro,'parrrrrrrrrrrrrrrr num');
+                                        this.codigo_lab= parteCod+'-'+nro;
+                                        console.log(this.codigo_lab,'lab........');
+                                    } else{
+                                        console.log('entras123121212312121321212313');
+                                        //this.codigo_lab=='';
+                                        if (this.codigo_lab=='') {
+                                            this.codigo_lab = this.codigo_cliente + '-1';
+                                            console.log(this.codigo_lab,'entro else');
+                                        }
+                                        
+                                    }
+                                }
+                        }    
+                    }else{
+                        console.log('entras1231212123121213212123130000000000');
+                        this.codigo_lab = this.codigo_cliente + '-1';
+                        console.log(this.codigo_lab,'entro else afuera');
+                    }
+                   
+                
+                }                
+            }
+        },
+
+        checkBoxSol(val){
+               if (val==0) {
+                  if (this.liquido == true) {
+                    this.solido = false;
+                }  
+               }else if(val==1){
+                   if (this.solido == true) {
+                     this.liquido = false;}
+               }     
+           },
            
         },
         mounted() {            
@@ -696,5 +809,8 @@
         margin-top:10px;
         font-family: 'Lato', sans-serif;
         color:rgb(46, 93, 155);
-    }        
+    }   
+    .modal-lg {
+       max-width: 75% !important;
+}     
 </style>

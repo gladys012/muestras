@@ -11,51 +11,57 @@ class RecepcionController extends Controller
     {
         //if (!$request->ajax()) return redirect('/');
  
-        $buscar = $request->buscar;
-        $criterio = $request->criterio;
+       // $criterio = $request->criterio;
          
-        if ($buscar==''){
-            $recepcion = Recepcion::join('personas','id_prs_entrega','=','personas.id')
-            ->select('recepcion.id','recepcion.id_prs_entrega as identrega','recepcion.codigo','recepcion.cantidad','personas.paterno as paterno','recepcion.fecha as fecha','recepcion.hora','recepcion.liquido','recepcion.solido','recepcion.cliente','recepcion.observaciones','recepcion.usr_id','recepcion.estado')
+            $recepcion = Recepcion::join('unidad_codigo','idunidadcod','=','unidad_codigo.id')
+            ->join('unidad_solicitud','unidad_codigo.idunidad','=','unidad_solicitud.id')
+            ->select('recepcion.id', 'recepcion.fecha_recepcion', 'recepcion.fecha_muestra', 'recepcion.codigo_cliente', 'recepcion.codigo_muestra', 'recepcion.codigo_lab', 'recepcion.idunidadcod',
+                    'recepcion.analito','recepcion.cantidad','recepcion.hora','recepcion.liquido','recepcion.solido','recepcion.cliente','recepcion.observaciones','recepcion.usr_id','recepcion.estado',
+                    'unidad_codigo.id as iduncod','unidad_codigo.idunidad', 'unidad_codigo.codigo', 'unidad_codigo.analito', 'unidad_solicitud.unidad' )
             ->orderBy('recepcion.id', 'desc')->paginate(10);
-        }
-        else{
+       
+       /* else{
             $recepcion = Recepcion::join('personas','id_prs_entrega','=','personas.id')
             ->select('recepcion.id','recepcion.id_prs_entrega as identrega','recepcion.codigo','recepcion.cantidad','personas.paterno as paterno','recepcion.fecha as fecha','recepcion.hora','recepcion.liquido','recepcion.solido','recepcion.cliente','recepcion.observaciones','recepcion.usr_id','recepcion.estado')
             ->where('recepcion.'.$criterio, 'like', '%'. $buscar . '%')
             ->orderBy('recepcion.id', 'desc')->paginate(10);
-        }
-         
+        }*/         
  
-        return [
-            'pagination' => [
-                'total'        => $recepcion->total(),
-                'current_page' => $recepcion->currentPage(),
-                'per_page'     => $recepcion->perPage(),
-                'last_page'    => $recepcion->lastPage(),
-                'from'         => $recepcion->firstItem(),
-                'to'           => $recepcion->lastItem(),
-            ],
-            'recepcion' => $recepcion
-        ];
+        return [ 'recepcion' => $recepcion ];
     }
+
+
     public function selectRecepcion(Request $request){
         if(!$request->ajax()) return redirect('/');
         $recepcion = Recepcion::where('estado','=','true')
-        ->select('id','codigo')->orderBy('codigo','asc')->get();
+        ->select('id', 'codigo_cliente')->distinct('codigo_cliente')->get(); 
         return['recepcion'=>$recepcion];
-    } 
+    }
+
+    public function selectCodigoLab(Request $request){
+        $filtro = $request->filtro; 
+        $recepcion = Recepcion::where('estado','=','1')
+        ->where('recepcion.codigo_cliente','like','%'. $filtro . '%')
+        ->select('recepcion.id', 'recepcion.codigo_muestra','recepcion.codigo_cliente', 'recepcion.codigo_lab')
+        ->orderBy('recepcion.id','asc')->get();
+        return['recepcion'=>$recepcion];
+    }
+                   
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
         $recepcion = new Recepcion();
-        $recepcion->id_prs_entrega = $request->identrega;
-        $recepcion->codigo = $request->codigo;
+        $recepcion->fecha_recepcion = $request->fecha_recepcion;
+        $recepcion->fecha_muestra = $request->fecha_muestra;
+        $recepcion->hora = $request->hora;
+        $recepcion->idunidadcod = $request->idunidadcod;
+        $recepcion->codigo_cliente = $request->codigo_cliente;
+        $recepcion->codigo_muestra = $request->codigo_muestra;
+        $recepcion->codigo_lab = $request->codigo_lab;
         $recepcion->cantidad = $request->cantidad;
         $recepcion->liquido = $request->liquido;
         $recepcion->solido = $request->solido;
-        $recepcion->fecha = $request->fecha;
-        $recepcion->hora = $request->hora;
+        $recepcion->analito = $request->analito;
         $recepcion->cliente = $request->cliente;
         $recepcion->observaciones = $request->observaciones;
         $recepcion->usr_id = $request->usr_id;
@@ -68,13 +74,17 @@ class RecepcionController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $recepcion = Recepcion::findOrFail($request->id);
-        $recepcion->id_prs_entrega = $request->identrega;
-        $recepcion->codigo = $request->codigo;
+        $recepcion->fecha_recepcion = $request->fecha_recepcion;
+        $recepcion->fecha_muestra = $request->fecha_muestra;
+        $recepcion->hora = $request->hora;
+        $recepcion->idunidadcod = $request->idunidadcod;
+        $recepcion->codigo_cliente = $request->codigo_cliente;
+        $recepcion->codigo_muestra = $request->codigo_muestra;
+        $recepcion->codigo_lab = $request->codigo_lab;
         $recepcion->cantidad = $request->cantidad;
         $recepcion->liquido = $request->liquido;
         $recepcion->solido = $request->solido;
-        $recepcion->fecha = $request->fecha;
-        $recepcion->hora = $request->hora;
+        $recepcion->analito = $request->analito;
         $recepcion->cliente = $request->cliente;
         $recepcion->observaciones = $request->observaciones;
         $recepcion->usr_id = $request->usr_id;

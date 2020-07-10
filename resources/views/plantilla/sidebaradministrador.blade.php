@@ -13,12 +13,15 @@
                             <li @click="menu=1" class="nav-item">
                                 <a class="nav-link" href="#"><i class="c-icon cil-circle"></i> Solicitud</a>
                             </li>
+                            <li @click="menu=101" class="nav-item">
+                                <a class="nav-link" href="#"><i class="c-icon cil-circle"></i> Adjuntar archivo</a>
+                            </li>
                             <li @click="menu=111" class="nav-item">
                                 <a class="nav-link" href="#"><i class="c-icon cil-circle"></i> Modificaciones</a>
                             </li>
-                            <!--li @click="menu=2" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Preparación</a>
-                            </li-->                            
+                            <li @click="menu=555" class="nav-item">
+                                <a class="nav-link" href="#"><i class="c-icon cil-circle"></i> Asignación de código</a>
+                            </li>                            
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">

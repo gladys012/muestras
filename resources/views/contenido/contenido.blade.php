@@ -9,8 +9,14 @@
         <template v-if="menu==1">
                 <solicitud></solicitud>
         </template>
+        <template v-if="menu==101">
+                <sol_adjuntar_archivo></sol_adjuntar_archivo>
+        </template>
         <template v-if="menu==111">
                 <modificacion></modificacion>
+        </template>
+        <template v-if="menu==555">
+                <codigo_lab></codigo_lab>
         </template>
         <template v-if="menu==2">
                 <recepcion></recepcion>

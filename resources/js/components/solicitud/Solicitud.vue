@@ -1270,7 +1270,6 @@
                 }).catch(function (error) {
                     console.log(error);
                 });
-               // console.log(this.idUnidadSol,'------------------');
             },
            
             RegistrarSolicitud(){
@@ -1565,7 +1564,7 @@
 /*@import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';*/
 
-$body-font-family: 'Open Sans', sans-serif;
+//$body-font-family: 'Open Sans', sans-serif;
 
 $checkbox-bg-color-checked: #00bbd6;
 $checkbox-border-color-checked: $checkbox-bg-color-checked;
@@ -1573,7 +1572,7 @@ $checkbox-bg-color-unchecked: #fff;
 $checkbox-border-color-unchecked:  #757575;
 
 body {
-  font-family: $body-font-family;
+ // font-family: $body-font-family;
 
   .container  {
    // display: flex;

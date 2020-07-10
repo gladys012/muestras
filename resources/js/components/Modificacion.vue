@@ -1164,7 +1164,7 @@
                   me.unidad_busq = valU.unidad;
               }                   
             },
-             countDownChanged(dismissCountDown) {
+            countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown
             },
             countDownChanged2(dismissCountDown2) {

@@ -32,7 +32,7 @@
               <td v-text="solicitud.cantidad"></td>
               <td v-text="solicitud.flujo"></td>
               <td v-text="solicitud.matriz"></td>
-              <td v-text="solicitud.analito"></td>
+              <td v-text="solicitud.analitoRender"></td>
               <td v-text="solicitud.des_procedencia"></td>
               <td>
                 <a
@@ -350,10 +350,24 @@ export default {
         analito: this.datosAnalito,
         des_procedencia: this.des_procedencia
       });
-      this.modal2 = 0;
-      let datos = this.arrayinfoSolicitud;
-      this.$emit('resultadosInf', datos);
+      
+      console.log(this.arrayinfoSolicitud,'info array');
+            for(let item of this.arrayinfoSolicitud){
+                item.analitoRender = [];
+                item.analito=JSON.parse(item.analito);
+                console.log(item.analito,'analito');
+                for (const nombre of item.analito) {
+                    item.analitoRender.push(nombre.nombre)
+                }                         
+            item.analitoRender = item.analitoRender.join("-")
+            }
+     
+     //envio de datos /padre
+     let datos = this.arrayinfoSolicitud;
+     this.$emit('resultadosInf', datos);
+     this.modal2 = 0;
     },
+    
     actualizarInfSolicitud(idsolicitud) {
       if (this.validarInfSolicitud()) {
         return;
@@ -409,8 +423,8 @@ export default {
         this.errorMostrarMsjSolicitud.push("Debe ingresar la cantidad.");
       if (!this.matriz)
         this.errorMostrarMsjSolicitud.push("Debe ingresar la matriz.");
-     /* if (!this.analito)
-        this.errorMostrarMsjSolicitud.push("Debe ingresar analito de interés.");*/
+      if (!this.value)
+        this.errorMostrarMsjSolicitud.push("Debe ingresar analito de interés.");
       if (!this.des_procedencia)
         this.errorMostrarMsjSolicitud.push(
           "Debe ingresar la descripción de la procedencia."

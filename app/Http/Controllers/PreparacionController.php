@@ -16,12 +16,12 @@ class PreparacionController extends Controller
          
         if ($buscar==''){
             $preparaciones = Preparacion::join('recepcion','preparacion.idrecepcion','=','recepcion.id')
-            ->select('preparacion.id','preparacion.idrecepcion','preparacion.codigo_lab','preparacion.fecha_analisis','preparacion.fecha_muestreo','preparacion.vh','preparacion.vs','preparacion.peso','preparacion.observaciones','preparacion.estado','preparacion.usr_id', 'recepcion.codigo as codigo_recepcion')
+            ->select('preparacion.id','preparacion.idrecepcion','preparacion.idcodigo_lab','preparacion.fecha_analisis','preparacion.fecha_muestreo','preparacion.vh','preparacion.vs','preparacion.peso','preparacion.observaciones','preparacion.estado','preparacion.usr_id', 'recepcion.codigo_lab as codigo_laboratorio', 'recepcion.codigo_cliente as codigo')
             ->orderBy('preparacion.id', 'desc')->paginate(10);
         }
         else{
             $preparaciones = Preparacion::join('recepcion','preparacion.idrecepcion','=','recepcion.id')
-            ->select('preparacion.id','preparacion.idrecepcion','preparacion.codigo_lab','preparacion.fecha_analisis','preparacion.fecha_muestreo','preparacion.vh','preparacion.vs','preparacion.peso','preparacion.observaciones','preparacion.estado','preparacion.usr_id', 'recepcion.codigo as codigo_recepcion')
+            ->select('preparacion.id','preparacion.idrecepcion','preparacion.idcodigo_lab','preparacion.fecha_analisis','preparacion.fecha_muestreo','preparacion.vh','preparacion.vs','preparacion.peso','preparacion.observaciones','preparacion.estado','preparacion.usr_id', 'recepcion.codigo_lab as codigo_laboratorio', 'recepcion.codigo_cliente as codigo')
             ->where('preparacion.'.$criterio, 'like', '%'. $buscar . '%')
             ->orderBy('preparacion.id', 'desc')->paginate(10);
         }
@@ -42,7 +42,7 @@ class PreparacionController extends Controller
     public function selectPreparacion(Request $request){
         if(!$request->ajax()) return redirect('/');
         $preparaciones = Preparacion::where('estado','=','1')
-        ->select('id','codigo_lab')->orderBy('codigo_lab','asc')->get();
+        ->select('id','idcodigo_lab')->orderBy('idcodigo_lab','asc')->get();
         return['preparaciones'=>$preparaciones];
     } 
 
@@ -51,7 +51,7 @@ class PreparacionController extends Controller
         if (!$request->ajax()) return redirect('/');
         $preparacion = new Preparacion();
         $preparacion->idrecepcion = $request->idrecepcion;
-        $preparacion->codigo_lab = $request->codigo_lab;
+        $preparacion->idcodigo_lab = $request->idcodigo_lab;
         $preparacion->fecha_analisis = $request->fecha_analisis;
         $preparacion->fecha_muestreo = $request->fecha_muestreo;
         $preparacion->vs = $request->vs;
@@ -67,7 +67,7 @@ class PreparacionController extends Controller
         if (!$request->ajax()) return redirect('/');
         $preparacion = Preparacion::findOrFail($request->id);
         $preparacion->idrecepcion = $request->idrecepcion;
-        $preparacion->codigo_lab = $request->codigo_lab;
+        $preparacion->idcodigo_lab = $request->idcodigo_lab;
         $preparacion->fecha_analisis = $request->fecha_analisis;
         $preparacion->fecha_muestreo = $request->fecha_muestreo;
         $preparacion->vs = $request->vs;

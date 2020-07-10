@@ -13,11 +13,13 @@ Vue.use(IconsPlugin)
 
 Vue.component('solicitud', require('./components/solicitud/Solicitud.vue').default);  
 Vue.component('solicitudInf', require('./components/solicitud/Sol_InformacionSol.vue').default);  
-Vue.component('solPDF', require('./components/solicitud/solPDF.vue').default);  
+Vue.component('sol_adjuntar_archivo', require('./components/solicitud/Adjuntar_Archivo.vue').default);  
+//Vue.component('solPDF', require('./components/solicitud/solPDF.vue').default);  
 Vue.component('modificacion', require('./components/Modificacion.vue').default);
+Vue.component('codigo_lab', require('./components/Codigo_Lab.vue').default); 
 
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('recepcion', require('./components/Recepcion.vue').default);
 Vue.component('preparacion', require('./components/Preparacion.vue').default);
 Vue.component('cloruros_vol', require('./components/Cloruros_vol.vue').default);
@@ -49,8 +51,8 @@ Vue.component('rol', require('./components/Rol.vue').default);
 Vue.component('user', require('./components/User.vue').default);
 /*Vue.component('rol', require('./components/Rol.vue').default);
 Vue.component('user', require('./components/User.vue').default);
-*/Vue.component('prueba', require('./components/User.vue').default);
-Vue.component('solicitud2', require('./components/User.vue').default);
+*///Vue.component('prueba', require('./components/User.vue').default);
+//Vue.component('solicitud2', require('./components/User.vue').default);
 
 
 import swal from 'sweetalert2'
