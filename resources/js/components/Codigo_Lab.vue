@@ -502,7 +502,7 @@
                 this.idpreparacion= 0;
                 this.idunidad='',
                 this.codigo = '';
-                this.analito = '';
+                this.value = '';
             },
             abrirModal(modelo, accion, data = []){
                 switch(modelo){
@@ -531,7 +531,18 @@
                                 this.unidadCodigo_id=data['id'];
                                 this.idunidad = data['idunidad'];
                                 this.codigo=data['codigo'];
-                                this.datosAnalito=data['analito'];
+                                //this.value=data['analito'];
+                                let analito = data
+                                data.analitoRender = [];
+                                //data.analito=JSON.parse(data.analito);
+                                console.log(data.analito,'analito');
+                                data.analito = typeof data.analito == 'string' ? JSON.parse(data.analito) : data.analito
+                                for (const nombre of data.analito) {
+                                    data.analitoRender.push(nombre.nombre)
+                                }                         
+                            //data.analitoRender = data.analitoRender.join("-")
+                            
+                            this.value = data["analitoRender"];
                                 break;
                             }
                         }

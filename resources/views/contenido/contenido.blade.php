@@ -92,9 +92,12 @@
                 <trazas_aa></trazas_aa>
         </template>
         <template v-if="menu==30">
+                <resultados></resultados>
+        </template>
+        <template v-if="menu==35">
                 <personas></personas>
         </template>
-        <template v-if="menu==31">
+        <template v-if="menu==36">
                 <analitos></analitos>
         </template>
         <template v-if="menu==40">

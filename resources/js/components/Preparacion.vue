@@ -172,7 +172,7 @@
                        <div class="row">    
                        <div class="form-group col-sm-4">
                             <b-form-group id="input-group-2"  label="Codigo laboratorio:" label-for="input-2" >                                                              
-                                <b-form-select v-model="idcodigo_lab" class="mb-3" required>
+                                <b-form-select v-model="idcodigo_lab" class="mb-3" @change="selectCodigoLabid(idcodigo_lab)" required> 
                                     <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
                                     <b-form-select-option v-for="codigo in arrayCodigoLab" :key="codigo.id" :value="codigo.id" v-text="codigo.codigo_lab"></b-form-select-option>
                                 </b-form-select> 
@@ -195,9 +195,9 @@
                             <div class="container">
                                 <div class="box">
                                     <div class="checkbox-group">
-                                    <input id="checkboxName1" type="checkbox" v-model="vs"/>
+                                    <input id="checkboxName1" type="checkbox" v-model="vs" @change="checkBoxSol(0)"/>
                                     <label for="checkboxName1" class="ta">VS</label>
-                                    <input id="checkboxName2" type="checkbox" v-model="vh"/>
+                                    <input id="checkboxName2" type="checkbox" v-model="vh" @change="checkBoxSol(1)"/>
                                     <label for="checkboxName2" class="ta">VH</label> 
                                     </div>
                                 </div>
@@ -244,7 +244,7 @@
 
                 preparacion_id: 0,
                 idrecepcion : 0,
-                idcodigo_lab:0,
+                codigo_lab:'',
                 codigo_lab:'',
                 fecha_analisis: new Date(),
                 fecha_muestreo: new Date(),
@@ -262,12 +262,12 @@
                 tipoAccion : 0,
                 dismissSecs: 5,
                 dismissCountDown: 0,
-                show: true,
+                show: true, 
                 columnas: [
                   { key: 'fecha_analisis', label: 'Fecha análisis', sortable: true, sortDirection: 'desc' },
                   { key: 'fecha_muestreo', label: 'Fecha muestreo', sortable: true, sortDirection: 'desc' },
                   { key: 'codigo', label: 'Cod. recepción', sortable: true, class: 'text-justify' },                 
-                  { key: 'codigo_laboratorio', label: 'Código laboratorio', sortable: true },                 
+                  { key: 'codigo_lab', label: 'Código laboratorio', sortable: true },                 
                   { key: 'peso', label: 'Peso', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
                 ],
@@ -315,6 +315,10 @@
                 evt.preventDefault()  //val. form
             },
             registrarPreparacion(){ 
+                /*for (let i = 0; i < this.arrayPreparacion; i++) {
+                    const codigo = this.arrayPreparacion[i].codigo_lab;
+                    
+                }*/
                 console.log(this.fecha_analisis,'entra fecha');
                 this.fecha_analisis = moment(this.fecha_analisis).format('D/MM/YYYY');
                 console.log(this.fecha_analisis,'fechaaaaaa');
@@ -322,7 +326,7 @@
                     console.log('entra 0');
                         axios.post('/preparacion/registrar',{
                         'idrecepcion': this.idrecepcion, 
-                        'idcodigo_lab': this.idcodigo_lab,
+                        'codigo_lab': this.codigo_lab,
                         'fecha_analisis': this.fecha_analisis,
                         'fecha_muestreo': this.fecha_muestreo,
                         'peso': this.peso,
@@ -344,7 +348,7 @@
                 this.fecha_analisis = moment(this.fecha_analisis).format('D/MM/YYYY');
                 axios.put('/preparacion/actualizar',{
                     'idrecepcion': this.idrecepcion,
-                    'idcodigo_lab': this.idcodigo_lab,
+                    'codigo_lab': this.codigo_lab,
                     'fecha_analisis': this.fecha_analisis,
                     'fecha_muestreo': this.fecha_muestreo,
                     'peso': this.peso,
@@ -378,13 +382,13 @@
                     console.log(error);
                 });
             },
-
-            selectCodigoLab(idcodigo_lab){
-                console.log(idcodigo_lab,'idcodigo_lab codigo+++++');  
+            
+            selectCodigoLab(idrecepcion){
+                console.log(idrecepcion,'idrecepcion codigo+++++');  
                // var c=0;
                 for (let i = 0; i < this.arrayRecepcion.length; i++) {
                     console.log(this.arrayRecepcion[i].id,'arrary id');
-                    if (idcodigo_lab == this.arrayRecepcion[i].id) {
+                    if (idrecepcion == this.arrayRecepcion[i].id) {
                         var codigo = this.arrayRecepcion[i].codigo_cliente;   
                         
                         console.log(codigo,'codigo.');                     
@@ -402,6 +406,21 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            },
+
+            selectCodigoLabid(idcod){
+                console.log(this.arrayCodigoLab,'*************');
+                for (let i = 0; i < this.arrayCodigoLab.length; i++) {
+                    console.log(this.arrayCodigoLab[i],'djvjdvjdbv');
+                    console.log(this.arrayCodigoLab[i].id,'arrary id');
+                    if (idcod == this.arrayCodigoLab[i].id) {
+                        var codigo = this.arrayCodigoLab[i].codigo_lab;   
+                        this.codigo_lab = codigo;
+                        
+                        console.log(codigo,'codigo.');                     
+                        console.log(this.codigo_lab,'codigo. lab');  
+                    }                    
+                }
             },
 
             cerrarModal(){
@@ -459,7 +478,17 @@
                     }
                 }
                 this.selectRecepcion();
-            }
+            },
+            checkBoxSol(val){
+               if (val==0) {
+                  if (this.vs == true) {
+                    this.vh = false;
+                }  
+               }else if(val==1){
+                   if (this.vh == true) {
+                     this.vs = false;}
+               }     
+           },           
         },
         mounted() {            
             this.listarPreparacion();            
@@ -474,7 +503,7 @@
     .mostrar{
         display: list-item !important;
         opacity: 1 !important;
-        position: absolute !important;
+        position: fixed !important;
         background-color: #3c29297a !important;
     }  
     .datepicker1 {

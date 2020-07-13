@@ -15,7 +15,7 @@ Vue.component('solicitud', require('./components/solicitud/Solicitud.vue').defau
 Vue.component('solicitudInf', require('./components/solicitud/Sol_InformacionSol.vue').default);  
 Vue.component('sol_adjuntar_archivo', require('./components/solicitud/Adjuntar_Archivo.vue').default);  
 //Vue.component('solPDF', require('./components/solicitud/solPDF.vue').default);  
-Vue.component('modificacion', require('./components/Modificacion.vue').default);
+Vue.component('modificacion', require('./components/solicitud/Modificacion.vue').default);
 Vue.component('codigo_lab', require('./components/Codigo_Lab.vue').default); 
 
 
@@ -44,6 +44,8 @@ Vue.component('turbidez_conductividad', require('./components/Turbidez_Conductiv
 Vue.component('potasio_valoracion', require('./components/Potasio_Valoracion.vue').default);
 Vue.component('potasio_gravimetria', require('./components/Potasio_Gravimetria.vue').default);
 Vue.component('trazas_aa', require('./components/Trazas_Aa.vue').default);
+
+Vue.component('resultados', require('./components/Resultados.vue').default);
 
 Vue.component('personas', require('./components/Personas.vue').default);
 Vue.component('analitos', require('./components/Analitos.vue').default);

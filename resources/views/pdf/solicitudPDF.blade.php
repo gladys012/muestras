@@ -119,7 +119,7 @@
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>IncanatoIT</b><br>José Gálvez 1368, Chongoyape - Chiclayo, Perú<br>Telefono:(+51)931742904<br>Email:jcarlos.ad7@gmail.com
+                    <b>IncanatoIT</b><br>José Gálvez com ngfhgfhj
                 </p>
             </div>
             <div id="fact">
@@ -156,7 +156,6 @@
                     <thead>
                         <tr id="fv">
                             <th>VENDEDOR</th>
-                            <th>FECHA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,57 +167,6 @@
             </div>
         </section>
         <br>
-        <section>
-            <div>
-                <table id="facarticulo">
-                    <thead>
-                        <tr id="fa">
-                            <th>CANT</th>
-                            <th>DESCRIPCION</th>
-                            <th>PRECIO UNIT</th>
-                            <th>DESC.</th>
-                            <th>PRECIO TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($detalles as $det)
-                        <tr>
-                            <td>{{$det->cantidad}}</td>
-                            <td>{{$det->articulo}}</td>
-                            <td>{{$det->precio}}</td>
-                            <td>{{$det->descuento}}</td>
-                            <td>{{$det->cantidad*$det->precio-$det->descuento}}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        @foreach ($venta as $v)
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>SUBTOTAL</th>
-                            <td>$ {{round($v->total-($v->total*$v->impuesto),2)}}</td>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Impuesto</th>
-                            <td>$ {{round($v->total*$v->impuesto,2)}}</td>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>TOTAL</th>
-                            <td>$ {{$v->total}}</td>
-                        </tr>
-                        @endforeach
-                    </tfoot>
-                </table>
-            </div>
-        </section>
         <br>
         <br>
         <footer>

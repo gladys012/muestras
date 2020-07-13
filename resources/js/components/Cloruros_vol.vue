@@ -72,7 +72,7 @@
                         <template v-slot:head(fecha)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
-                        <template v-slot:head(codigo_lab)="data">
+                        <template v-slot:head(codigo_laboratorio)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
                         <template v-slot:head(dilucion)="data">
@@ -172,7 +172,7 @@
                             </b-form-group>
                          </div>
                          <div class="form-group col-lg-4">
-                            <b-form-group id="input-group-6" label="Conc Tit.:" label-for="input-6">
+                            <b-form-group id="input-group-6" label="Conc. Tit.:" label-for="input-6">
                                 <b-form-input id="input-6" 
                                     v-model="conc_tit"  type="text" placeholder="Conc Tit." required>
                                 </b-form-input>
@@ -237,7 +237,7 @@
                 show: true,
                 columnas: [
                   { key: 'fecha', label: 'Fecha', sortable: true, sortDirection: 'desc' },
-                  { key: 'codigo_lab', label: 'Cod. laboratorio', sortable: true, class: 'text-justify' },                 
+                  { key: 'codigo_laboratorio', label: 'Cod. laboratorio', sortable: true, class: 'text-justify' },                 
                   { key: 'dilucion', label: 'Dilución', sortable: true },                 
                   { key: 'vol_muestra', label: 'Volumen muestra', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
@@ -339,7 +339,7 @@
                 axios.get(url).then(function (response) {
                     console.log(response,'select');
                     var respuesta= response.data;
-                    me.arrayPreparacion = respuesta.preparaciones.data;
+                    me.arrayPreparacion = respuesta.preparaciones;
                     console.log(me.arrayPreparacion,'select 3');
                 })
                 .catch(function (error) {
@@ -369,7 +369,7 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar datos de Cloruros por Volumetría';
                                 this.idpersona= 0;
-                                this.fechaD='',
+                                this.fechaD=new Date(),
                                 this.codigo_lab = '';
                                 this.dilucion = '';
                                 this.vol_muestra = '';

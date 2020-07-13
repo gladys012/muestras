@@ -135,7 +135,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/preparacion/actualizar', 'PreparacionController@update');
         Route::put('/preparacion/desactivar', 'PreparacionController@desactivar');
         Route::put('/preparacion/activar', 'PreparacionController@activar');
-        Route::get('/preparacion/selectPreparacion', 'PreparacionController@index');        
+        Route::get('/preparacion/selectPreparacion', 'PreparacionController@selectPreparacion');        
 
 
         Route::get('/cloruros_vol', 'Cloruros_VolController@index');
@@ -306,7 +306,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/preparacion/actualizar', 'PreparacionController@update');
         Route::put('/preparacion/desactivar', 'PreparacionController@desactivar');
         Route::put('/preparacion/activar', 'PreparacionController@activar');
-        Route::get('/preparacion/selectPreparacion', 'PreparacionController@index');        
+        Route::get('/preparacion/selectPreparacion', 'PreparacionController@selectPreparacion');        
 
 
         Route::get('/cloruros_vol', 'Cloruros_VolController@index');
@@ -488,7 +488,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/preparacion/actualizar', 'PreparacionController@update');
         Route::put('/preparacion/desactivar', 'PreparacionController@desactivar');
         Route::put('/preparacion/activar', 'PreparacionController@activar');
-        Route::get('/preparacion/selectPreparacion', 'PreparacionController@index');        
+        Route::get('/preparacion/selectPreparacion', 'PreparacionController@selectPreparacion');        
 
 
         Route::get('/cloruros_vol', 'Cloruros_VolController@index');

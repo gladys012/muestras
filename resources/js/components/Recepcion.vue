@@ -120,7 +120,7 @@
             <!-- Fin -->
         </div>
         <!--Inicio del modal agregar/ modificar-->
-        <div class="modal fade" :class="{'mostrar' : modal}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" :class="{'mostrarr' : modal}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -168,12 +168,12 @@
                                   </b-form-select> 
                                </b-form-group>
                             </div> 
-                         <!--div class="form-group col-sm-3">
-                            <b-form-group id="input-group-4"  label="Codigo cliente:" label-for="input-4" >
-                                <b-form-input id="input-4" v-model="codigo_cliente" placeholder="Cod. cliente" required                            
-                                ></b-form-input>
-                            </b-form-group>
-                         </div-->                                                
+                                    <!--div class="form-group col-sm-3">
+                                        <b-form-group id="input-group-4"  label="Codigo cliente:" label-for="input-4" >
+                                            <b-form-input id="input-4" v-model="codigo_cliente" placeholder="Cod. cliente" required                            
+                                            ></b-form-input>
+                                        </b-form-group>
+                                    </div-->                                                
                        </div>
                         <div class="row">
                          <div class="form-group col-sm-3">
@@ -202,12 +202,12 @@
                                 </div>
                             </div> 
                          </div>
-                         <div class="form-group col-sm-3">
+                         <!--div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
                                 <b-form-input id="input-4" type="number" v-model="cantidad" placeholder="Cantidad" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>
+                         </div-->
                          <div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Cod. muestra:" label-for="input-4" >
                                 <b-form-input id="input-4" v-model="codigo_muestra" placeholder="Cod. muestra" required                            
@@ -563,15 +563,20 @@
                 let me = this;
                 this.fechaR = moment(this.fechaR).format('D/MM/YYYY');
                 axios.put('/recepcion/actualizar',{
-                    'codigo': this.codigo,
-                    'cantidad': this.cantidad,
-                    'fecha' : this.fecha,
+                    'fecha_recepcion' : this.fechaR,
+                    'fecha_muestra' : this.fechaM,
                     'hora' : this.hora,
+                    'codigo_cliente': this.codigo_cliente,
+                    'codigo_muestra': this.codigo_muestra,
+                    'codigo_lab': this.codigo_lab,
+                    'cantidad': this.cantidad,
                     'liquido' : this.liquido,
                     'solido' : this.solido,
-                    'cliente': this.cliente,
+                    'usr_id':1,
+                    'idunidadcod': this.idunidad,
+                    'analito': this.datosAnalito,
+                    'cliente':this.cliente,
                     'observaciones': this.observaciones,
-                    'identrega' : this.identrega,
                     'usr_id': 1,
                     'id':this.recepcion_id
                 }).then(function (response) {
@@ -608,13 +613,13 @@
 
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Recepción';
-                                this.fecha_recepcion = new Date();
-                                this.fecha_muestra = new Date();
+                                this.fechaR = new Date();
+                                this.fechaM = new Date();
                                 this.codigo='';
                                 this.cantidad=0;
                                 this.liquido='';
                                 this.solido='';
-                                this.cliente='';
+                                //this.cliente='';
                                 this.direccion='';
                                 this.telefono='';
                                 this.email='';
@@ -624,11 +629,7 @@
                                 break;
                             }
                             case 'actualizar':
-                            {
-                                /*var datoA = this.datosAnalito;
-                                this.datosAnalito = JSON.parse(datoA);
-                                console.log(this.datosAnalito,'datos aaaaaanalito');
-                                */
+                            {                                
                                 this.modal=1;
                                 this.tituloModal='Actualizar Recepción';
                                 this.tipoAccion=2;
@@ -639,9 +640,19 @@
                                 this.solido = data['solido'];
                                 this.fecha = data['fecha'];
                                 this.hora = data['hora'];
-                                this.identrega = 1;
                                 this.cliente = data['cliente'];
                                 this.observaciones = data['observaciones'];
+                                let analito = data
+                                data.analitoRender = [];
+                                //data.analito=JSON.parse(data.analito);
+                                console.log(data.analito,'analito');
+                                data.analito = typeof data.analito == 'string' ? JSON.parse(data.analito) : data.analito
+                                for (const nombre of data.analito) {
+                                    data.analitoRender.push(nombre.nombre)
+                                }                         
+                            //data.analitoRender = data.analitoRender.join("-")
+                            
+                            this.value = data["analitoRender"];
                                 this.usr_id = data['usr_id'];
                                 break;
                             }
@@ -660,7 +671,7 @@
                 this.cantidad=0;
                 this.liquido='';
                 this.solido='';
-                this.persona_entrega='';                
+                //this.persona_entrega='';                
                 this.errorRecepcion=0;
             },
 
@@ -720,12 +731,22 @@
                 console.log(error);
             });
         },
+        /*selectAnalito(idcod){
+
+        },*/
         nroCodigoLab(idcod){
             console.log(idcod,'cod.......');
             this.codigo_lab='';
+           // console.log(this.arrayCodigo,'kldjksj');
             for (let i = 0; i < this.arrayCodigo.length; i++) {
                 if (idcod == this.arrayCodigo[i].id) {
                     this.codigo_cliente = this.arrayCodigo[i].codigo;
+                    //this.value = this.arrayCodigo[i].analito;
+                    
+                    this.value = typeof this.arrayCodigo[i].analito == 'string' ? JSON.parse(this.arrayCodigo[i].analito) : this.arrayCodigo[i].analito
+                    this.value.forEach((item,index)=>{this.value[index]=item.nombre})   
+                       
+                    console.log(this.value,'analito value');
                     console.log(this.codigo_cliente,'this.codigo_vliente');
                     
                     if (this.arrayRecepcion.length>0) {  
@@ -733,7 +754,7 @@
                         for (let j = 0; j < this.arrayRecepcion.length; j++) {
                             //var cod_labCorr = this.arrayRecepcion[i].codigo_lab.substring(0,2);
 
-                                    console.log(this.arrayRecepcion[j].codigo_lab,'000000000000000000000000000 cod lab ');                
+                                    console.log(this.arrayRecepcion[j].codigo_lab,' cod lab ');                
                                     var cod_lab_corr = this.arrayRecepcion[j].codigo_lab;
                                 if (this.codigo_lab=='') {    
                                     console.log(cod_lab_corr,'corrrrrr');
@@ -792,10 +813,10 @@
         width: 100% !important;
         position: absolute !important;
     }
-    .mostrar{
+    .mostrarr{
         display: list-item !important;
         opacity: 1 !important;
-        position: absolute !important;
+        position: fixed !important;
         background-color: #3c29297a !important;
     }  
     .datepicker1 {

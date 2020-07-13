@@ -32,7 +32,8 @@
               <td v-text="solicitud.cantidad"></td>
               <td v-text="solicitud.flujo"></td>
               <td v-text="solicitud.matriz"></td>
-              <td v-text="solicitud.analitoRender"></td>
+              <td>{{analitoRender(solicitud.analito)}}</td> 
+
               <td v-text="solicitud.des_procedencia"></td>
               <td>
                 <a
@@ -349,25 +350,28 @@ export default {
         matriz: this.matriz,
         analito: this.datosAnalito,
         des_procedencia: this.des_procedencia
-      });
-      
-      console.log(this.arrayinfoSolicitud,'info array');
-            for(let item of this.arrayinfoSolicitud){
-                item.analitoRender = [];
-                item.analito=JSON.parse(item.analito);
-                console.log(item.analito,'analito');
-                for (const nombre of item.analito) {
-                    item.analitoRender.push(nombre.nombre)
-                }                         
-            item.analitoRender = item.analitoRender.join("-")
-            }
-     
+      });      
+      console.log(this.arrayinfoSolicitud,'info array');                
+
+
      //envio de datos /padre
      let datos = this.arrayinfoSolicitud;
      this.$emit('resultadosInf', datos);
      this.modal2 = 0;
     },
     
+    analitoRender(analito){
+      let analitoRender = [];
+              
+          analito = typeof analito == 'string' ? JSON.parse(analito) : analito
+          //analito=JSON.parse(analito);
+          console.log(analito,'analito');
+          for (const nombre of analito) {
+              analitoRender.push(nombre.nombre)
+          }                         
+        return analitoRender.join("-") 
+        
+    },
     actualizarInfSolicitud(idsolicitud) {
       if (this.validarInfSolicitud()) {
         return;
@@ -405,7 +409,18 @@ export default {
               this.solicitud_id = data["id"];
               this.cantidad = data["cantidad"];
               this.matriz = data["matriz"];
-              this.analito = data["analito"];
+              //this.datosAnalito = data["analito"];
+              let analito = data
+                  data.analitoRender = [];
+                  //data.analito=JSON.parse(data.analito);
+                  console.log(data.analito,'analito');
+                  data.analito = typeof data.analito == 'string' ? JSON.parse(data.analito) : data.analito
+                  for (const nombre of data.analito) {
+                      data.analitoRender.push(nombre.nombre)
+                  }                         
+              //data.analitoRender = data.analitoRender.join("-")
+              
+              this.value = data["analitoRender"];
               this.flujo = data["flujo"];
               this.des_procedencia = data["des_procedencia"];
               break;

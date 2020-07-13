@@ -25,7 +25,7 @@ class Unidad_CodigoController extends Controller
         $filtro = $request->filtro; 
         $unidad_codigo = Unidad_Codigo::where('estado','=','1')
         ->where('unidad_codigo.idunidad','like','%'. $filtro . '%')
-        ->select('unidad_codigo.id', 'unidad_codigo.idunidad', 'unidad_codigo.codigo')
+        ->select('unidad_codigo.id', 'unidad_codigo.idunidad', 'unidad_codigo.codigo', 'unidad_codigo.analito')
         ->orderBy('unidad_codigo.id','asc')->get();
         return['unidad_codigo'=>$unidad_codigo];
     }
