@@ -129,6 +129,11 @@ Route::group(['middleware'=>['auth']],function(){
         Route::get('/recepcion/selectRecepcion', 'RecepcionController@selectRecepcion'); 
         Route::get('/recepcion/selectUnidad', 'Unidad_SolicitanteController@selectUnidad2');      
         Route::get('/recepcion/selectCodigoLab', 'RecepcionController@selectCodigoLab');      
+        Route::get('/recepcion/selectCodigoId', 'RecepcionController@selectCodigoId');              
+        
+        Route::get('/recepcion/selectCristales', 'RecepcionController@selectCristales');      
+        Route::get('/recepcion/selectSalmueras', 'RecepcionController@selectSalmueras');      
+        Route::get('/recepcion/selectAguas', 'RecepcionController@selectAguas');      
                 
         Route::get('/preparacion', 'PreparacionController@index');
         Route::post('/preparacion/registrar', 'PreparacionController@store');
@@ -137,12 +142,15 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/preparacion/activar', 'PreparacionController@activar');
         Route::get('/preparacion/selectPreparacion', 'PreparacionController@selectPreparacion');        
 
+        Route::get('/lab_resultados', 'Lab_ResultadoController@index');
+        
 
         Route::get('/cloruros_vol', 'Cloruros_VolController@index');
         Route::post('/cloruros_vol/registrar', 'Cloruros_VolController@store');
         Route::put('/cloruros_vol/actualizar', 'Cloruros_VolController@update');
         Route::put('/cloruros_vol/desactivar', 'Cloruros_VolController@desactivar');
         Route::put('/cloruros_vol/activar', 'Cloruros_VolController@activar');
+        Route::get('/cloruros_vol/selectDilucion', 'Cloruros_VolController@selectDilucion');        
 
         Route::get('/sulfatos_turb', 'Sulfatos_TurbController@index');
         Route::post('/sulfatos_turb/registrar', 'Sulfatos_TurbController@store');
@@ -269,6 +277,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::put('/trazas_aa/actualizar', 'Trazas_AaController@update');
         Route::put('/trazas_aa/desactivar', 'Trazas_AaController@desactivar');
         Route::put('/trazas_aa/activar', 'Trazas_AaController@activar');
+
 
         Route::get('/rol', 'RolController@index');
         Route::get('/rol/selectRol', 'RolController@selectRol');

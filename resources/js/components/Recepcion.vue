@@ -81,7 +81,7 @@
                         <template v-slot:head(codigo_muestra)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
-                        <template v-slot:head(cantidad)="data">
+                        <template v-slot:head(dilucion_tipo)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>   
                         <template v-slot:head(acciones)="data">
@@ -120,7 +120,7 @@
             <!-- Fin -->
         </div>
         <!--Inicio del modal agregar/ modificar-->
-        <div class="modal fade" :class="{'mostrarr' : modal}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" :class="{'mostrarr' : modal}"  style="overflow-y: auto;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -190,7 +190,7 @@
                                 ></datepicker>
                             </b-form-group>
                          </div>                         
-                         <div class="form-group col-sm-3">                           
+                         <!--div class="form-group col-sm-3">                           
                             <div class="container">
                                 <div class="box">
                                     <div class="checkbox-group">
@@ -201,7 +201,7 @@
                                     </div>
                                 </div>
                             </div> 
-                         </div>
+                         </div-->
                          <!--div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
                                 <b-form-input id="input-4" type="number" v-model="cantidad" placeholder="Cantidad" required                            
@@ -213,34 +213,39 @@
                                 <b-form-input id="input-4" v-model="codigo_muestra" placeholder="Cod. muestra" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                                                
-                       </div>  
-                       <div class="row">                                                                                                                                                                                                               
-                         
-                       </div>                       
-                       <div class="row">                                                                                                                                   
-                            <!--div class="form-group col-sm-4">                           
+                         </div>                                                                                                                                                                                                       
+                            <!--div class="form-group col-sm-3">                           
                                 <div class="container">
                                     <div class="box">
                                         <div class="checkbox-group">
-                                        <input id="checkboxName3" type="checkbox" v-model="cristales"/>
+                                        <input id="checkboxName3" type="checkbox" v-model="cristales" @click="checkDilucion(cristales1)"/>
                                         <label for="checkboxName3" class="ta">Cristales</label>
-                                        <input id="checkboxName4" type="checkbox" v-model="salmueras"/>
+                                        <input id="checkboxName4" type="checkbox" v-model="salmueras" onChange="checkDilucion(salmueras)"/>
                                         <label for="checkboxName4" class="ta">Salmueras</label> 
-                                        <input id="checkboxName5" type="checkbox" v-model="aguas"/>
+                                        <input id="checkboxName5" type="checkbox" v-model="aguas" @change="checkDilucion(aguas)"/>
                                         <label for="checkboxName5" class="ta">Aguas</label> 
                                         </div>
                                     </div>
                                 </div> 
-                         </div>
-                         <div class="form-group col-sm-4">
-                             <b-form-group id="input-group-2"  label="Diluciones:" label-for="input-2" >                                                              
-                                <b-form-select v-model="idunidad" class="mb-3" required>
+                         </div-->
+                         <div class="form-group col-sm-3">
+                             <b-form-group id="input-group-2"  label="Tipo dilución:" label-for="input-2" >                                                              
+                                <b-form-select v-model="dilucion_tipo" class="mb-3" required @change="checkDilucion(dilucion_tipo)">
                                     <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
-                                    <b-form-select-option v-for="unidad in arrayUnidad" :key="unidad.id" :value="unidad.id" v-text="unidad.unidad2"></b-form-select-option>
+                                    <b-form-select-option value="cristales" >Cristales</b-form-select-option>
+                                    <b-form-select-option value="salmueras" >Salmueras</b-form-select-option>
+                                    <b-form-select-option value="aguas">Aguas</b-form-select-option>
                                 </b-form-select> 
                             </b-form-group>
-                         </div-->                          
+                         </div> 
+                         <div class="form-group col-sm-3">
+                             <b-form-group id="input-group-2"  label="nombre dilución:" label-for="input-2" >                                                              
+                                <b-form-select v-model="idnom_dilucion" class="mb-3" required @change="obtNombreDilucion(idnom_dilucion)">
+                                    <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                    <b-form-select-option v-for="dilucion in arrayDilucion" :key="dilucion.id" :value="dilucion.id" v-text="dilucion.nombre_dilucion"></b-form-select-option>
+                                </b-form-select> 
+                            </b-form-group>
+                         </div>                          
                         </div> 
                        <div class="row">
                         <div class="form-group col-sm-9">
@@ -387,21 +392,23 @@
                 cliente:'',
                 cantidad:'',
                 persona_entrega:'',
-                liquido:'',
-                solido:'',
                 unidad:'',
+                dilucion_tipo:'',
+                dilNombre:'',
                 
                 //esta por verse
                 cristales:'',
                 salmueras:'',
                 aguas:'',
                 dato_dilucion:'',
+                idnom_dilucion:0,
 
                 idcod:'',
                 arrayCodigo:[],
                 idunidad:0,
                 arrayUnidad:[],
                 arrayRecepcion : [],
+                arrayDilucion:[],
                 arrayPreparacion :[],
                 errorMostrarMsjPersona:[],
                 tituloModal : '',
@@ -433,7 +440,7 @@
                   { key: 'fecha_muestra', label: 'Fecha muestra', sortable: true, sortDirection: 'desc' },
                   { key: 'codigo_lab', label: 'Cod. laboratorio', sortable: true, class: 'text-justify' },                 
                   { key: 'codigo_muestra', label: 'Cod. muestra', sortable: true },                 
-                  { key: 'cantidad', label: 'Cantidad', sortable: true },                 
+                  { key: 'dilucion_tipo', label: 'Dilución', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
                 ],
                 perPage: 10,
@@ -516,6 +523,7 @@
                 evt.preventDefault()  //val. form
             },
             registrarRecepcion(){ 
+                console.log(this.idnom_dilucion,'id dilucion');
                 this.fechaR = moment(this.fechaR).format('D/MM/YYYY');
                 console.log(this.fechaR,'fechaaaaaa');
                 let me = this;
@@ -541,7 +549,7 @@
                         'codigo_muestra': this.codigo_muestra,
                         'codigo_lab': this.codigo_lab,
                         'cantidad': this.cantidad,
-                        'liquido' : this.liquido,
+                        'dilucion_tipo' : this.dilucion_tipo,
                         'solido' : this.solido,
                         'usr_id':1,
                         'idunidadcod': this.idunidad,
@@ -571,7 +579,7 @@
                     'codigo_lab': this.codigo_lab,
                     'cantidad': this.cantidad,
                     'liquido' : this.liquido,
-                    'solido' : this.solido,
+                    'dilucion_tipo' : this.dilucion_tipo,
                     'usr_id':1,
                     'idunidadcod': this.idunidad,
                     'analito': this.datosAnalito,
@@ -618,7 +626,7 @@
                                 this.codigo='';
                                 this.cantidad=0;
                                 this.liquido='';
-                                this.solido='';
+                                this.dilucion_tipo='';
                                 //this.cliente='';
                                 this.direccion='';
                                 this.telefono='';
@@ -637,7 +645,7 @@
                                 this.codigo = data['codigo'];
                                 this.cantidad = data['cantidad'];
                                 this.liquido = data['liquido'];
-                                this.solido = data['solido'];
+                                this.dilucion_tipo = data['dilucion_tipo'];
                                 this.fecha = data['fecha'];
                                 this.hora = data['hora'];
                                 this.cliente = data['cliente'];
@@ -668,9 +676,9 @@
                 //this.fechaR = new Date();
                // this.hora='';
                 this.codigo='';
-                this.cantidad=0;
+                //this.cantidad=0;
                 this.liquido='';
-                this.solido='';
+                this.dilucion_tipo='';
                 //this.persona_entrega='';                
                 this.errorRecepcion=0;
             },
@@ -781,7 +789,7 @@
                                 }
                         }    
                     }else{
-                        console.log('entras1231212123121213212123130000000000');
+                        console.log('entras123121');
                         this.codigo_lab = this.codigo_cliente + '-1';
                         console.log(this.codigo_lab,'entro else afuera');
                     }
@@ -791,17 +799,65 @@
             }
         },
 
-        checkBoxSol(val){
-               if (val==0) {
-                  if (this.liquido == true) {
-                    this.solido = false;
-                }  
-               }else if(val==1){
-                   if (this.solido == true) {
-                     this.liquido = false;}
-               }     
-           },
-           
+        checkDilucion(dil){
+        console.log(dil,'dil prueba');
+        let me = this;
+        if(dil == 'cristales'){
+            var url = "/recepcion/selectCristales";
+            axios
+                .get(url)
+                .then(function(response) {
+                console.log(response, "select");
+                var respuesta = response.data;
+                me.arrayDilucion = respuesta.recepcion;
+                console.log(me.arrayDilucion, "select 3 dil");
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            }
+            else if(dil == 'salmueras'){
+            var url = "/recepcion/selectSalmueras";
+            axios
+                .get(url)
+                .then(function(response) {
+                console.log(response, "select");
+                var respuesta = response.data;
+                me.arrayDilucion = respuesta.recepcion;
+                console.log(me.arrayDilucion, "select 3 dil");
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            } 
+            else if (dil == 'aguas') {
+                var url = "/recepcion/selectAguas";
+                axios
+                .get(url)
+                .then(function(response) {
+                console.log(response, "select");
+                var respuesta = response.data;
+                me.arrayDilucion = respuesta.recepcion;
+                console.log(me.arrayDilucion, "select 3 dil");
+
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            }                                              
+        },
+        obtNombreDilucion(dato){
+            for (let i = 0; i < this.arrayDilucion.length; i++) {
+                let dil = this.arrayDilucion[i].id;
+                if (dil == this.idnom_dilucion) {
+                    this.dilNombre = this.arrayDilucion[i].nombre_dilucion;
+                    console.log(this.dilNombre,'dil Nombre');
+                }
+                
+            }
+            console.log(dato,'id dil');
+         },
+
         },
         mounted() {            
             this.listarRecepcion();            
@@ -818,7 +874,9 @@
         opacity: 1 !important;
         position: fixed !important;
         background-color: #3c29297a !important;
+        
     }  
+   
     .datepicker1 {
         background-color:#5d998f; 
         border-radius:15px; 

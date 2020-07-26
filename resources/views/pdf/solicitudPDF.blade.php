@@ -119,12 +119,12 @@
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>IncanatoIT</b><br>José Gálvez com ngfhgfhj
+                    <b>IncanatoIT</b><br>
                 </p>
             </div>
             <div id="fact">
                 <p>{{$v->unidad}}<br>
-                {{$v->serie_comprobante}}-{{$v->num_comprobante}}</p>
+                {{$v->nombre}}-{{$v->analito}}</p>
             </div>
         </header>
         <br>

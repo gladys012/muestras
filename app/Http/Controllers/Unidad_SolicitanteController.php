@@ -74,12 +74,9 @@ class Unidad_SolicitanteController extends Controller
      }//*******************
 
      public function solPdf(Request $request){          
-        $nro_reg = $request->nro_reg;       
-     //   $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=', $nro_reg)
-        
-        
+        $nro_reg = $request->nro_reg;                     
      
-        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=', '1')
+        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=', $nro_reg)
         
         ->where('solicitud_ensayo.estado','=','1')
         ->where('unidad_solicitud.estado','=','1')
@@ -87,34 +84,23 @@ class Unidad_SolicitanteController extends Controller
          ->join('personas as personasE','unidad_solicitud.idencargado','=','personasE.id')
          ->join('solicitud_ensayo','unidad_solicitud.id','=','solicitud_ensayo.idunidad')
          ->join('informacion_solicitud','informacion_solicitud.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('revision','revision.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('resultado','resultado.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('recomendaciones','recomendaciones.idsol_ensayo','=','solicitud_ensayo.id')
+         ->join('conformidad','conformidad.idsol_ensayo','=','solicitud_ensayo.id')
         ->select('unidad_solicitud.id','unidad_solicitud.idresponsable','unidad_solicitud.idencargado','unidad_solicitud.telefono',
                   'personasR.ci as ciR','personasE.ci as ciE','unidad_solicitud.unidad','personasR.nombre as nombreR','personasE.nombre as nombreE',
                   'personasR.paterno as paternoR','personasE.paterno as paternoE','personasR.materno as maternoR',
                   'personasE.materno as maternoE','unidad_solicitud.id as idUnidad_sol','personasR.id as idResponsable',
                   'personasE.id as idEncargado', 'solicitud_ensayo.id as idSol_ensayo','solicitud_ensayo.nro_registro','solicitud_ensayo.fecha_registro','solicitud_ensayo.idunidad',
-                  'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito')
+                  'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito','revision.id as idRevision','resultado.id as idResultado',
+                  'recomendaciones.id as idRecomendaciones','conformidad.id as idConformidad')
                    ->orderBy('unidad_solicitud.id','asc')->get();
-        //return['unidad_solicitante'=>$unidad_solicitante];
-        /*$pdf = \PDF::loadView('pdf.solicitudpdf',['gladys'=>$unidad_solicitante])->setPaper('a4', 'landscape');
-        return $pdf->download('solicitud.pdf');*/
-        print_r ($unidad_solicitante);
-        return response()->json($unidad_solicitante);
-//        return $pdf->download('solicitud-'.$nro_reg.'.pdf');
-       // return response( $pdf )->header('Content-Type', 'text/'.$type);
+        $pdf = \PDF::loadView('pdf.solicitudpdf',['unidad_solicitante'=>$unidad_solicitante]);  //  ->setPaper('a4', 'portrait');
+        return $pdf->download('solicitud.pdf');
+        /*print_r ($unidad_solicitante);
+        return response()->json($unidad_solicitante);*/
     }
-
-  /*  public function listarPdf(){
-        $ventas = Venta::join('personas','ventas.idcliente','=','personas.id')
-            ->join('users','ventas.idusuario','=','users.id')
-            ->select('ventas.id','ventas.tipo_comprobante','ventas.serie_comprobante',
-            'ventas.num_comprobante','ventas.fecha_hora','ventas.impuesto','ventas.total',
-            'ventas.estado','personas.nombre','users.usuario')
-            ->orderBy('ventas.id', 'desc')->get();
-        $cont=Venta::count();
-
-        $pdf = \PDF::loadView('pdf.ventaspdf',['ventas'=>$ventas,'cont'=>$cont])->setPaper('a4', 'landscape');
-        return $pdf->download('ventas.pdf');
-    }*/
 
     public function selectDatosBusqueda(Request $request){  
         $unidad = $request->unidad;        
@@ -147,8 +133,8 @@ class Unidad_SolicitanteController extends Controller
                   'personasR.paterno as paternoR','personasE.paterno as paternoE','personasR.materno as maternoR',
                   'personasE.materno as maternoE','unidad_solicitud.id as idUnidad_sol','personasR.id as idResponsable',
                   'personasE.id as idEncargado','solicitud_ensayo.id as idSol_ensayo','solicitud_ensayo.nro_registro','solicitud_ensayo.fecha_registro','solicitud_ensayo.idunidad',
-                   'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito', 'revision.id as idRevision','resultado.id as idResultado',
-                   'recomendaciones.id as idRecomendaciones','conformidad.id as idConformidad')
+                  'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito', 'revision.id as idRevision','resultado.id as idResultado',
+                  'recomendaciones.id as idRecomendaciones','conformidad.id as idConformidad')
                    ->orderBy('unidad_solicitud.id','asc')->get();
         return['unidad_solicitante'=>$unidad_solicitante];
     }
@@ -163,7 +149,6 @@ class Unidad_SolicitanteController extends Controller
         $unidad_solicitante->telefono = $request->telefono;
         $unidad_solicitante->usr_id = $request->usr_id;
         $unidad_solicitante->estado = '1';
-        //$recepcion->fecha = $request->fecha;
         $unidad_solicitante->save();
     }
     public function update(Request $request)

@@ -13,14 +13,12 @@
                 <!--h2><p>F-A4-01-02 </p></h2-->
              </div>   
         <div class="col-sm-12">
-        <div class="card">
-            
+        <div class="card">            
             <div class="card-header"><strong>Solicitud de ensayo</strong></div>
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-lg-6">
                         <label for="city">Fecha</label>
-                        <!--input class="form-control" v-model="fecha_registro" type="text" placeholder="Fecha de registro"-->
                         <datepicker 
                             :bootstrap-styling="true"
                             :language="es"
@@ -71,7 +69,7 @@
                             v-model="ciEnc"
                         >
                         <span slot="no-options">No existen registros</span>
-                        <input slot="no-options" v-if="responsable==1" @click="abrirModalPersonaRes('solicitud','registrarEncargado')" class="form-control btn btn-info" type="button" value="Adicionar persona" />
+                        <input slot="no-options" v-if="encargado==1" @click="abrirModalPersonaRes('solicitud','registrarEncargado')" class="form-control btn btn-info" type="button" value="Adicionar persona" />
                         </v-select>
                     </div>
                     <div class="form-group col-sm-6">
@@ -213,7 +211,7 @@
                         <tr>                   
                         <th>Soporte impreso</th>
                         <th>Correo electrónico</th>
-                        <th>otro</th>
+                        <th>Otro</th>
                         <th>Observaciones</th>
                         <th>Disposiciones finales</th>                            
                         <th>Opciones</th>
@@ -225,7 +223,7 @@
                             <td v-text="resultados.correo_electronico"></td>
                             <td v-text="resultados.otro"></td>
                             <td v-text="resultados.observ_resultado"></td>
-                            <td v-text="resultados.disposiciones"></td>
+                            <td v-text="resultados.disposiciones"></td>                            
                             <td>                            
                                 <a href="#" data-toggle="modal" @click="abrirModalInfSol('resultados','actualizar',resultados)">
                                     <i class="fa fa-edit info" style="font-size: 23px"></i>
@@ -239,48 +237,6 @@
                 </table>                
             </div>
         </div>
-        <!--div class="col-sm-12">
-            <div class="card">
-              <div class="card-header"><strong>Reporte de Resultados</strong></div>
-                <div class="card-body">                                                      
-                    <div class="form-group row">                                               
-                        <div class="container">
-                            <div class="box">
-                                <div class="checkbox-group"> correo
-                                <input id="checkboxName8" type="checkbox" v-model="soporte_impreso" @change="checkBoxResul(0)"/>
-                                <label for="checkboxName8" class="ta"> SOPORTE IMPRESO </label>
-                                <input id="checkboxName9" type="checkbox" v-model="correo" @change="checkBoxResul(1)"/>
-                                <label for="checkboxName9" class="ta"> CORREO ELECTRÓNICO </label>
-                                </div>
-                            </div>
-                        </div> 
-                        <div v-if="verificaError == 1" v-show="errorResultados" class="form-group row div-error">
-                          <div class="text-center text-error">
-                            <div v-for="error in errorMostrarMsjSolicitud" :key="error" v-text="error">
-
-                            </div>  
-                         </div>
-                        </div>
-                        <div v-if="correo==true" class="form-group col-sm-6">                                
-                            <label  for="text-input">Destinatario</label>
-                            <input type="text" v-model="destinatario" class="form-control" placeholder="Destinatario">
-                        </div>    
-                        <div v-if="correo" class="form-group col-sm-6">                        
-                            <label for="text-input">Correo</label>
-                            <textarea cols="90" rows="1" placeholder="Correo" v-model="correo_destinatario" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="postal-code">Observaciones</label>
-                            <textarea cols="90" rows="3" placeholder="Observaciones" v-model="observ_resultado" class="form-control"></textarea>
-                        </div> 
-                        <div class="form-group col-sm-6">
-                            <label for="postal-code">Disposiciones finales</label>
-                            <textarea cols="90" rows="3" placeholder="Disposiciones finales" v-model="disposiciones" class="form-control"></textarea>
-                        </div>                       
-                    </div>                    
-                </div>
-            </div>
-        </div--> 
         <div class="col-sm-12">
           <div class="card">
             <div class="card-header"><i class="fa fa-align-justify"></i><strong>Recomendaciones de mejora (Métodos de ensayo, servicios, etc.)</strong> 
@@ -379,21 +335,7 @@
             <p>- En caso de haber evidencia documentada (p.e. Nota Interna), será adjunta al presente contrato. </p>
             </div>       
         </div>
-        </div>
-<!--form action={{route('contact')}} method="POST">
-     {{ csrf_field() }}
-    <div class="form-group">
-        <label for="name">Nombre</label>
-        <input name="name" type="text">
-    </div>
-    <div class="form-group">
-        <label for="name">Mensaje</label>
-                                <input name="msg" type="text">
-    </div>
-    <div class="form-group">
-        <button type="submit" id='btn-contact' class="btn">Enviar</button>
-    </div>
-</form-->                                     
+        </div>                                   
         
         <div class="col-sm-12" style="justify-content: center;">        
             <button type="button" class="btn btn-secondary" @click="cerrarModal()"><font color="white">Cancelar</font></button>
@@ -491,16 +433,7 @@
                             <div class="form-group col-lg-6">
                                 <label for="city">Fecha</label>
                                 <!--input class="form-control" v-model="fecha_recom" type="text" placeholder="Fecha"-->
-                                 <b-form-datepicker id="example-datepicker" v-model="fecha_recom" class="mb-2"></b-form-datepicker>
-   <!--datepicker 
-                                    :bootstrap-styling="true"
-                                    :language="es"
-                                    calendar-class="datepicker1"                                    
-                                    input-class="form-control col-md-6"
-                                    :open-date="openDate"
-                                    :format="customFormatterRecom"
-                                    v-model="fecha_recom">
-                                </datepicker-->
+                                 <b-form-datepicker id="example-datepicker" v-model="fecha_recom" class="mb-2" disabled></b-form-datepicker>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="city">Recomendaciones</label>
@@ -664,9 +597,10 @@
                idencargado:1,
                responsable:0,
                encargado:0,
+               verifPersona:0,
 
                //Informacion solicitud
-               arrayinfoSolicitud:[],
+               /*arrayinfoSolicitud:[],
                cantidad:'',
                flujo:'',
                matriz:'',
@@ -674,7 +608,7 @@
                des_procedencia:'',
                idActualizar: -1,
                solicitud_id:0,
-               datosInformacionSol: [],
+               datosInformacionSol: [],*/
 
               //revision
                personal_capacitado:'',
@@ -700,7 +634,6 @@
                checkOtro:'',
 
                //recomendaciones
-
                recomendaciones_id:0,
                arrayRecomendaciones:[],
                recomendaciones:'',
@@ -716,7 +649,6 @@
                cargo_per_atendida:'',
                cargo_per_solicitante:'',
 
-
                //solicitud de ensayo
                fecha_registro: new Date(),
                nro_registro:'',               
@@ -724,11 +656,9 @@
                disp_finales:'',
                codigo:'',
                cantidad:0,
-               //fecha:'',
                arraySolEnsayo:[],
                idSolEnsayo:'',
-               solEnsayoUlt:'',
-              
+               solEnsayoUlt:'',              
                
                //unidad_solicitante 
                arrayUnidadSol:[],
@@ -738,14 +668,12 @@
                 
                usr_id:1,
                encargado:'',               
-               responsable:0,
                observ_resultado:'',                               
                                              
                fecha_resultado:'',
                solicitante_resultado:'',
                cargo_resultado:'',
                descripcion:'',
-               responsable:'',
                modal1:0,
                modal2:0,
                modal3:0,
@@ -754,7 +682,7 @@
                tipoAccion:0,
                errorSolicitud: 0,
                errorPersona: 0,
-               errorInfSolicitud:0,
+               //errorInfSolicitud:0,
                errorRecomendaciones: 0,
                errorRevision: 0,
                errorResultados: 0,
@@ -775,9 +703,9 @@
             },
             
         },
-        //props: ['olicitudInf'],
+        //props: ['solicitudInf'],
         methods : {
-            resultadoInforSol(v){
+            resultadoInforSol(v){//comp hijo
                 this.datosInformacionSol = v;
                 console.log(this.datosInformacionSol);
             },
@@ -816,8 +744,7 @@
             crearResultados() {
                /* if (this.validarResultados()){
                     return;
-                }*/  
-             
+                }*/               
                 this.arrayResultados.push({
                     soporte_impreso: this.soporte_impreso,
                     correo: this.correo, 
@@ -845,7 +772,7 @@
                 this.modal3=0;
             },
             eliminarResultados (idResultados) {
-                // Borramos de la lista
+                // Borrar de la lista
                 this.arrayResultados.splice(idResultados, 1);
             },          
             crearRecomendaciones () {
@@ -885,7 +812,6 @@
            validarSolicitudEnsayo(){
                 this.errorSolicitud=0;
                 this.errorMostrarMsjSolicitud =[];
-//fecha_registro  nro_registro unidad telefono_unidad ciRes ciEnc
                 if (!this.unidad) this.errorMostrarMsjSolicitud.push("Debe ingresar la Unidad solicitante.");
                 if (!this.telefono_unidad) this.errorMostrarMsjSolicitud.push("Debe ingresar el teléfono.");
                 if (!this.nombreResponsable) this.errorMostrarMsjSolicitud.push("Debe ingresar el responsable de la solicitud.");
@@ -902,17 +828,6 @@
                 if (!this.paterno) this.errorMostrarMsjPersona.push("Debe ingresar el apellido paterno de la persona.");
                 if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
                 return this.errorPersona;
-            },
-            validarInfSolicitud(){
-                this.errorInfSolicitud=0;//cantidad flujo matriz analito des_procedencia
-                this.errorMostrarMsjSolicitud =[];
-                console.log('ENTRA INF E');
-                if (!this.cantidad) this.errorMostrarMsjSolicitud.push("Debe ingresar la cantidad.");
-                if (!this.matriz) this.errorMostrarMsjSolicitud.push("Debe ingresar la matriz.");
-                if (!this.analito) this.errorMostrarMsjSolicitud.push("Debe ingresar analito de interés.");
-                if (!this.des_procedencia) this.errorMostrarMsjSolicitud.push("Debe ingresar la descripción de la procedencia.");
-                if (this.errorMostrarMsjSolicitud.length) this.errorInfSolicitud = 1;
-                return this.errorInfSolicitud;
             },
             validarRevision(){  
                 this.errorRevision=0;  //aceptado rechazado
@@ -966,7 +881,6 @@
                 this.telefono='';
                 this.email='';
                 this.errorSolicitud=0;
-
             },
 
              abrirModalPersonaRes(modelo, accion, data = []){
@@ -1067,7 +981,7 @@
                                     this.recomendaciones='';
                                     this.respuesta='';
                                     this.vobo='';
-                                    this.fecha='';
+                                    this.fecha_recom=new Date();
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -1113,34 +1027,38 @@
                 });
             },
             getDatosResponsable(val1){
-              console.log(val1,'dato val1');
-              let me = this;
-              me.loading = true;
-              me.idresponsable = val1.id;
-              if (val1 =='') {
-                 me.nombreResponsable='';
-              }else{
-                   if (val1.materno=='' || val1.materno==null) {
-                    me.nombreResponsable = val1.paterno +' '+ val1.nombre;   
-                  }else{
-                 me.nombreResponsable = val1.paterno +' '+ val1.materno +' '+ val1. nombre;
-                  }             
-              }              
+                if (this.verifPersona == 0) {                    
+                    console.log(val1,'dato val1');
+                    let me = this;
+                    me.loading = true;
+                    me.idresponsable = val1.id;
+                    if (val1 =='') {
+                        me.nombreResponsable='';
+                    }else{
+                        if (val1.materno=='' || val1.materno==null) {
+                            me.nombreResponsable = val1.paterno +' '+ val1.nombre;   
+                        }else{
+                        me.nombreResponsable = val1.paterno +' '+ val1.materno +' '+ val1. nombre;
+                        }             
+                    }              
+                }    
             },
             getDatosEncargado(val2){
-              console.log(val2,'dato val2');
-              let me = this;
-              me.loading = true;
-              me.idencargado = val2.id;
-              if (val2 =='') {
-                 me.nombreEncargado='';
-              }else{
-                  if (val2.materno=='' || val2.materno==null) {
-                    me.nombreEncargado = val2.paterno +' '+ val2.nombre;   
-                  }else{
-                    me.nombreEncargado = val2.nombre +' '+ val2.paterno +' '+ val2.materno;
-                 }
-              }              
+                if (this.verifPersona == 0) {
+                    console.log(val2,'dato val2');
+                    let me = this;
+                    me.loading = true;
+                    me.idencargado = val2.id;
+                    if (val2 =='') {
+                        me.nombreEncargado='';
+                    }else{
+                        if (val2.materno=='' || val2.materno==null) {
+                            me.nombreEncargado = val2.paterno +' '+ val2.nombre;   
+                        }else{
+                            me.nombreEncargado = val2.paterno +' '+ val2.materno +' '+ val2.nombre;
+                        }
+                    }        
+                }                       
             },
             checkBoxSol(val){
                if (val==0) {
@@ -1169,14 +1087,12 @@
                 if (this.validarPersona()){
                     return;
                 }                
-                let me = this;
-
-                  
+                let me = this;                  
                 axios.post('/persona/registrar',{
                     'nombre': this.nombre,
                     'paterno': this.paterno,
                     'materno' : this.materno,
-                    'ci' : this.ciResponsable,
+                    'ci' : this.ciResponsable,  //persona ciResponsable
                     'telefono' : this.telefono,
                     'email' : this.email,
                     'direccion' : this.direccion,
@@ -1184,14 +1100,18 @@
 
                 }).then(function (response) {
                     console.log(me.nombreResponsable,'123');
-                    if (me.nombreResponsable !='') {
-                        me.nombreResponsable=me.nombre+' '+ me.paterno+' '+me.materno
-                        console.log(me.nombreResponsable,'res123');
+                    if (me.responsable == 1) {
                         me.ciRes = me.ciResponsable;
-                    }else if (me.nombreResponsable !='') {
-                        me.nombreResponsable=me.nombre+' '+ me.paterno+' '+me.materno
-                         me.ciRes = me.ciResponsable;  
-                    }          
+                        console.log(me.ciRes,'me.ciRes');
+                        me.nombreResponsable = me.paterno+' '+me.materno +' '+ me.nombre;
+                        console.log(me.nombreResponsable,'res123');
+                        me.verifPersona = 1;
+                        
+                    } if (me.encargado == 1 ) {
+                        me.ciEnc = me.ciEncargado;
+                        me.nombreEncargado = me.paterno+' '+ me.materno+' '+me.nombre;
+                        me.verifPersona = 1;
+                    }         
               
                 me.cerrarModal();
                }).catch(function (error) {
@@ -1201,8 +1121,8 @@
            },
 
             //BD solicitud   .....
-            //Inicia **  *****************************
-            //************************************** */
+            //Ini **  *****************************
+            //************************************** 
             registrarUnidadSolicitante(){
                 /*if (this.validarUnidadSol()){
                     return;
@@ -1513,8 +1433,7 @@
                 })
              },        
             },
-            mounted() {
-             //
+            mounted() {             
             //     ///php artisan serve --host=192.168.1.5
             this.listarSolNroRegistro();
 

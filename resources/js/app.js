@@ -45,7 +45,7 @@ Vue.component('potasio_valoracion', require('./components/Potasio_Valoracion.vue
 Vue.component('potasio_gravimetria', require('./components/Potasio_Gravimetria.vue').default);
 Vue.component('trazas_aa', require('./components/Trazas_Aa.vue').default);
 
-Vue.component('resultados', require('./components/Resultados.vue').default);
+Vue.component('lab_resultados', require('./components/Lab_Resultados.vue').default);
 
 Vue.component('personas', require('./components/Personas.vue').default);
 Vue.component('analitos', require('./components/Analitos.vue').default);

@@ -17,13 +17,13 @@ class PreparacionController extends Controller
         if ($buscar==''){
             $preparaciones = Preparacion::join('recepcion','preparacion.idrecepcion','=','recepcion.id')
             ->select('preparacion.id','preparacion.idrecepcion','preparacion.codigo_lab','preparacion.fecha_analisis','preparacion.fecha_muestreo','preparacion.vh','preparacion.vs','preparacion.peso','preparacion.observaciones','preparacion.estado','preparacion.usr_id', 'recepcion.codigo_lab as codigo_laboratorio', 'recepcion.codigo_cliente as codigo')
-            ->orderBy('preparacion.id', 'desc')->paginate(10);
+            ->orderBy('preparacion.id', 'desc')->paginate(1000);
         }
         else{
             $preparaciones = Preparacion::join('recepcion','preparacion.idrecepcion','=','recepcion.id')
             ->select('preparacion.id','preparacion.idrecepcion','preparacion.codigo_lab','preparacion.fecha_analisis','preparacion.fecha_muestreo','preparacion.vh','preparacion.vs','preparacion.peso','preparacion.observaciones','preparacion.estado','preparacion.usr_id', 'recepcion.codigo_lab as codigo_laboratorio', 'recepcion.codigo_cliente as codigo')
             ->where('preparacion.'.$criterio, 'like', '%'. $buscar . '%')
-            ->orderBy('preparacion.id', 'desc')->paginate(10);
+            ->orderBy('preparacion.id', 'desc')->paginate(1000);
         }
          
  
@@ -37,6 +37,21 @@ class PreparacionController extends Controller
                 'to'           => $preparaciones->lastItem(),
             ],
             'preparaciones' => $preparaciones
+        ];
+    }
+    public function datos(Request $request)
+    {
+        //if (!$request->ajax()) return redirect('/');
+        $preparacion = Preparacion::join('recepcion','preparacion.idrecepcion','=','recepcion.id')
+        ->join('cloruros_volumetria','cloruros_volumetria.idpreparacion','=','preparacion.id')
+        ->select('preparacion.id','preparacion.idrecepcion','preparacion.codigo_lab as codigo_labP','preparacion.fecha_analisis as fecha_analisisP','preparacion.fecha_muestreo','preparacion.vh',
+            'preparacion.vs','preparacion.peso','preparacion.observaciones',
+            'recepcion.codigo_lab', 'recepcion.codigo_muestra as codigo_muestraR', 'recepcion.fecha_recepcion as fecha_recepcionR', 'recepcion.fecha_muestra as fecha_muestraR', 
+            'cloruros_volumetria.fecha','cloruros_volumetria.dilucion','cloruros_volumetria.vol_gastado','cloruros_volumetria.vol_muestra','cloruros_volumetria.conc_tit','cloruros_volumetria.observaciones',
+            'cloruros_volumetria.id as nro', 'cloruros_volumetria.idpreparacion as nro_preparacion')
+            ->orderBy('preparacion.id', 'desc')->paginate(1000);       
+        return [
+            'datos' => $preparacion
         ];
     }
     public function selectPreparacion(Request $request){

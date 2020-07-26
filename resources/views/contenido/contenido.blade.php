@@ -92,7 +92,7 @@
                 <trazas_aa></trazas_aa>
         </template>
         <template v-if="menu==30">
-                <resultados></resultados>
+                <lab_resultados></lab_resultados>
         </template>
         <template v-if="menu==35">
                 <personas></personas>
