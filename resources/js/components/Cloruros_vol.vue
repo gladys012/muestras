@@ -476,7 +476,6 @@
                 console.log(alicuota,'alicuota');
                 console.log(this.vol_muestra,'muestras alidcuota');
                 let vg = this.vol_gastado;
-                console.log(vg,'vg');
                 let normalidad = this.conc_tit;
                 console.log(normalidad,'normalidad');
 

@@ -16,7 +16,7 @@ Vue.component('solicitudInf', require('./components/solicitud/Sol_InformacionSol
 Vue.component('sol_adjuntar_archivo', require('./components/solicitud/Adjuntar_Archivo.vue').default);  
 //Vue.component('solPDF', require('./components/solicitud/solPDF.vue').default);  
 Vue.component('modificacion', require('./components/solicitud/Modificacion.vue').default);
-Vue.component('codigo_lab', require('./components/Codigo_Lab.vue').default); 
+Vue.component('codigo_lab', require('./components/solicitud/Codigo_Lab.vue').default); 
 
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);

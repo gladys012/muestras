@@ -1,6 +1,4 @@
 |<template>
-
-
     <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
@@ -119,16 +117,7 @@
                 </table>     
              </div>
             </div>
-
-
-
-
-
-
-
-
-
-
+            <!----fin busqueda de datos Modificacion-->>
 
            <div class="col-sm-12" v-if="datosModificar==1">
             <div class="card">
@@ -208,49 +197,10 @@
             </div>
         </div> 
         <!-- /. solicitud-->  
-                
         <div v-if="datosModificar==1">
-        <div class="col-sm-12">
-            <div class="card">
-            <div class="card-header"><i class="fa fa-align-justify"></i><strong>Información de la Solicitud</strong> 
-                <button type="button" data-toggle="modal" data-target="#modalInformacionSol" @click="abrirModalInfSol('solicitud','registrar')" class="btn btn-info pull-right" style="right:0;">
-                   + Nuevo
-                </button>
-            </div> 
-            <div class="card-body">
-                <table class="table table-responsive-sm table-bordered table-striped table-sm">
-                <thead>
-                    <tr>                    
-                    <th>Cantidad</th>
-                    <th>Flujo de muestras</th>
-                    <th>Matriz</th>
-                    <th>Analito de interés</th>
-                    <th>Descripción de la procedencia</th>                            
-                    <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr v-for="solicitud in arrayinfoSolicitud" :key="solicitud.id">                                    
-                        <td v-text="solicitud.cantidad"></td>
-                        <td v-text="solicitud.flujo"></td>
-                        <td v-text="solicitud.matriz"></td>
-                        <td v-text="solicitud.analito"></td>
-                        <td v-text="solicitud.des_procedencia"></td>
-                        <td>                            
-                            <a href="#" data-toggle="modal" data-target="#modalInformacionSol" @click="abrirModalInfSol('solicitud','actualizar',solicitud)">
-                                <i class="fa fa-edit info" style="font-size: 23px"></i>
-                            </a>                            
-                            <a href="#" @click="eliminarInfSol(solicitud.id)">
-                                <i class="fa fa-trash" style="font-size: 23px"></i>
-                            </a>
-                        </td>                                    
-                     </tr>                                                                                   
-                </tbody>
-                </table>                
-            </div>
-            </div>
-        </div>
+        <solicitudInf @resultadosInf="resultadoInforSol"></solicitudInf>               
+        
+        
         <div class="col-sm-12" v-if="datosModificar==1">
             <div class="card">
             <div class="card-header"><strong>Revisión de la oferta</strong></div>
@@ -348,56 +298,52 @@
                     <div v-if="verificaError == 1" v-show="errorRevision" class="form-group row div-error">
                         <div class="text-center text-error">
                         <div v-for="error in errorMostrarMsjSolicitud" :key="error" v-text="error">
-
                         </div>  
                       </div>
                     </div>   
                 </div>                    
             </div>
             </div>
-        </div> 
+        </div>         
         <div class="col-sm-12" v-if="datosModificar==1">
             <div class="card">
-            <div class="card-header"><strong>Reporte de Resultados</strong></div>
-            <div class="card-body">                                                      
-                <div class="form-group row">                                               
-                    <div class="container">
-                        <div class="box">
-                            <div class="checkbox-group">
-                            <input id="checkboxName8" type="checkbox" v-model="soporte_impreso" @change="checkBoxResul(0)"/>
-                            <label for="checkboxName8" class="ta"> SOPORTE IMPRESO </label>
-                            <input id="checkboxName9" type="checkbox" v-model="correo" @change="checkBoxResul(1)"/>
-                            <label for="checkboxName9" class="ta"> CORREO ELECTRÓNICO </label>
-                            </div>
-                        </div>
-                    </div> 
-                    <div v-if="verificaError == 1" v-show="errorResultados" class="form-group row div-error">
-                          <div class="text-center text-error">
-                            <div v-for="error in errorMostrarMsjSolicitud" :key="error" v-text="error">
-
-                            </div>  
-                         </div>
-                        </div>
-                    <div v-if="correo==true" class="form-group col-sm-6">                                
-                        <label  for="text-input">Destinatario</label>
-                        <input type="text" v-model="destinatario" class="form-control" placeholder="Destinatario">
-                    </div>    
-                    <div v-if="correo" class="form-group col-sm-6">                        
-                        <label for="text-input">Correo</label>
-                        <textarea cols="90" rows="1" placeholder="Correo" v-model="correo_destinatario" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <label for="postal-code">Observaciones</label>
-                        <textarea cols="90" rows="3" placeholder="Observaciones" v-model="observ_resultado" class="form-control"></textarea>
-                    </div> 
-                    <div class="form-group col-sm-6">
-                        <label for="postal-code">Disposiciones finales</label>
-                        <textarea cols="90" rows="3" placeholder="Disposiciones finales" v-model="disposiciones" class="form-control"></textarea>
-                    </div>                       
-                </div>                    
+                <div class="card-header"><i class="fa fa-align-justify"></i><strong>Reporte de Resultados</strong> 
+                    <button type="button" data-toggle="modal" @click="abrirModalResul('resultados','registrar')" class="btn btn-info pull-right" style="right:0;">
+                        <font bold>+ Nuevo</font>
+                    </button>
+                </div> 
+                <div class="card-body">
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>                   
+                        <th>Soporte impreso</th>
+                        <th>Correo electrónico</th>
+                        <th>Otro</th>
+                        <th>Observaciones</th>
+                        <th>Disposiciones finales</th>                            
+                        <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="resultados in arrayResultados" :key="resultados.id">                                    
+                            <td v-text="resultados.soporte_impreso"></td>
+                            <td v-text="resultados.correo_electronico"></td>
+                            <td v-text="resultados.otro"></td>
+                            <td v-text="resultados.observ_resultado"></td>
+                            <td v-text="resultados.disposiciones"></td>                            
+                            <td>                            
+                                <a href="#" data-toggle="modal" @click="abrirModalInfSol('resultados','actualizar',resultados)">
+                                    <i class="fa fa-edit info" style="font-size: 23px"></i>
+                                </a>                            
+                                <a href="#" @click="eliminarResul(resultados.id)">
+                                    <i class="fa fa-trash" style="font-size: 23px"></i>
+                                </a>
+                            </td>                                    
+                            </tr>                                                                                   
+                    </tbody>
+                </table>                
             </div>
-            </div>
-        </div> 
+        </div>
         <div class="col-sm-12">
             <div class="card">
             <div class="card-header"><i class="fa fa-align-justify"></i><strong>Recomendaciones de mejora (Métodos de ensayo, servicios, etc.)</strong> 
@@ -505,7 +451,7 @@
 <hr>
 
     <!--Inicio del modal agregar/  persona-->
-    <div class="modal fade" :class="{'mostrar1' : modal1}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" :class="{'mostrarr' : modal1}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -573,9 +519,9 @@
     </div>
     <!--Fin del modal-->
 
- <!--Inicio del modal agregar/actualizar  solicitud-->
-    <div class="modal fade" :class="{'mostrar1' : modal2}" tabindex="-1" role="dialog" aria-labelledby="modalInformacionSolTit" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!--Inicio del modal agregar/actualizar  recomdendaciones-->
+    <div class="modal fade" :class="{'mostrarr' : modal3}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" v-text="tituloModal"></h4>
@@ -586,57 +532,46 @@
                 <div class="modal-body">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label for="city">Cantidad</label>
-                                <input class="form-control" v-model="cantidad" type="text" placeholder="Cantidad">
+                            <div class="form-group col-lg-6">
+                                <label for="city">Fecha</label>
+                                <!--input class="form-control" v-model="fecha_recom" type="text" placeholder="Fecha"-->
+                                 <b-form-datepicker id="example-datepicker" v-model="fecha_recom" class="mb-2" disabled></b-form-datepicker>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="postal-code">Flujo de muestras</label>
-                                <input class="form-control" v-model="flujo" type="text" placeholder="Flujo de muestras">
-                            </div>
+                                <label for="city">Recomendaciones</label>
+                                <input class="form-control" v-model="recomendaciones" type="text" placeholder="Recomendaciones (cliente)">
+                            </div>                            
                         </div>
                         <!-- /.row-->
-                        <div class="row">
+                        <div class="row">  
                             <div class="form-group col-sm-6">
-                                <label for="city">Matriz</label>
-                                <input class="form-control" v-model="matriz" type="text" placeholder="Matriz">
+                                <label for="postal-code">Respuesta</label>
+                                <input class="form-control" v-model="respuesta" type="text" placeholder="Respuesta (encargado de laboratorio)">
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="postal-code">Analito de interés</label>
-                                <input class="form-control" v-model="analito" type="text" placeholder="Analito de interés">
+                                <label for="city">VoBo</label>
+                                <input class="form-control" v-model="vobo" type="text" placeholder="VoBo">
                             </div>
                         </div>
-                        <!-- /.row--> 
-                        <div class="row">                                    
-                            <div class="form-group col-sm-12">
-                                <label for="postal-code">Descripción de la procedencia</label>
-                                <textarea cols="90" rows="4" placeholder="Descripción de la procedencia" v-model="des_procedencia" class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <!-- /.row--> 
-                        <div v-show="errorInfSolicitud" class="form-group row div-error">
+                        <div v-show="errorRecomendaciones" class="form-group row div-error">
                             <div class="text-center text-error">
-                                <div v-for="error in errorMostrarMsjsolicitud" :key="error" v-text="error">
-
+                                <div v-for="error in errorMostrarMsjSolicitud" :key="error" v-text="error">
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </form> 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="cerrarModal()" data-dismiss="modal">Cerrar</button>
-                    <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="crearInfSolicitud()" data-dismiss="modal">Guardar</button>
-                    <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarInfSolicitud(solicitud.id)" data-dismiss="modal">Actualizar</button>
+                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                    <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="crearRecomendaciones()">Guardar</button>
+                    <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarRecomendaciones(recomendaciones.id)">Actualizar</button>
                 </div>
             </div>
             <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialvue-datepickerog -->
+        <!-- /.modal-dialvue- revision -->
     </div>
-    <!--Fin del modal-->
-    <!--Inicio del modal agregar/actualizar  recomdendaciones-->
-    <div class="modal fade" :class="{'mostrar1' : modal3}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+     <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" v-text="tituloModal"></h4>
@@ -657,7 +592,8 @@
                                     :open-date="openDate"
                                     :format="customFormatterRecom"
                                     v-model="fecha_recom">
-                                </datepicker>                            </div>
+                                </datepicker>                          
+                                </div>
                             <div class="form-group col-sm-6">
                                 <label for="city">Recomendaciones</label>
                                 <input class="form-control" v-model="recomendaciones" type="text" placeholder="Recomendaciones (cliente)">
@@ -695,7 +631,7 @@
      </div>
     <!--Fin del modal-->    
  
-    <div class="modal fade" :class="{'mostrar1' : modal4}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" :class="{'mostrar1' : modal4}" style="overflow-y: auto;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -711,17 +647,8 @@
                             <div class="row">
                             <div class="form-group col-sm-3">
                                 <label for="city">Fecha</label>
-                                <!--input class="form-control" v-model="fecha_mod" type="text" placeholder="Fecha"-->
                                 <b-form-datepicker id="example-datepicker" v-model="fecha_mod" class="mb-2"></b-form-datepicker>
-                                 <!--datepicker 
-                                :bootstrap-styling="true"
-                                :language="es"
-                                calendar-class="datepicker1"                            
-                                input-class="form-control col-sm-6"
-                                :open-date="openDate"
-                                :format="customFormatterModif"
-                                v-model="fecha_mod">
-                            </datepicker-->
+                                 
                             </div>
                             <div class="form-group col-sm-5">
                                 <label for="city">Nombre Solicitante</label>
@@ -855,7 +782,7 @@
                 arrayModificaciones:[],
                 
                 //tabla glosa
-                fecha_mod:'',
+                fecha_mod:new Date(),
                 nombre_mod:'',
                 cargo_mod:'',
                 descripcion_mod:'',
@@ -1424,35 +1351,6 @@
 
 
 
-
-
-
-            crearInfSolicitud () {    
-                if (this.validarInfSolicitud()){
-                    return;
-                }                             
-                this.arrayinfoSolicitud.push({
-                    cantidad: this.cantidad,
-                    flujo: this.flujo,
-                    matriz: this.matriz,
-                    analito: this.analito,
-                    des_procedencia: this.des_procedencia
-                });
-                this.modal2=0;
-            },
-              actualizarInfSolicitud (idsolicitud) {
-                  if (this.validarInfSolicitud()){
-                    return;
-                }                 
-                    this.idActualizar = idsolicitud;
-                    this.cantidad= this.cantidad;
-                    this.flujo= this.flujo;
-                    this.matriz= this.matriz;
-                    this.analito= this.analito;
-                    this.des_procedencia= this.des_procedencia;
-                    this.formActualizar = true;
-                    this.modal2=0;
-            },
                         
             crearRecomendaciones () {  
                 if (this.validarRecomendaciones()){
@@ -1492,7 +1390,6 @@
                 this.errorModificaciones=0;
                 this.errorMostrarMsjSolicitud =[];  
 //fecha_registro  nro_registro unidad telefono_unidad ciRes ciEnc
-               // if (!this.fecha_mod) this.errorMostrarMsjSolicitud.push("Debe ingresar la Unidad solicitante.");
                 if (!this.nombre_mod) this.errorMostrarMsjSolicitud.push("Debe ingresar nombre.");
                 if (!this.cargo_mod) this.errorMostrarMsjSolicitud.push("Debe ingresar el cargo.");
                 if (!this.descripcion_mod) this.errorMostrarMsjSolicitud.push("Debe ingresar descripción.");
@@ -1521,16 +1418,7 @@
                 if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
                 return this.errorPersona;
             },
-            validarInfSolicitud(){
-                this.errorInfSolicitud=0;//cantidad flujo matriz analito des_procedencia
-                this.errorMostrarMsjSolicitud =[];
-                if (!this.cantidad) this.errorMostrarMsjSolicitud.push("Debe ingresar la cantidad.");
-                if (!this.matriz) this.errorMostrarMsjSolicitud.push("Debe ingresar la matriz.");
-                if (!this.analito) this.errorMostrarMsjSolicitud.push("Debe ingresar analito de interés.");
-                if (!this.des_procedencia) this.errorMostrarMsjSolicitud.push("Debe ingresar la descripción de la procedencia.");
-                if (this.errorMostrarMsjSolicitud.length) this.errorInfSolicitud = 1;
-                return this.errorInfSolicitud;
-            },
+            
             validarRevision(){  
                 this.errorRevision=0;  //aceptado rechazado
                 this.errorMostrarMsjSolicitud =[];
@@ -1627,43 +1515,7 @@
                         }
                     }
                 }
-            },
-
-            //crearInfSolicitud
-            abrirModalInfSol(modelo, accion, data = []){
-                switch(modelo){
-                    case "solicitud":
-                    {
-                        switch(accion){
-                            case 'registrar':
-                            {
-                                this.modal2 = 1;
-                                this.tituloModal = 'Registrar solicitud';
-                                    this.cantidad='';
-                                    this.matriz='';
-                                    this.analito='';
-                                    this.flujo='';
-                                    this.des_procedencia='';
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            {
-                                //console.log(data);
-                                this.modal2=1;
-                                this.tituloModal='Actualizar solicitud';
-                                this.tipoAccion=2;
-                                this.solicitud_id=data['id'];
-                                this.cantidad = data['cantidad'];
-                                this.matriz = data['matriz'];
-                                this.analito = data['analito'];
-                                this.des_procedencia = data['des_procedencia'];
-                                break;
-                            }
-                        }
-                    }
-                }
-            },
+            },           
                  
             //crear Recomendaciones
             abrirModalRecomend(modelo, accion, data = []){
@@ -1700,10 +1552,10 @@
             },
             //crear Modificaciones tabla
             cerrarModificaciones(){
-                this.fecha_mod='';
-                this.nombre_mod='';
-                this.cargo_mod='';
-                this.descripcion_mod='';
+                this.fecha_mod = new Date();
+                this.nombre_mod = '';
+                this.cargo_mod  = '';
+                this.descripcion_mod = '';
             },
             //actualizarModificaciones
             /*abrirModalModificaciones(modelo, accion, data = []){
@@ -1807,7 +1659,6 @@
                if(me.verifica2==1){
                     me.nombreEncargado = me.busquedaEncargado;
                     console.log(me.busquedaEncargado,'nombre res');
-                    console.log('entrooooooo');
                     console.log(me.busquedaEncargado,'ressssss');
                  } else{
                      me.busquedaEncargado='';}
@@ -1833,17 +1684,14 @@
                      this.soporte_impreso = false;}
                }     
            },
-           
-           
+                      
              // Registro --->BD  
              registrarPersona(){
                 if (this.validarPersona()){
                     this.popToastError();
                     return;
                 }                
-                let me = this;
-
-                  
+                let me = this;                
                 axios.post('/persona/registrar',{
                     'nombre': this.nombre,
                     'paterno': this.paterno,

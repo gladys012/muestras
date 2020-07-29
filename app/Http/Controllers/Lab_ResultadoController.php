@@ -20,7 +20,7 @@ class Lab_ResultadoController extends Controller
             'preparacion.vs','preparacion.peso','preparacion.observaciones',
             'recepcion.codigo_lab', 'recepcion.codigo_muestra as codigo_muestraR', 'recepcion.fecha_recepcion as fecha_recepcionR', 'recepcion.fecha_muestra as fecha_muestraR', 
             'cloruros_volumetria.fecha','cloruros_volumetria.dilucion','cloruros_volumetria.vol_gastado','cloruros_volumetria.vol_muestra','cloruros_volumetria.conc_tit','cloruros_volumetria.observaciones',
-            'cloruros_volumetria.id as nro', 'cloruros_volumetria.idpreparacion as nro_preparacion')
+            'cloruros_volumetria.id as nro', 'cloruros_volumetria.idpreparacion as nro_preparacion', 'cloruros_volumetria.vol_resultado as resultadoClor')
             ->orderBy('preparacion.id', 'desc')->paginate(1000);       
         return [
             'datos' => $preparacion

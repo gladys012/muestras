@@ -340,7 +340,8 @@
         <div class="col-sm-12" style="justify-content: center;">        
             <button type="button" class="btn btn-secondary" @click="cerrarModal()"><font color="white">Cancelar</font></button>
             <!--button type="button" class="btn btn-primary" ><font color="white">Guardar Datos</font></button-->
-            <b-button variant="info" @click="RegistrarSolicitud()">Guardar Datos</b-button>
+            <b-button variant="info" class="btn btn-primary" @click="generarPDF()">PDF</b-button>
+            <b-button variant="info" class="btn btn-primary" @click="RegistrarSolicitud()">Guardar Datos</b-button>
         </div>
         
       </div>
@@ -1366,6 +1367,13 @@
                     console.log(error);
                 });
             },
+
+            generarPDF(){
+                console.log(this.nro_registro,'12345678');
+                var nro = this.nro_registro;
+                window.open('http://localhost:8000/solicitud/pdf/'+ nro + ',' + '_blank');
+            },
+
             popToastReg() {
                 const h = this.$createElement
                 this.count++
@@ -1433,6 +1441,8 @@
                 })
              },        
             },
+
+
             mounted() {             
             //     ///php artisan serve --host=192.168.1.5
             this.listarSolNroRegistro();
@@ -1556,10 +1566,8 @@ body {
     }
   }  
 }
-
 /*@keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }*/
-
 </style>

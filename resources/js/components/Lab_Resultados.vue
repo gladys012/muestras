@@ -68,7 +68,7 @@
                         :sort-desc.sync="sortDesc"
                         :sort-direction="sortDirection"                     
                     >
-                    <template v-slot:cell(index)="data">
+                    <template v-slot:cell(nro)="data">
                         {{ data.index + 1 }}
                     </template>
                     <template v-slot:cell(name)="data">
@@ -151,7 +151,7 @@
                 show: true,
                 columnas: [ 
                   { key: 'codigo_lab', label: 'Cod. lab', sortable: true, sortDirection: 'desc' },
-                    'index',
+                    'Nro',
                   { key: 'codigo_muestraR', label: 'Cod. muestra', sortable: true, sortDirection: 'desc' },
                   { key: 'codigo_muestraR', label: 'Fecha Muestreo', sortable: true, sortDirection: 'desc' },
                   { key: 'fecha_recepcionR', label: 'Fecha Recepcion', sortable: true, sortDirection: 'desc' },
@@ -160,7 +160,7 @@
                   { key: 'vol_muestra', label: 'Alic.', sortable: true },                 
                   { key: 'dilucion', label: 'FD', sortable: true },                 
                   { key: 'conc_tit', label: 'Conc. tit.', sortable: true },                 
-                  { key: 'resultado', label: 'resultado', sortable: true },                 
+                  { key: 'resultadoClor', label: 'Resultado', sortable: true },                 
                 ],
                 perPage: 10,
                 selectedID: null,

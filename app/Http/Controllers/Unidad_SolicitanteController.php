@@ -76,7 +76,7 @@ class Unidad_SolicitanteController extends Controller
      public function solPdf(Request $request){          
         $nro_reg = $request->nro_reg;                     
      
-        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=', $nro_reg)
+        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=',36)
         
         ->where('solicitud_ensayo.estado','=','1')
         ->where('unidad_solicitud.estado','=','1')

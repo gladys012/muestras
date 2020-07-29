@@ -104,7 +104,7 @@ Route::group(['middleware'=>['auth']],function(){
         Route::get('/solicitud', 'RecomendacionesController@index');
         Route::get('/solicitud/registrar', 'RecomendacionesController@store');
 
-        Route::get('/solicitud/solPdf/{nro_reg}', 'Unidad_SolicitanteController@solPdf')->name('solicitud.pdf');
+        Route::get('/solicitud/pdf/{nro_reg}', 'Unidad_SolicitanteController@solPdf')->name('solicitud.pdf');
         // ruta de formulario
         Route::get('/solicitud', 'EmailController@index');
         // ruta al enviar correo
