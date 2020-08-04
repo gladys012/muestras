@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-group col-sm-3">
                         <label for="postal-code">Teléfono</label>
-                        <input class="form-control" v-model="telefono_unidad" type="text" placeholder="Teléfono de referencia">
+                        <input class="form-control" v-model="telefono_unidad" type="integer" placeholder="Teléfono de referencia">
                     </div>
                 </div>                    
                 <div class="row">
@@ -562,7 +562,6 @@
 </template>
 
 <script>
-   // import datables from 'datatables'
     import vSelect from 'vue-select';
     import Datepicker from 'vuejs-datepicker';
     import { es } from 'vuejs-datepicker/dist/locale';
@@ -706,11 +705,10 @@
         },
         //props: ['solicitudInf'],
         methods : {
-            resultadoInforSol(v){//comp hijo
+            resultadoInforSol(v){       //comp hijo
                 this.datosInformacionSol = v;
                 console.log(this.datosInformacionSol);
             },
-
             customFormatterRecom(date) {
                 return moment(date).format('D/MM/YYYY');
             },
@@ -1222,13 +1220,10 @@
                 }
                 this.registrarUnidadSolicitante();
                 //this.listarUnidadSolicitante();
-                //location.reload();
                 //this.registrarSolEnsayo();
                 console.log('registro ..  fin');
               },
             registrarInfSolicitud(){
-                console.log('entra..**************');
-
                 let me=this;
                 var url= '/solicitudSolEnsayo';
                 axios.get(url).then(function (response) {
@@ -1250,10 +1245,8 @@
                                     'des_procedencia': me.datosInformacionSol[i].des_procedencia,
                                     'usr_id':1,
                                 }).then(function (response) {
-                                    console.log(response,'response inf solicitud');
-                                    
+                                    console.log(response,'response inf solicitud');                                    
                                     me.registraDatos=1;
-                                // me.resetDatos();                                                                   
                                 }).catch(function (error) {
                                     console.log(error);
                                     me.popToastError();
@@ -1301,8 +1294,7 @@
             },
               
             registrarResultado(){
-                this.registraDatos = 0;
-        
+                this.registraDatos = 0;        
                 let me = this;
                 axios.post('/solicitud/registrarResultado',{
                     'idsol_ensayo': me.idSolEnsayo,

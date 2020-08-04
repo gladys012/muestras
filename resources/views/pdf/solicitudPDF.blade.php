@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte de venta</title>
+    <title>Solicitud de Ensayo</title>
     <style>
         body {
         /*position: relative;*/
@@ -119,7 +119,7 @@
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>IncanatoIT</b><br>
+                    <b>Solicitud de Ensayo</b><br>
                 </p>
             </div>
             <div id="fact">

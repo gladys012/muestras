@@ -105,7 +105,8 @@
                 
                 let datoImagen = new FormData();
                 datoImagen.append('imagen', this.file);
-
+                this.popToastReg();
+                location.reload();
                 axios.post('/solicitud/adjunto', datoImagen)
                     .then((response) => {
                         this.popToastReg();

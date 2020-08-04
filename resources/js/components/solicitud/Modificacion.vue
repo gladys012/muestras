@@ -7,9 +7,7 @@
         <div class="col-sm-12">
          <div class="card">
              <div class="container">
-                <h1>Modificación de solicitud de ensayo y atención al cliente</h1>
-                <!--h2><p>F-A4-01-02 </p></h2-->
-              
+                <h1>Modificación de solicitud de ensayo y atención al cliente</h1>              
              <div class="row">
                  <!--h3>Realice la búsqueda de la solicitud de ensayo</h3-->                    
                 <div class="form-group col-sm-6">
@@ -85,7 +83,7 @@
                 <i class="icon-search" style="color:white"></i>Buscar datos
             </button--> 
             
-             </div>             
+            </div>             
            <div class="col-sm-12">
             <div class="card">
             <table class="table table-responsive-sm table-bordered table-striped table-sm">
@@ -117,7 +115,7 @@
                 </table>     
              </div>
             </div>
-            <!----fin busqueda de datos Modificacion-->>
+            <!----fin busqueda de datos Modificacion-->
 
            <div class="col-sm-12" v-if="datosModificar==1">
             <div class="card">
@@ -198,9 +196,8 @@
         </div> 
         <!-- /. solicitud-->  
         <div v-if="datosModificar==1">
-        <solicitudInf @resultadosInf="resultadoInforSol"></solicitudInf>               
-        
-        
+        <solicitudInf @resultadosInf="resultadoInforSol"></solicitudInf>                       
+        <!-- /. fin inf. solicitud--> 
         <div class="col-sm-12" v-if="datosModificar==1">
             <div class="card">
             <div class="card-header"><strong>Revisión de la oferta</strong></div>
@@ -383,7 +380,6 @@
             </div>
         </div>
         <!-- fin tabla recomendaciones-->
-
     <div class="col-sm-12" v-if="datosModificar==1">
         <div class="card">
         <div class="card-header"><strong>Conformidad</strong></div>
@@ -518,7 +514,6 @@
         <!-- /.modal-dialvue-datepickerog -->
     </div>
     <!--Fin del modal-->
-
     <!--Inicio del modal agregar/actualizar  recomdendaciones-->
     <div class="modal fade" :class="{'mostrarr' : modal3}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -534,19 +529,18 @@
                             <div class="row">
                             <div class="form-group col-lg-6">
                                 <label for="city">Fecha</label>
-                                <!--input class="form-control" v-model="fecha_recom" type="text" placeholder="Fecha"-->
                                  <b-form-datepicker id="example-datepicker" v-model="fecha_recom" class="mb-2" disabled></b-form-datepicker>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="city">Recomendaciones</label>
-                                <input class="form-control" v-model="recomendaciones" type="text" placeholder="Recomendaciones (cliente)">
+                                <input class="form-control" v-model="recomendaciones" type="text" placeholder="Recomendaciones(cliente)">
                             </div>                            
                         </div>
                         <!-- /.row-->
                         <div class="row">  
                             <div class="form-group col-sm-6">
                                 <label for="postal-code">Respuesta</label>
-                                <input class="form-control" v-model="respuesta" type="text" placeholder="Respuesta (encargado de laboratorio)">
+                                <input class="form-control" v-model="respuesta" type="text" placeholder="Respuesta(encargado de laboratorio)">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="city">VoBo</label>
@@ -570,67 +564,10 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialvue- revision -->
+     </div>   
     </div>
-     <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" v-text="tituloModal"></h4>
-                    <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                            <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label for="city">Fecha</label>
-                                <datepicker 
-                                    :bootstrap-styling="true"
-                                    :language="es"
-                                    calendar-class="datepicker1"                                    
-                                    input-class="form-control col-md-6"
-                                    :open-date="openDate"
-                                    :format="customFormatterRecom"
-                                    v-model="fecha_recom">
-                                </datepicker>                          
-                                </div>
-                            <div class="form-group col-sm-6">
-                                <label for="city">Recomendaciones</label>
-                                <input class="form-control" v-model="recomendaciones" type="text" placeholder="Recomendaciones (cliente)">
-                            </div>                            
-                        </div>
-                        <!-- /.row-->
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label for="postal-code">Respuesta</label>
-                                <input class="form-control" v-model="respuesta" type="text" placeholder="Respuesta (encargado de laboratorio)">
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="city">VoBo</label>
-                                <input class="form-control" v-model="vobo" type="text" placeholder="VoBo">
-                            </div>
-                        </div>
-                        <div v-show="errorRecomendaciones" class="form-group row div-error">
-                            <div class="text-center text-error">
-                                <div v-for="error in errorMostrarMsjsolicitud" :key="error" v-text="error">
-
-                                </div>
-                            </div>
-                        </div>
-                    </form> 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                    <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="crearRecomendaciones()">Guardar</button>
-                    <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarRecomendaciones(recomendaciones.id)">Actualizar</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialvue-datepickerog -->
-     </div>
     <!--Fin del modal-->    
- 
+
     <div class="modal fade" :class="{'mostrar1' : modal4}" style="overflow-y: auto;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -647,7 +584,7 @@
                             <div class="row">
                             <div class="form-group col-sm-3">
                                 <label for="city">Fecha</label>
-                                <b-form-datepicker id="example-datepicker" v-model="fecha_mod" class="mb-2"></b-form-datepicker>
+                                <b-form-datepicker id="example-datepicker" v-model="fecha_mod" class="mb-2" disabled></b-form-datepicker>
                                  
                             </div>
                             <div class="form-group col-sm-5">
@@ -659,7 +596,6 @@
                                 <input class="form-control" v-model="cargo_mod" type="text" placeholder="Cargo">
                             </div>                            
                         </div>
-                        <!-- /.row-->
                         <div class="row">                            
                             <div class="form-group col-sm-12">
                                 <label for="city">Descripcion</label>
@@ -734,20 +670,17 @@
 </template>
 
 <script>
-   // import datables from 'datatables'
     import vSelect from 'vue-select';
     import Datepicker from 'vuejs-datepicker';
     import { es } from 'vuejs-datepicker/dist/locale';
     import moment from "moment";
-    //import './resources/assets/css/modal.css';
-       
+    import infSolicitud from './Sol_InformacionSol.vue';       
 
     export default {
         data (){
          
             return {
                 es: es,
-                //fecha_registro: new Date(),
                 openDate: new Date(),
                 selectedDate: '',
                 bootstrapStyling: true,
@@ -755,7 +688,7 @@
                 dismissSecs: 5,
                 dismissCountDown: 0,
                 dismissCountDown2: 0,
-                //date: new Date(2016, 9, 16),
+
                 //modificacion
                 nombreciBusq:'',
                 nombrePaternoBusq:'',
@@ -811,17 +744,6 @@
                idencargado:1,
                responsable:0,
                encargado:0,
-            
-
-               //Informacion solicitud
-               arrayinfoSolicitud:[],
-               cantidad:'',
-               flujo:'',
-               matriz:'',
-               analito:'',
-               des_procedencia:'',
-               idActualizar: -1,
-               solicitud_id:0,
 
               //revision
                personal_capacitado:'',
@@ -845,13 +767,12 @@
                equipos:'',
 
                //recomendaciones
-
                recomendaciones_id:0,
                arrayRecomendaciones:[],
                recomendaciones:'',
                respuesta:'',
                vobo:'',  
-               fecha_recom:'',                            
+               fecha_recom:new Date(),                            
                
                //CONFORMIDAD
                fecha_atendida:new Date(),
@@ -868,24 +789,20 @@
                disp_finales:'',
                codigo:'',
                cantidad:0,
-              // fecha:'',
                arraySolEnsayo:[],
-               idSolEnsayo:'',
-              
+               idSolEnsayo:'',              
                
                //unidad_solicitante 
                arrayUnidadSol:[],
                telefono_unidad:'',
                unidad:'', 
-               idUnidadSol:'',
-                
+               idUnidadSol:'',                
                usr_id:1,
-               encargado:'',
-               
+               encargado:'',               
                responsable:0,
                observ_resultado:'',                               
                                              
-               fecha_resultado:'',
+               fecha_resultado:new Date(),
                solicitante_resultado:'',
                cargo_resultado:'',
                fecha_recomendaciones:'',
@@ -902,7 +819,6 @@
                errorModificaciones:0,
                errorSolicitud: 0,
                errorPersona: 0,
-               errorInfSolicitud:0,
                errorRecomendaciones: 0,
                errorRevision: 0,
                errorResultados: 0,
@@ -924,32 +840,6 @@
                 offset : 3,
                 criterio : 'codigo',
                 buscar : '',
-
-
-
-                perPage: ['10', '25', '50'],
-            colums: [
-                {
-                    label: 'ID',
-                    name: 'id',
-                    filterable: true,
-                },
-                {
-                    label: 'Name',
-                    name: 'nombre',
-                    filterable: true,
-                },
-                {
-                    label: 'Email',
-                    name: 'email',
-                    filterable: true,
-                },
-                {
-                    label: '',
-                    name: 'View',
-                    filterable: false,
-                },
-            ]
             }
         },
         components: {
@@ -962,8 +852,9 @@
             },           
         },
         methods : {
-            prueba(){
-                console.log('prueba***-11***111');
+            resultadoInforSol(v){   //comp hijo
+                this.datosInformacionSol = v;
+                console.log(this.datosInformacionSol);
             },
             customFormatterRecom(date) {
                 return moment(date).format('D/MM/YYYY');
@@ -987,8 +878,7 @@
                     var respuesta= response.data;
                     console.log(respuesta,'respuesta');
                     me.nro_registro = respuesta.solicitud_ensayo+1;
-                  //  me.nro_registro = me.nro_registro+1;
-                  
+                  //  me.nro_registro = me.nro_registro+1;                  
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1073,7 +963,6 @@
                     console.log(respuesta,'respuesta');
                     q: search
                     me.arrayUnidadBusq= respuesta.unidad_solicitante;
-                    console.log(me.arrayUnidadBusq,'select 3');
                     loading(false);                   
                 })
                 .catch(function (error) {
@@ -1081,11 +970,9 @@
                 });
             },
             getDatosUnidadBusq(valU){
-              console.log(valU,'dato valU');
               let me = this;
               me.loading = true;
               if (valU == null || valU == '') {
-                  console.log(valU,'123456789');
                   me.unidad_busq='';
               }else {
                   me.unidad_busq = valU.unidad;
@@ -1104,8 +991,7 @@
                 console.log('entra4', nro_reg);
                 if (unidad=='' && ci=='' && idpaterno=='' && nro_reg=='') {
                      this.dismissCountDown = this.dismissSecs
-                }
-               
+                }               
                 let me=this;
                 if (unidad!='' || idpaterno!='' || ci!='' || nro_reg!='' ) {
                     var url= '/solicitudModificacion/busquedaDatos?unidad='+ unidad + '&idpaterno='+ idpaterno + '&ci='+ ci + '&nro_reg=' + nro_reg;
@@ -1126,9 +1012,7 @@
             },
 
             mostrarDatosSolicitud(busqueda){
-                console.log('entra', busqueda);
                 console.log('entra00', busqueda.fecha_registro);
-                console.log(this.arrayBusqueda,'array');
                 this.datosModificar=1;
                 this.verifica1=1;
                 this.verifica2=1;
@@ -1141,11 +1025,10 @@
                 this.busquedaEncargado = busqueda.paternoE +' '+ busqueda.maternoE +' '+ busqueda.nombreE;
                 this.idResponsableBusq = busqueda.idResponsable;
                 this.idEncargadoBusq = busqueda.idEncargado;
-                console.log(this.busquedaEncargado,'encar');
                 this.ciEnc = busqueda.ciE;
                 
                 let me=this;
-                console.log('entra serv');
+                console.log('entra');
                 this.listarInformacion_SolId (busqueda.idSol_ensayo);                
                 this.listarRevisionId(busqueda.idSol_ensayo);
                 this.listarResultadoId(busqueda.idSol_ensayo);
@@ -1160,7 +1043,6 @@
                     var respuesta= response.data;
                     console.log(respuesta,'respuesta info');
                     me.arrayinfoSolicitud = respuesta.informacion_solicitud.data;
-                    console.log(me.arrayinfoSolicitud,'resul array infor');
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1174,7 +1056,6 @@
                     var respuesta= response.data;
                     console.log(respuesta,'respuesta');
                     me.arrayRevision = respuesta.revision.data;
-                    console.log(me.arrayRevision,'resul array rev ');
                     console.log(me.arrayRevision[0].materiales,'prueba');
                     me.personal_capacitado =  me.arrayRevision[0].personal_capacitado;
                     me.disponibilidad = me.arrayRevision[0].disponibilidad;
@@ -1195,9 +1076,7 @@
                 var url= '/solicitudRecomendacionesId?idSolicitud=' + idSolicitud;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    console.log(respuesta,'respuesta');
                     me.arrayRecomendaciones = respuesta.recomendaciones.data;
-                    console.log(me.arrayRecomendaciones,'resul array rec');
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1208,9 +1087,7 @@
                 var url= '/solicitudResultadoId?idSolicitud=' + idSolicitud;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    console.log(respuesta,'respuesta');
                     me.arrayResultado = respuesta.resultado.data;
-                    console.log(me.arrayResultado,'resul array resul');
                     me.soporte_impreso = me.arrayResultado[0].soporte_impreso;
                     me.correo = me.arrayResultado[0].correo;
                     me.destinatario = me.arrayResultado[0].destinatario;
@@ -1227,7 +1104,6 @@
                 var url= '/solicitudConformidadId?idSolicitud=' + idSolicitud;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    console.log(respuesta,'respuesta');
                     me.arrayConformidad = respuesta.conformidad.data;
                     console.log(me.arrayConformidad,'resul array CONFORMI');
                     me.fecha_atendida = me.arrayConformidad[0].fecha_atendida;
@@ -1236,7 +1112,6 @@
                     me.cargo_per_atendida = me.arrayConformidad[0].cargo_per_atendida;
                     me.nombre_solicitante = me.arrayConformidad[0].per_solicitante;
                     me.cargo_per_solicitante = me.arrayConformidad[0].cargo_per_solicitante;
-
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1255,7 +1130,6 @@
                     descripcion_mod: this.descripcion_mod,
                 });
                 this.cerrarModificaciones();
-
             },
             actualizarModificaciones(idModificaciones){
                 console.log('entra mod',idModificaciones);
@@ -1273,7 +1147,6 @@
             },
 
             guardarModificacionesTabla(){
-
                 console.log(this.arrayModificaciones,'mod..array...*');
                 this.idSolRegistroMod = this.arrayBusqueda[0].idSol_ensayo;
                /* if (this.validarModificaciones()){
@@ -1299,7 +1172,6 @@
                         'usr_id':1
                     }).then(function (response) {
                         //me.listarPreparacion(1,'','codigo_lab');
-                        //me.popToastR();
                         console.log(response,'response glosa guardar');
                         //me.modal4=0;
                     }).catch(function (error) {
@@ -1730,8 +1602,7 @@
                 if (this.validarSolicitudEnsayo()){   
                     this.verificaError=1;
                     this.popToastError();  
-                    console.log('entro*****');   
-                                  
+                    console.log('entro**');         
                     return;
                 }  
                 if (this.validarRevision()){
@@ -1757,11 +1628,8 @@
                
               },
 
-              /////////////////////////////registrar//////
+              /////////////////////////////registrar SOLICITUD/////////////
             registrarUnidadSolicitante(){
-                /*if (this.validarUnidadSol()){
-                    return;
-                }*/  
                 if (this.idresponsable == ''|| this.idresponsable == null) {
                     this.idresponsable = this.idResponsableBusq;
                 }
@@ -1784,7 +1652,6 @@
                    this.popToastError();
                     console.log(error);
             });
-
            }, 
            registrarSolEnsayo (){
                 console.log('entro');
@@ -1815,13 +1682,8 @@
                             'usr_id':1,
                         }).then(function (response) {
                             console.log(response,'r4esponse sol ensayo');
-                            me.verificaMod=1;
-                            
-                            /*me.registrarRevision();
-                            me.registrarResultado();
-                            me.registrarRecomendaciones();
-                            me.registrarConformidad();
-                           */ me.registraDatos=1;
+                            me.verificaMod=1;                                                        
+                            me.registraDatos=1;
                         }).catch(function (error) {
                             me.verificaMod=0;
                             me.popToastError();
@@ -1842,38 +1704,46 @@
                // console.log(this.idUnidadSol,'------------------');
             },
                                               
-            registrarInfSolicitud (){  
+            registrarInfSolicitud(){
+                console.log('entra..**************');
+
                 let me=this;
                 var url= '/solicitudSolEnsayo';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arraySolEnsayo = respuesta.solicitud_ensayo.data;
-                    console.log(me.arraySolEnsayo,'array...');
+                    console.log(me.arraySolEnsayo,'array...'); 
                     for (let i = 0; i < me.arraySolEnsayo.length; i++) { 
                         if (me.arraySolEnsayo[i].nro_registro == me.nro_registro) {
                             me.idSolEnsayo = me.arraySolEnsayo[i].id;
                             console.log(me.arraySolEnsayo[i].nro_registro,'nro registro');
                             console.log(me.idSolEnsayo,'id solensayo');
-                            axios.post('/solicitud/registrarInfSolicitud',{
-                                'idsol_ensayo': me.idSolEnsayo,
-                                'cantidad' : me.cantidad,
-                                'matriz' : me.matriz,
-                                'analito' : me.analito,
-                                'flujo': me.flujo,
-                                'des_procedencia': me.des_procedencia,
-                                'usr_id':1,
-
-                            }).then(function (response) {
-                                console.log(response,'response inf solicitud');
+                            for (let i = 0; i < me.datosInformacionSol.length; i++) {                               
+                                axios.post('/solicitud/registrarInfSolicitud',{
+                                    'idsol_ensayo': me.idSolEnsayo,
+                                    'cantidad' : me.datosInformacionSol[i].cantidad,
+                                    'matriz' : me.datosInformacionSol[i].matriz,
+                                    'analito' : me.datosInformacionSol[i].analito,
+                                    'flujo': me.datosInformacionSol[i].flujo,
+                                    'des_procedencia': me.datosInformacionSol[i].des_procedencia,
+                                    'usr_id':1,
+                                }).then(function (response) {
+                                    console.log(response,'response inf solicitud');
+                                    
+                                    me.registraDatos=1;
+                                }).catch(function (error) {
+                                    console.log(error);
+                                    me.popToastError();
+                                });
+                            }
+                            if (me.registraDatos == 1) {
                                 me.registrarRevision();
                                 me.registrarResultado();
                                 me.registrarRecomendaciones();
                                 me.registrarConformidad();
-                                me.registraDatos=1;
-                            }).catch(function (error) {
-                                this.popToastError();
-                                console.log(error);
-                            });
+                                me.popToastReg();
+                                location.reload();
+                            }
                         }                                                                       
                     }               
                  }).catch(function (error) {
@@ -1882,10 +1752,7 @@
             },
             
             registrarRevision(){
-                this.registraDatos = 0;
-               /* if (this.validarInfSolicitud()){
-                    return;
-                }*/     
+                this.registraDatos = 0;                  
                 console.log('ENTRA REVISION');          
                 let me = this;
                 axios.post('/solicitud/registrarRevision',{
@@ -1911,9 +1778,7 @@
               
             registrarResultado(){
                 this.registraDatos = 0;
-               /* if (this.validarInfSolicitud()){
-                    return;
-                }       */         
+                        
                 let me = this;
                 axios.post('/solicitud/registrarResultado',{
                     'idsol_ensayo': me.idSolEnsayo,
@@ -2125,13 +1990,6 @@
     
 </script>
 <style>   
- /*.mostrar{
-    display: list-item !important;
-    opacity: 1 !important;
-    position: relative !important;
-    background-color: #3c29297a !important;
-}*/
-	
 .mostrar1 {
     display: list-item !important;
     opacity: 1 !important;

@@ -57,7 +57,7 @@ class PreparacionController extends Controller
     public function selectPreparacion(Request $request){
         if(!$request->ajax()) return redirect('/');
         $preparacion = Preparacion::where('estado','=','1')
-        ->select('id','codigo_lab',)->distinct('codigo_lab')->get();
+        ->select('id','codigo_lab','peso')->distinct('codigo_lab')->get();
         return['preparaciones'=>$preparacion];
     } 
 

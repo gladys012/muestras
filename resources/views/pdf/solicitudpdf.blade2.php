@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte de venta</title>
+    <title>Solicitud de ensayo</title>
     <style>
         body {
         /*position: relative;*/
@@ -112,14 +112,14 @@
         }
     </style>
     <body>
-        @foreach ($gladys as $v)
+        @foreach ($unidad_solicitante as $v)
         <header>
             <div id="logo">
                 <img src="img/logo2.png" alt="incanatoIT" id="imagen">
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>IncanatoIT</b><br>José Gálvez com
+                    <b>Solicitud de Ensayo</b><br>
                 </p>
             </div>
             <div id="fact">

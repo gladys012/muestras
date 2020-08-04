@@ -226,6 +226,7 @@
                 observaciones: '',
                 conc_tit:'',
                 vol_muestra:'',
+                resultadoClor:'',
                 arrayCloruros_vol : [],
                 arrayPreparacion :[],
                 tituloModal : '',
@@ -233,6 +234,8 @@
                 v1f:'',
                 v2f:'',
                 v1i:'',
+                resul:0,
+                pesoClor:'',
 
                 modal : 0,                
                 tipoAccion : 0,
@@ -291,45 +294,51 @@
             },
 
             registrarCloruros_vol(){ 
-                //me.resultadoCloruros_vol();
-                console.log(this.fechaD,'fecha***');
                 this.fechaD = moment(this.fechaD).format('D/MM/YYYY');
-                console.log(this.fechaD,'fechaaaaaa');
-                let me = this;
+                this.datosCloruros_vol();
+                console.log(this.resultadoClor,'resultado form cloruros');
+               
+            },
+
+            registra(){
+                 let me = this;
                     console.log('entra 0');
                         axios.post('/cloruros_vol/registrar',{
-                        'idpreparacion': this.idpreparacion,    
-                        'dilucion': this.dilucion,
-                        'fecha': this.fechaD,
-                        'codigo_lab' : this.codigo_lab,
-                        'vol_muestra' : this.vol_muestra,
-                        'vol_gastado' : this.vol_gastado,
-                        'conc_tit' : this.conc_tit,
-                        'observaciones' : this.observaciones,
+                        'idpreparacion': me.idpreparacion,    
+                        'dilucion': me.dilucion,
+                        'fecha': me.fechaD,
+                        'vol_muestra' : me.vol_muestra,
+                        'vol_gastado' : me.vol_gastado,
+                        'conc_tit' : me.conc_tit,
+                        'observaciones' : me.observaciones,
+                        'vol_resultado' : me.resultadoClor,
                         'usr_id':1,
-
-                        }).then(function (response) {   
-                                            
-                        me.datosCloruros_vol();
-                          
+                        }).then(function (response) {                                               
+                        console.log(response,'respon reg cloruros');
+                        me.listarCloruros_vol();                        
+                        me.cerrarModal(); 
                     }).catch(function (error) {
                         me.fechaD = me.fechaD;
                             console.log(error);
                     });              
             },
             
-            actualizarCloruros_vol(){             
+            actualizarCloruros_vol(){    
+                this.resul = 1;         
                 let me = this;
                 this.fechaD = moment(this.fechaD).format('D/MM/YYYY');
+                this.datosCloruros_vol();
+            },
+            actualiza(){
                 axios.put('/cloruros_vol/actualizar',{
                     'idpreparacion': this.idpreparacion, 
                     'dilucion': this.dilucion,
                     'fecha': this.fechaD,
-                    'codigo_lab' : this.codigo_lab,
                     'vol_muestra' : this.vol_muestra,
                     'vol_gastado' : this.vol_gastado,
                     'conc_tit' : this.conc_tit,
                     'observaciones' : this.observaciones,
+                    'vol_resultado' : this.resultadoClor,
                     'id': this.cloruros_vol_id,
                     'usr_id':1,
                 }).then(function (response) {
@@ -337,7 +346,7 @@
                     me.cerrarModal();
                 }).catch(function (error) {
                     console.log(error);
-                });               
+                });   
             },
             
             datosCloruros_vol(){
@@ -350,11 +359,11 @@
                 axios
                     .get(url)
                     .then(function(response) {
+
                         console.log(response, "select");
                         var respuesta = response.data;
                         me.arrayDilucion = respuesta.recepcion;
                         console.log(me.arrayDilucion, "select 3 dil cristales");
-                        //var datDil = me.arrayDilucion[0].dilucion_nombre;
                         for (let i = 0; i < me.arrayDilucion.length; i++) {
                             const datDilucion = me.arrayDilucion[i].nombre_dilucion;
                             if (dil_nombre == datDilucion) {
@@ -376,10 +385,21 @@
                 axios
                     .get(url)
                     .then(function(response) {
-                    console.log(response, "select");
-                    var respuesta = response.data;
-                    me.arrayDilucion = respuesta.recepcion;
-                    console.log(me.arrayDilucion, "select 3 dil salm");
+                        console.log(response, "select");
+                        var respuesta = response.data;
+                        me.arrayDilucion = respuesta.recepcion;
+                        console.log(me.arrayDilucion, "select 3 dil salm");
+                        for (let i = 0; i < me.arrayDilucion.length; i++) {
+                            const datDilucion = me.arrayDilucion[i].nombre_dilucion;
+                            if (dil_nombre == datDilucion) {
+                                console.log('entra',me.arrayDilucion[i]);
+                                me.v1f = me.arrayDilucion[i].v1f;
+                                me.v2i = me.arrayDilucion[i].v2i;
+                                me.v2f = me.arrayDilucion[i].v2f;
+                                console.log(me.v1f,'v1f fr');
+                                me.resultado();
+                            }                            
+                        }    
                     })
                     .catch(function(error) {
                     console.log(error);
@@ -390,105 +410,61 @@
                     axios
                     .get(url)
                     .then(function(response) {
-                    console.log(response, "select");
-                    var respuesta = response.data;
-                    me.arrayDilucion = respuesta.recepcion;
-                    console.log(me.arrayDilucion, "select 3 dil aguas");
-
+                        console.log(response, "select");
+                        var respuesta = response.data;
+                        me.arrayDilucion = respuesta.recepcion;
+                        console.log(me.arrayDilucion, "select 3 dil aguas");
+                        for (let i = 0; i < me.arrayDilucion.length; i++) {
+                            const datDilucion = me.arrayDilucion[i].nombre_dilucion;
+                            if (dil_nombre == datDilucion) {
+                                console.log('entra',me.arrayDilucion[i]);
+                                me.v1f = me.arrayDilucion[i].v1f;
+                                me.v2i = me.arrayDilucion[i].v2i;
+                               // me.v2f = me.arrayDilucion[i].v2f;
+                                me.resultado();
+                            }                            
+                        }
                     })
                     .catch(function(error) {
                     console.log(error);
                     });
-                }   
-                /*console.log(me.arrayCloruros_vol,'array clorurioas');
-                for (let i = 0; i < this.arrayCloruros_vol.length; i++) {
-                    if (this.codigo_laboratorio == this.arrayCloruros_vol[i].codigo_laboratorio) {
-                        let peso = this.arrayCloruros_vol[i].peso;
-                        console.log(peso, 'peso');
-                    }
-                    
-                } 
-                */ 
-                /*var url= '/cloruros/selectDilucion?dil_tipo='+dil_tipo + '&dil_nombre='+ dil_nombre ;
-                axios.get(url).then(function (response) {
-                    console.log(response,'select');
-                    var respuesta= response.data;
-                    me.arrayDilucionClo = respuesta.cloruros_vol;
-                    console.log(me.arrayDilucionClo,'select 3 id datos');
-                  //  me.dilucion = me.arrayRecepcion[0].dilucion_nombre;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });*/
-
-                
-               /*Function Cloruros(RDiluciones, Masa, Dilucion, Alicuota, Vg, Normalidad)
-                RDiluciones  = Tabla Cloruros (Selected * from cloruros where dilucion=FD)
-                    RDilucionesV1f=V1f
-                    RDilucionesV2i = V2i
-                    RDilucionesV2f=V2f
-                Masa =Peso(g),
-                Dilucion=FD,
-                Alicuota= Alic(ml),
-                Vg=Vol.Gast (ml),
-                Normalidad= Conc. Titulante
-
-                Pre = 35453 * Normalidad * Vg / Alicuota
-                Cloruros = Pre * RDilucionesV1f * RDilucionesV2f / 10000 / Masa / RDilucionesV2i*/
-               
-               
-               /*console.log('ingresa formula');
-                console.log(me.v1f,'v1f form');
-                let RDilucionesV1f = this.v1f;
-                let RDilucionesV2i = this.v2i;
-                let RDilucionesV2f = this.v2f;
-                var masa = peso;
-                //let dilucionF = this.vol_muestra; //arreglar
-                let alicuota = this.vol_muestra;
-                let vg = this.vol_gastado;
-                let normalidad = this.conc_tit;
-
-                let pre = (35453)*(normalidad)*vg /alicuota;
-                console.log(pre,'pre');
-                let cloruros = pre*RDilucionesv1f*RDilucionesV2f/10000/masa/RDilucionesV2i;
-                console.log(cloruros,'resul cloruros');*/
-                //this.resultado();
+                }                  
             },
 
             resultado(){
-                console.log(this.arrayCloruros_vol,'array clorurioas');
-                for (let i = 0; i < this.arrayCloruros_vol.length; i++) {
-                    if (this.codigo_laboratorio == this.arrayCloruros_vol[i].codigo_laboratorio) {
-                        let peso = this.arrayCloruros_vol[i].peso;
-                        console.log(peso, 'peso');
-                    }
-                    
+                console.log(this.arrayPreparacion,'array prep');
+                for (let i = 0; i < this.arrayPreparacion.length; i++) {
+                    console.log(this.arrayPreparacion[i].id,'arrayclor lab 1');
+                    console.log(this.idpreparacion,'a clor lab 2');
+                    if (this.idpreparacion == this.arrayPreparacion[i].id) {
+                        this.pesoClor = this.arrayPreparacion[i].peso;
+                        console.log(this.pesoClor, 'pesoClor1');
+                    }                    
                 }
                 console.log('ingresa formula');
                 console.log(this.v1f,'v1f form');
-                //var RDilucionesV1f = this.v1f;
-                //console.log(RDilucionesV1f,'RDilucionesV1f');
+                // formula datos
                 var RDilucionesV2i = this.v2i;
                 var RDilucionesV2f = this.v2f;
-                var masa = 1;
+                var masa = this.pesoClor;
                 //let dilucionF = this.vol_muestra; //arreglar
                 let alicuota = this.vol_muestra;
                 console.log(alicuota,'alicuota');
                 console.log(this.vol_muestra,'muestras alidcuota');
                 let vg = this.vol_gastado;
                 let normalidad = this.conc_tit;
-                console.log(normalidad,'normalidad');
-
                 let pre = (35453)*(normalidad)*vg /alicuota;
                 console.log(pre,'pre');
 
                 let RDilucionesV1f = this.v1f;
-                console.log(RDilucionesV1f,'RDilucionesV1f 1231');
                 let cloruros = (pre)*(RDilucionesV1f)*(RDilucionesV2f)/10000/(masa)/(RDilucionesV2i);
                 console.log(cloruros,'resul cloruros');
-
-                this.listarCloruros_vol();                        
-                this.cerrarModal(); 
+                this.resultadoClor = cloruros;
+                console.log(this.resultadoClor,'resul saca resul');
+                if (this.resul == 0) {
+                    this.registra();    
+                }else if(this.resul == 1)
+                    this.actualiza();
             },
 
             selectPreparacion(){
