@@ -1,0 +1,904 @@
+
+
+------------------------------------
+------------------USUARIOS-----------
+--------------------------------------
+
+CREATE TABLE public.personas
+(
+    id serial PRIMARY KEY,
+    paterno text COLLATE pg_catalog."default" NOT NULL,
+    materno text COLLATE pg_catalog."default",
+    nombre text COLLATE pg_catalog."default" NOT NULL,
+    ci text COLLATE pg_catalog."default" NOT NULL,
+    direccion text COLLATE pg_catalog."default",
+    telefono integer,
+    email text COLLATE pg_catalog."default",
+    usr_id integer NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+CREATE TABLE public.roles
+(
+    id serial PRIMARY KEY,
+    nombre character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    descripcion character varying(100) COLLATE pg_catalog."default",
+    estado boolean NOT NULL DEFAULT true,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT roles_nombre_unique UNIQUE (nombre)
+);
+
+CREATE TABLE public.users
+(
+    id serial PRIMARY KEY,
+    usuario character varying(191)  NOT NULL,
+    password character varying(191)  NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    idrol integer NOT NULL,
+    remember_token character varying(100) ,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    usr_id integer,
+    CONSTRAINT users_usuario_unique UNIQUE (usuario),
+    CONSTRAINT users_id_foreign FOREIGN KEY (id)
+        REFERENCES public.personas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT users_idrol_foreign FOREIGN KEY (idrol)
+        REFERENCES public.roles (id) MATCH SIMPLE
+
+);
+
+
+
+
+
+
+--------------form-01-02-------------
+
+
+CREATE TABLE unidad_solicitud
+(
+    id serial PRIMARY KEY,
+    idresponsable integer NOT NULL,
+    idencargado integer NOT NULL,
+    unidad text,
+    telefono text,
+    usr_id integer NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT unidad_solicitud_idresponsable_foreign FOREIGN KEY (idresponsable)
+    REFERENCES public.personas (id) MATCH SIMPLE,
+    CONSTRAINT unidad_solicitud_idencargado_foreign FOREIGN KEY (idencargado)
+    REFERENCES public.personas (id) MATCH SIMPLE        
+);
+
+CREATE TABLE public.solicitud_ensayo
+(
+    id serial PRIMARY KEY,
+    idunidad integer NOT NULL,
+    nro_registro text NOT NULL,
+    fecha_registro date,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT solicitud_ensayo_idunidad_foreign FOREIGN KEY (idunidad)
+        REFERENCES public.unidad_solicitud (id) MATCH SIMPLE
+);
+
+CREATE TABLE public.informacion_solicitud
+(
+    id serial PRIMARY KEY,
+    idsol_ensayo integer NOT NULL,
+    cantidad text NOT NULL,
+    flujo text,
+    matriz text,
+    analito text,
+    des_procedencia text,
+    nro_registro int,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT informacion_solicitud_idsol_ensayo_foreign FOREIGN KEY (idsol_ensayo)
+        REFERENCES public.solicitud_ensayo (id) MATCH SIMPLE
+);
+
+CREATE TABLE public.revision
+(
+    id serial PRIMARY KEY,
+    idsol_ensayo integer NOT NULL,
+    personal_capacitado  boolean,
+    disponibilidad  boolean,
+    materiales  boolean,
+    equipos  boolean,
+    instalaciones  boolean,
+    metodo  boolean,
+    observaciones text,
+    aclaraciones text,
+    trabajo_aceptado  boolean,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT revision_idsol_ensayo_foreign FOREIGN KEY (idsol_ensayo)
+        REFERENCES public.solicitud_ensayo (id) MATCH SIMPLE
+);
+
+CREATE TABLE public.resultado
+(
+    id serial PRIMARY KEY,
+    idsol_ensayo integer NOT NULL,
+    soporte_impreso boolean,
+    correo boolean,
+    correo_destino text,
+    destinatario text,
+    observaciones text,
+    disp_finales text,
+    fecha date,
+    solicitante text,
+    cargo text,
+    otro text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT resultado_idsol_ensayo_foreign FOREIGN KEY (idsol_ensayo)
+        REFERENCES public.solicitud_ensayo (id) MATCH SIMPLE
+);
+
+CREATE TABLE public.recomendaciones
+(
+    id serial PRIMARY KEY,
+    idsol_ensayo integer NOT NULL,
+    fecha date,
+    recomendaciones text,
+    respuesta text,
+    vobo text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT recomendaciones_idsol_ensayo_foreign FOREIGN KEY (idsol_ensayo)
+        REFERENCES public.solicitud_ensayo (id) MATCH SIMPLE
+);
+CREATE TABLE public.conformidad
+(
+    id serial PRIMARY KEY,
+    idsol_ensayo integer NOT NULL,
+    fecha_atendida date,
+    per_atendida text,
+    cargo_per_atendida text,
+    fecha_solicitante date,
+    per_solicitante text,
+    cargo_per_solicitante text,    
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT conformidad_idsol_ensayo_foreign FOREIGN KEY (idsol_ensayo)
+        REFERENCES public.solicitud_ensayo (id) MATCH SIMPLE
+);
+CREATE TABLE public.glosa
+(
+    id serial PRIMARY KEY,
+    idsol_ensayo integer NOT NULL,
+    fecha date,
+    solicitante text,
+    cargo text,
+    decripcion text,
+    tipo_doc text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT glosa_idsol_ensayo_foreign FOREIGN KEY (idsol_ensayo)
+        REFERENCES public.solicitud_ensayo (id) MATCH SIMPLE
+);
+
+
+
+
+
+---------01---------------
+--  A MODIFICAR---> RECEPCION
+-- Table: public.recepcion
+
+
+     CREATE TABLE public.recepcion
+(
+    id serial primary key,
+    idunidadcod integer NOT NULL,
+    fecha_recepcion date NOT NULL,
+    fecha_muestra date NOT NULL,
+    hora time(0) without time zone,
+    codigo_cliente text COLLATE pg_catalog."default" NOT NULL,
+    codigo_muestra text COLLATE pg_catalog."default" NOT NULL,
+    codigo_lab text COLLATE pg_catalog."default" NOT NULL,
+    cantidad integer NOT NULL,
+    dilucion_nombre text, 	
+    cliente text COLLATE pg_catalog."default" NOT NULL,
+    observaciones text COLLATE pg_catalog."default",
+    analito jsonb NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,    
+    CONSTRAINT recepcion_idunidadcod_foreign FOREIGN KEY (idunidadcod)
+        REFERENCES public.unidad_solicitud (id) MATCH SIMPLE    
+);
+
+
+----------------02----------------
+CREATE TABLE public.preparacion
+(
+    id serial PRIMARY KEY,
+    idrecepcion integer NOT NULL,
+    codigo_lab text NOT NULL,
+    fecha_analisis date NOT NULL,
+    fecha_muestreo date NOT NULL,
+    vs boolean,
+    vh boolean,
+    peso text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT preparacion_idrecepcion_foreign FOREIGN KEY (idrecepcion)
+        REFERENCES public.recepcion (id) MATCH SIMPLE
+
+);
+
+--------03-------
+CREATE TABLE public.cloruros_volumetria
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    dilucion text,
+    vol_muestra integer,
+    vol_gastado text,
+    conc_tit numeric(11,6),
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT cloruros_volumetria_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE        
+);
+
+
+
+--------04-------------------
+CREATE TABLE public.sulfatos_turbimetrias
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    d1 text,
+    lectura1 text,
+    ecuac1 text,
+    d2 text,
+    lectura2 text,
+    ecuac2 text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT sulfatos_turbimetrias_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+------------05---------------
+
+CREATE TABLE public.sulfatos_gravimetria
+(
+    id serial primary key,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    nro_vaso text,
+    masa_muestra numeric(8,2) NOT NULL,
+    nro_crisol text,
+    masa_crisol numeric(8,2) NOT NULL,
+    masa_c_m numeric(8,2) NOT NULL,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT sulfatos_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+----------------06---------------
+
+CREATE TABLE public.ph_densidad
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    densidad text,
+    ph text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT ph_densidad_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+
+-------------------07-----------------
+
+CREATE TABLE public.humedad
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    peso_cp text,
+    peso_cp_mh text,
+    peso_cp_ms text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT humedades_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+------08------------
+
+CREATE TABLE public.alcalinidad
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    masa_muestra text,
+    vol_muestra text,
+    vol_gastado_fenol text,
+    vol_gastado_mixto text,
+    conc_hci text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT ph_densidad_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+------09------------
+
+
+CREATE TABLE public.carbonatos_pcl
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    masa_recipiente text,
+    masa_muestra text,
+    cod_balanza text,
+    vol_gastado_hci text,
+    cod_bureta text,
+    conc_hci text,
+    dato text,
+    cumple boolean DEFAULT true,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT carbonatos_pcl_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+
+-----------------10--------------
+CREATE TABLE public.espectrometrias
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    litio text,
+    magnesio text,
+    potasio text,
+    sodio text,
+    calcio text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT espectrometrias_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+-----------------11-------------------
+
+CREATE TABLE public.granulometrico
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    posicion text,
+    nro_malla text,
+    peso_tamiz text,
+    tamiz_muestra_ret text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT granulometrico_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+
+    REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+-----------12--------------
+
+CREATE TABLE public.oxido_calcio
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    hoja_ruta text,
+    peso_muestra text,
+    vol_gastado_hci text,
+    concentracion_hci text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT oxido_calcio_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+-------------13---------------
+CREATE TABLE public.muestreo_cal
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    hoja_ruta text,
+    placa text,
+    peso text,
+    cao text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT cal_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+
+
+------------------14---------------
+CREATE TABLE public.correccion_metrologica
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    cod_balanza text,
+    litio boolean DEFAULT true,
+    potasio boolean DEFAULT true,
+    masa_recipiente text,
+    masa_muestra text,
+    cod_matraz250 text,
+    cod_pipeta text,
+    cod_matraz200 text,
+    lectura text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT correccion_metrologica_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE        
+);
+
+----------15----------------
+
+
+
+CREATE TABLE public.cloruros_pspv
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    cod_balanza text,
+    masa_recipiente text,
+    masa_muestra text,
+    cod_matraz text,
+    cod_pipeta text,
+    vol_gastado text,
+    cod_bureta text,
+    conc_tit text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT cloruros_pspv_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+---------------16--------------
+
+----NO HAY---
+
+
+---------17--------------
+
+CREATE TABLE public.boro_volumetria
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    masa_muestra text,
+    dil text,
+    vol_alicuota text,
+    vol_gastado_blanco text,
+    vol_gastado text,
+    conc_tit text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT boro_volumetria_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+--------------18--------------
+CREATE TABLE public.cal_mg_complexometria
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    dil text,
+    alicuota text,
+    vol_gastado_net text,
+    vol_gastado_murexide text,
+    conc_tit text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT cal_mg_complexometria_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+);
+
+----------19-----------
+
+CREATE TABLE public.ph_densidad_solidas
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    muestra text,
+    pc_sllena text,
+    pc_sparcial text,
+    densidad_solucion text,
+    masa_muestra text,
+    ph text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT ph_densidad_solidas_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+--------------------20-------------------
+CREATE TABLE public.carbonatos_mssv
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    masa_muestra text,
+    vol_gastado_hci text,
+    conc_hci text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT carbonatos_mssv_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+--------------------21------------------
+CREATE TABLE public.carbonatos_oxidrilos
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    peso_muestra text,
+    v1_gastado_hci text,
+    v2_gastado_hci text,
+    conc_hci text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT carbonatos_oxidrilos_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+----------22--------------
+
+CREATE TABLE public.turbidez_conductividad
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    turbidez_ntu text,
+    conductividad_lectura text,
+    conductividad_ms_cm text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT turbidez_conductividad_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+----------------23----------------
+CREATE TABLE public.potasio_valoracion
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    masa_muestra text,
+    dil text,
+    vol_alicuota text,
+    vol_gastado_blanco text,
+    vol_gastado text,
+    titulo text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT potasio_valoracion_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+------------------24----------------
+-----------NO HAY---------------
+
+
+------------------25------------
+
+
+
+CREATE TABLE public.potasio_gravimetria
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    masa_muestra text,
+    dilucion text,
+    alicuota text,
+    nro_vaso1 text,
+    nro_embudo1 text,
+    masa_embudo1 text,
+    masa_emb_muestra1 text,
+    nro_vaso2 text,
+    nro_embudo2 text,
+    masa_embudo2 text,
+    masa_emb_muestra2 text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT potasio_gravimetria_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+
+--------26--------------
+
+
+CREATE TABLE public.trazas_aa
+(
+    id serial PRIMARY KEY,
+    idpreparacion integer NOT NULL,
+    fecha date NOT NULL,
+    elemento text,
+    cod_muestra text,
+    peso_muestra text,
+    vol_aforo text,
+    vol_adicion text,
+    adicion text,
+    lectura1 text,
+    lectura2 text,
+    lectura3 text,
+    blanco_lectura text,
+    observaciones text,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT trazas_aa_idpreparacion_foreign FOREIGN KEY (idpreparacion)
+        REFERENCES public.preparacion (id) MATCH SIMPLE
+
+);
+
+
+
+
+
+CREATE TABLE public.analito
+(
+    id serial PRIMARY KEY,
+    nombre  text  NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+CREATE TABLE public.dil_cristales
+(
+    id serial PRIMARY KEY,
+    nombre_dilucion  text  NOT NULL,
+    v1f  text  NOT NULL,
+    v2i  text  NOT NULL,
+    v2f  text  NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+CREATE TABLE public.dil_salmueras
+(
+    id serial PRIMARY KEY,
+    nombre_dilucion  text  NOT NULL,
+    v1f  text  NOT NULL,
+    v2i  text  NOT NULL,
+    v2f  text  NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+CREATE TABLE public.dil_aguas
+(
+    id serial PRIMARY KEY,
+    nombre_dilucion  text  NOT NULL,
+    v1i  text  NOT NULL,
+    v1f  text  NOT NULL,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+CREATE TABLE public.unidad_codigo
+(
+    id serial PRIMARY KEY,
+    idunidad integer NOT NULL,
+    codigo text,
+    analito jsonb,
+    estado boolean NOT NULL DEFAULT true,
+    usr_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT unidad_codigo_idunidad_foreign FOREIGN KEY (idunidad)
+        REFERENCES public.unidad_solicitud (id) MATCH SIMPLE
+);
+	
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('litio', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('potasio', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('sodio', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('calcio', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('magnesio', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('boro', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('cloruros', true, 1);
+INSERT INTO public.analito(nombre, estado, usr_id) VALUES ('sulfatos', true, 1);
+
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('D', '250', '1', '1', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('A', '250', '0.2', '50', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('H', '250', '1', '50', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('B', '250', '2', '50', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('C', '250', '5', '50', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('F', '250', '10', '50', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('K', '250', '25', '50', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('L', '250', '0.2', '100', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('U', '250', '1', '100', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('P', '250', '5', '100', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('R', '250', '0.2', '200', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('N', '250', '1', '200', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('S', '250', '1', '250', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('Y', '250', '0.2', '500', true, 1);
+INSERT INTO public.dil_cristales(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('Z', '250', '1', '500', true, 1);
+
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('G', '100', '1', '1', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('A', '100', '0.2', '50', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('H', '100', '1', '50', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('B', '100', '2', '50', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('C', '100', '5', '50', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('F', '100', '10', '50', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('K', '100', '25', '50', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('L', '100', '0.2', '100', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('U', '100', '1', '100', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('P', '100', '5', '100', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('R', '100', '0.2', '200', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('N', '100', '1', '200', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('S', '100', '1', '250', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('Y', '100', '0.2', '500', true, 1);
+INSERT INTO public.dil_salmueras(nombre_dilucion, v1f, v2i, v2f, estado, usr_id) VALUES ('Z', '100', '1', '500', true, 1);
+
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('M', '1', '1', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('A', '0.2', '50', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('H', '1', '50', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('B', '2', '50', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('C', '5', '50', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('F', '10', '50' , true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('K', '25', '50', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('L', '0.2', '100', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('U', '1', '100', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('P', '5', '100', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('R', '0.2', '200', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('N', '1', '200', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('S', '1', '250', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('Y', '0.2', '500', true, 1);
+INSERT INTO public.dil_aguas(nombre_dilucion, v1i, v1f, estado, usr_id) VALUES ('Z', '1', '500', true, 1);
+
+INSERT INTO public.roles(nombre, descripcion, estado) VALUES ('administrador', 'Administra el sistema', true);
+INSERT INTO public.roles(nombre, descripcion, estado) VALUES ('control', 'Control del sistema', true);
+INSERT INTO public.roles(nombre, descripcion, estado) VALUES ('registrador', 'Registra muestras', true);
+
+
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('admin', 'admin', 'admin', '123456', 'centro', '7123456','admin@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('perez', 'perez', 'juan', '4567890', 'sopocachi', '7123456','juan@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('lopez', 'soria', 'luis', '3216540', 'san pedro', '74156210','luis@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('calle', 'careaga', 'carlos', '654321', 'centro', '71789456','carlos@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('rios', 'soliz', 'jorge', '7845120', 'sur', '79876542','jorge@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('cruz', 'martinez', 'daniel', '6549863', 'miraflores', '71987310','daniel@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('luna', 'cespedes', 'ana', '3692587', 'achumani', '7987021','ana@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('rodriguez', 'pinto', 'sonia', '2581478', 'irpavi', '76543210','sonia@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('sanchez', 'quiroz', 'roger', '4512012', 'llojeta', '71234560','roger@gmail.com', true, 1);
+INSERT INTO public.personas(paterno, materno, nombre, ci, direccion, telefono, email,estado, usr_id) VALUES ('sandoval', 'ruiz', 'juan rodrigo', '3450456', 'centro', '76544560','jrodrigo@gmail.com', true, 1);
+
+INSERT INTO public.users(usuario, password,estado, idrol, remember_token, usr_id) VALUES ('admin', '$2y$10$vQPWkshuj1tIJlW3OFTjkuX/.e3c3PPrBRKCxxSaXPNSLTd0YZARu', 'true', '1', '',1);
