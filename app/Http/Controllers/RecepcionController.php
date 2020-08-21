@@ -17,7 +17,7 @@ class RecepcionController extends Controller
             $recepcion = Recepcion::join('unidad_codigo','idunidadcod','=','unidad_codigo.id')
             ->join('unidad_solicitud','unidad_codigo.idunidad','=','unidad_solicitud.id')
             ->select('recepcion.id', 'recepcion.fecha_recepcion', 'recepcion.fecha_muestra', 'recepcion.codigo_cliente', 'recepcion.codigo_muestra', 'recepcion.codigo_lab', 'recepcion.idunidadcod',
-                    'recepcion.analito','recepcion.cantidad','recepcion.hora','recepcion.dilucion_tipo','recepcion.dilucion_nombre','recepcion.cliente','recepcion.observaciones','recepcion.usr_id','recepcion.estado',
+                    'recepcion.analito','recepcion.cantidad','recepcion.hora','recepcion.dilucion_nombre','recepcion.cliente','recepcion.observaciones','recepcion.usr_id','recepcion.estado',
                     'unidad_codigo.id as iduncod','unidad_codigo.idunidad', 'unidad_codigo.codigo', 'unidad_codigo.analito', 'unidad_solicitud.unidad' )
             ->orderBy('recepcion.id', 'desc')->paginate(10);
 
@@ -36,7 +36,7 @@ class RecepcionController extends Controller
         $filtro = $request->filtro; 
         $recepcion = Recepcion::where('estado','=','1')
         ->where('recepcion.codigo_cliente','=', $filtro)
-        ->select('recepcion.id', 'recepcion.codigo_muestra','recepcion.codigo_cliente', 'recepcion.codigo_lab','recepcion.dilucion_tipo', 'recepcion.dilucion_nombre')
+        ->select('recepcion.id', 'recepcion.codigo_muestra','recepcion.codigo_cliente', 'recepcion.codigo_lab', 'recepcion.dilucion_nombre')
         ->orderBy('recepcion.id','asc')->get();
         return['recepcion'=>$recepcion];
     }
@@ -44,7 +44,7 @@ class RecepcionController extends Controller
         $filtroId = $request->filtro; 
         $recepcion = Recepcion::where('estado','=','1')
         ->where('recepcion.id','=', $filtroId)
-        ->select('recepcion.id', 'recepcion.codigo_muestra','recepcion.codigo_cliente', 'recepcion.codigo_lab','recepcion.dilucion_tipo', 'recepcion.dilucion_nombre')
+        ->select('recepcion.id', 'recepcion.codigo_muestra','recepcion.codigo_cliente', 'recepcion.codigo_lab', 'recepcion.dilucion_nombre')
         ->orderBy('recepcion.id','asc')->get();
         return['recepcion'=>$recepcion];
     }
@@ -115,7 +115,6 @@ class RecepcionController extends Controller
         $recepcion->codigo_muestra = $request->codigo_muestra;
         $recepcion->codigo_lab = $request->codigo_lab;
         $recepcion->cantidad = $request->cantidad;
-        $recepcion->dilucion_tipo = $request->dilucion_tipo;
         $recepcion->dilucion_nombre = $request->dilucion_nombre;
         $recepcion->analito = $request->analito;
         $recepcion->cliente = $request->cliente;
@@ -124,7 +123,6 @@ class RecepcionController extends Controller
         $recepcion->estado = '1';
         //$recepcion->fecha = $request->fecha;
         $recepcion->save();
-      //  console.log('bjkbjkbjkjbk  hola');
     }
     public function update(Request $request)
     {
@@ -138,7 +136,6 @@ class RecepcionController extends Controller
         $recepcion->codigo_muestra = $request->codigo_muestra;
         $recepcion->codigo_lab = $request->codigo_lab;
         $recepcion->cantidad = $request->cantidad;
-        $recepcion->dilucion_tipo = $request->dilucion_tipo;
         $recepcion->dilucion_nombre = $request->dilucion_nombre;
         $recepcion->analito = $request->analito;
         $recepcion->cliente = $request->cliente;

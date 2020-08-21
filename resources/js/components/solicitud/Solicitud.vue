@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-group col-sm-3">
                         <label for="postal-code">Teléfono</label>
-                        <input class="form-control" v-model="telefono_unidad" type="integer" placeholder="Teléfono de referencia">
+                        <input class="form-control" v-model="telefono_unidad" type="number" placeholder="Teléfono de referencia">
                     </div>
                 </div>                    
                 <div class="row">
@@ -340,12 +340,13 @@
         <div class="col-sm-12" style="justify-content: center;">        
             <button type="button" class="btn btn-secondary" @click="cerrarModal()"><font color="white">Cancelar</font></button>
             <!--button type="button" class="btn btn-primary" ><font color="white">Guardar Datos</font></button-->
-            <b-button variant="info" class="btn btn-primary" @click="generarPDF()">PDF</b-button>
+            <!--b-button variant="info" class="btn btn-primary" @click="generarPDF()">PDF</b-button-->
             <b-button variant="info" class="btn btn-primary" @click="RegistrarSolicitud()">Guardar Datos</b-button>
         </div>
         
       </div>
     <!-- /.col-->
+    <p></p>
     </div>
     <!-- /.row-->
 
@@ -609,7 +610,7 @@
                idActualizar: -1,
                solicitud_id:0,
                datosInformacionSol: [],*/
-
+               arrayAnalitos:[],
               //revision
                personal_capacitado:'',
                materiales:'',
@@ -1122,11 +1123,93 @@
             //BD solicitud   .....
             //Ini **  *****************************
             //************************************** 
+            registrarNuevoAnalito(){              
+               console.log(this.arrayAnalitos,'arrayAnalitos');
+               let arrayA = [];
+               for (let i = 0; i < this.datosInformacionSol.length; i++) {
+               console.log(this.datosInformacionSol[i].analito,'analito then');
+                  let analito = this.datosInformacionSol[i].analito;
+                  let analitoRender = [];
+                  analito = typeof analito == 'string' ? JSON.parse(analito) : analito
+                  for (const nombre of analito) {
+                        analitoRender.push(nombre.nombre);
+                        //var arrayA = [];
+                        for (var j = 0; j < analitoRender.length; j++) {
+                            var igual=false;
+                            for (var k = 0; k < this.arrayAnalitos.length & !igual; k++) {
+                                console.log(analitoRender[j],'analitoRender[j]');
+                                console.log(this.arrayAnalitos[k]['nombre'],'this analitoRender[k][nombre]');
+                                if(analitoRender[j] == this.arrayAnalitos[k]['nombre'])
+                                        igual=true;
+                            }
+                            if(!igual)arrayA.push(analitoRender[j]);
+                        }                        
+                  }                                                                  
+                  console.log(analitoRender,'dataanalitor');                                  
+               } 
+               console.log(arrayA,'111111*****'); 
+                let verificaAnalito = 0;
+                
+                for (const analitoNuevo of arrayA) {
+                    //this.listarAnalitos();
+                    console.log(this.arrayAnalitos,'this.arrayanalitos');
+                    for (let i = 0; i < this.arrayAnalitos.length; i++) {
+                        if ( analitoNuevo == this.arrayAnalitos[i].nombre )   
+                            verificaAnalito = 1;                                          
+                    }
+                if (verificaAnalito == 0) {                               
+                            console.log(analitoNuevo,'analitoNuevo');
+                            axios.post('/analito/registrar',{
+                            'nombre': analitoNuevo,
+                            'usr_id':1,
+                            }).then(function (response) {                   
+                        console.log(response,'response nuevos regis');
+                        }).catch(function (error) {
+                                console.log(error);
+                        });
+                       
+                    }
+                }                    
+            },
+
+            RegistrarSolicitud(){
+                                         
+                //this.popToastReg();
+                if (this.validarSolicitudEnsayo()){   
+                    this.verificaError=1;
+                    this.popToastError();  
+                    console.log('entro*****1');                                     
+                    return;
+                }  
+                if (this.validarRevision()){
+                    this.verificaError=1;
+                    this.popToastError();
+                    console.log('entro*****2');
+                    return;
+                }
+                if (this.validarResultados()){
+                    this.verificaError=1;
+                    this.popToastError();
+                    console.log('entro*****3');
+                    return;
+                }
+                if (this.validarConformidad()){
+                    this.verificaError=1;
+                    this.popToastError();
+                    console.log('entro*****4');
+                    return;
+                }
+                this.registrarNuevoAnalito();
+                this.registrarUnidadSolicitante();
+                //this.listarUnidadSolicitante();
+                //this.registrarSolEnsayo();
+                console.log('registro ..  fin');
+              },
+            
             registrarUnidadSolicitante(){
                 /*if (this.validarUnidadSol()){
                     return;
-                }*/
-                
+                }*/                
                 let me = this;
                 axios.post('/solicitud/registrarUnidadSol',{
                     'unidad': this.unidad,
@@ -1173,11 +1256,7 @@
                         }).then(function (response) {
                             console.log(response,'r4esponse sol ensayo');
                             me.registrarInfSolicitud();
-                            /*me.registrarRevision();
-                            me.registrarResultado();
-                            me.registrarRecomendaciones();
-                            me.registrarConformidad();
-                           */ me.registraDatos=1;
+                            me.registraDatos=1;
                         }).catch(function (error) {
                             me.popToastError();
                             console.log(error,'e');
@@ -1191,39 +1270,8 @@
                 });
             },
            
-            RegistrarSolicitud(){
-                //this.popToastReg();
-                if (this.validarSolicitudEnsayo()){   
-                    this.verificaError=1;
-                    this.popToastError();  
-                    console.log('entro*****1');   
-                                  
-                    return;
-                }  
-                if (this.validarRevision()){
-                    this.verificaError=1;
-                    this.popToastError();
-                    console.log('entro*****2');
-                    return;
-                }
-                if (this.validarResultados()){
-                    this.verificaError=1;
-                    this.popToastError();
-                    console.log('entro*****3');
-                    return;
-                }
-                if (this.validarConformidad()){
-                    this.verificaError=1;
-                    this.popToastError();
-                    console.log('entro*****4');
-                    return;
-                }
-                this.registrarUnidadSolicitante();
-                //this.listarUnidadSolicitante();
-                //this.registrarSolEnsayo();
-                console.log('registro ..  fin');
-              },
             registrarInfSolicitud(){
+                
                 let me=this;
                 var url= '/solicitudSolEnsayo';
                 axios.get(url).then(function (response) {
@@ -1235,7 +1283,8 @@
                             me.idSolEnsayo = me.arraySolEnsayo[i].id;
                             console.log(me.arraySolEnsayo[i].nro_registro,'nro registro');
                             console.log(me.idSolEnsayo,'id solensayo');
-                            for (let i = 0; i < me.datosInformacionSol.length; i++) {                               
+                            for (let i = 0; i < me.datosInformacionSol.length; i++) {   
+                                console.log(me.datosInformacionSol[i].analito,'analitos');                            
                                 axios.post('/solicitud/registrarInfSolicitud',{
                                     'idsol_ensayo': me.idSolEnsayo,
                                     'cantidad' : me.datosInformacionSol[i].cantidad,
@@ -1245,7 +1294,9 @@
                                     'des_procedencia': me.datosInformacionSol[i].des_procedencia,
                                     'usr_id':1,
                                 }).then(function (response) {
-                                    console.log(response,'response inf solicitud');                                    
+                                    console.log(response,'response inf solicitud');
+                                    console.log(me.datosInformacionSol[i].analito,'analito then');                                    
+                                    console.log(me.datosInformacionSol[i].analito.length,'analito then 2');                                    
                                     me.registraDatos=1;
                                 }).catch(function (error) {
                                     console.log(error);
@@ -1258,7 +1309,7 @@
                                 me.registrarRecomendaciones();
                                 me.registrarConformidad();
                                 me.popToastReg();
-                                location.reload();
+                                
                             }
                         }                                                                       
                     }               
@@ -1353,12 +1404,25 @@
                 }).then(function (response) {
                     console.log(response,'response conformidad');
                    // me.listarsolicitud(1,'','codigo');
-                  // location.reload();
+                   location.reload();
                 }).catch(function (error) {
                     me.popToastError();
                     console.log(error);
                 });
             },
+
+            listarAnalitos (){
+                let me=this;
+                var url= '/analito';
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    me.arrayAnalitos = respuesta.analito.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+
 
             generarPDF(){
                 console.log(this.nro_registro,'12345678');
@@ -1438,7 +1502,7 @@
             mounted() {             
             //     ///php artisan serve --host=192.168.1.5
             this.listarSolNroRegistro();
-
+            this.listarAnalitos();
         }
     }
     

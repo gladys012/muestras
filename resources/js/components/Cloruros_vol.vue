@@ -151,12 +151,20 @@
                             </b-form-select> 
                             </b-form-group>
                          </div>
-                         <div class="form-group col-sm-4">
+                         <div class="form-group col-sm-3">
+                             <b-form-group id="input-group-2"  label="nombre dilución:" label-for="input-2" >                                                              
+                                <b-form-select v-model="idnom_dilucion" class="mb-3" required @change="obtNombreDilucion(idnom_dilucion)">
+                                    <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
+                                    <b-form-select-option v-for="dilucion in arrayDilucion" :key="dilucion.id" :value="dilucion.id" v-text="dilucion.nombre_dilucion"></b-form-select-option>
+                                </b-form-select> 
+                            </b-form-group>
+                         </div> 
+                         <!--div class="form-group col-sm-4"> idnom_dilucion arrayDilucion
                             <b-form-group id="input-group-3" label="Dilución:" label-for="input-2" >
                                 <b-form-input id="input-3" v-model="dilucion" disabled
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                         
+                         </div-->                         
                        </div>                    
                        <div class="row">
                           <div class="form-group col-sm-4">
@@ -164,7 +172,7 @@
                                 <b-form-input id="input-4" v-model="vol_muestra" placeholder="Vol. muestra" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div> 
+                         </div>
                          <div class="form-group col-sm-4">
                             <b-form-group id="input-group-5"  label="Vol. gastado:" label-for="input-5" >
                                 <b-form-input id="input-5" v-model="vol_gastado" placeholder=" Vol. gastado" required                            
@@ -236,6 +244,8 @@
                 v1i:'',
                 resul:0,
                 pesoClor:'',
+                idnom_dilucion:0,
+                arrayDilucion:[], 
 
                 modal : 0,                
                 tipoAccion : 0,

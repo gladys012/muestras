@@ -144,7 +144,7 @@
                     </div>
                     <div class="form-group col-sm-3">
                         <label for="postal-code">Teléfono</label>
-                        <input class="form-control" v-model="telefono_unidad" type="text" placeholder="Teléfono de referencia">
+                        <input class="form-control" v-model="telefono_unidad" type="number" placeholder="Teléfono de referencia">
                     </div>
                 </div>                    
                  <div class="row">

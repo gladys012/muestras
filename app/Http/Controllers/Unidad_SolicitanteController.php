@@ -76,7 +76,7 @@ class Unidad_SolicitanteController extends Controller
      public function solPdf(Request $request){          
         $nro_reg = $request->nro_reg;                     
      
-        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=',36)
+        $unidad_solicitante = Unidad_Solicitante::where('solicitud_ensayo.nro_registro','=',1)
         
         ->where('solicitud_ensayo.estado','=','1')
         ->where('unidad_solicitud.estado','=','1')
@@ -93,7 +93,10 @@ class Unidad_SolicitanteController extends Controller
                   'personasR.paterno as paternoR','personasE.paterno as paternoE','personasR.materno as maternoR',
                   'personasE.materno as maternoE','unidad_solicitud.id as idUnidad_sol','personasR.id as idResponsable',
                   'personasE.id as idEncargado', 'solicitud_ensayo.id as idSol_ensayo','solicitud_ensayo.nro_registro','solicitud_ensayo.fecha_registro','solicitud_ensayo.idunidad',
-                  'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito','revision.id as idRevision','resultado.id as idResultado',
+                  'informacion_solicitud.id as idInforsol', 'informacion_solicitud.cantidad','informacion_solicitud.flujo', 'informacion_solicitud.matriz',
+                  'informacion_solicitud.des_procedencia', 'informacion_solicitud.analito as analito','revision.id as idRevision','revision.personal_capacitado','revision.disponibilidad',
+                  'revision.materiales','revision.equipos','revision.instalaciones','revision.metodo','revision.aclaraciones','revision.observaciones as observacionesRev','revision.trabajo_aceptado',
+                  'resultado.id as idResultado',
                   'recomendaciones.id as idRecomendaciones','conformidad.id as idConformidad')
                    ->orderBy('unidad_solicitud.id','asc')->get();
         $pdf = \PDF::loadView('pdf.solicitudpdf',['unidad_solicitante'=>$unidad_solicitante]);  //  ->setPaper('a4', 'portrait');
@@ -115,7 +118,7 @@ class Unidad_SolicitanteController extends Controller
         ->where(function ($query)use ($ci) { 
         $query->where('personasR.ci','like','%'. $ci . '%') 
             ->orWhere('personasE.ci','like','%'. $ci . '%');})        
-        ->where('solicitud_ensayo.nro_registro','like','%'. $nro_reg)
+        ->where('solicitud_ensayo.nro_registro','=', $nro_reg)
         
         ->where('solicitud_ensayo.estado','=','1')
         ->where('unidad_solicitud.estado','=','1')
@@ -135,7 +138,7 @@ class Unidad_SolicitanteController extends Controller
                   'personasE.id as idEncargado','solicitud_ensayo.id as idSol_ensayo','solicitud_ensayo.nro_registro','solicitud_ensayo.fecha_registro','solicitud_ensayo.idunidad',
                   'informacion_solicitud.id as idInforsol', 'informacion_solicitud.analito as analito', 'revision.id as idRevision','resultado.id as idResultado',
                   'recomendaciones.id as idRecomendaciones','conformidad.id as idConformidad')
-                   ->orderBy('unidad_solicitud.id','asc')->get();
+                  ->distinct('nro_registro')->get();
         return['unidad_solicitante'=>$unidad_solicitante];
     }
 

@@ -81,7 +81,7 @@
                         <template v-slot:head(codigo_muestra)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>  
-                        <template v-slot:head(dilucion_tipo)="data">
+                        <template v-slot:head(dilucion_nombre)="data">
                             <span class="text-primary">{{ data.label }}</span>
                         </template>   
                         <template v-slot:head(acciones)="data">
@@ -190,47 +190,15 @@
                                 ></datepicker>
                             </b-form-group>
                          </div>                         
-                         <!--div class="form-group col-sm-3">                           
-                            <div class="container">
-                                <div class="box">
-                                    <div class="checkbox-group">
-                                    <input id="checkboxName1" type="checkbox" v-model="liquido" @change="checkBoxSol(0)"/>
-                                    <label for="checkboxName1" class="ta">Líquido</label>
-                                    <input id="checkboxName2" type="checkbox" v-model="solido" @change="checkBoxSol(1)"/>
-                                    <label for="checkboxName2" class="ta">Sólido</label> 
-                                    </div>
-                                </div>
-                            </div> 
-                         </div-->
-                         <!--div class="form-group col-sm-3">
-                            <b-form-group id="input-group-4"  label="Cantidad:" label-for="input-4" >
-                                <b-form-input id="input-4" type="number" v-model="cantidad" placeholder="Cantidad" required                            
-                                ></b-form-input>
-                            </b-form-group>
-                         </div-->
                          <div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Cod. muestra:" label-for="input-4" >
                                 <b-form-input id="input-4" v-model="codigo_muestra" placeholder="Cod. muestra" required                            
                                 ></b-form-input>
                             </b-form-group>
-                         </div>                                                                                                                                                                                                       
-                            <!--div class="form-group col-sm-3">                           
-                                <div class="container">
-                                    <div class="box">
-                                        <div class="checkbox-group">
-                                        <input id="checkboxName3" type="checkbox" v-model="cristales" @click="checkDilucion(cristales1)"/>
-                                        <label for="checkboxName3" class="ta">Cristales</label>
-                                        <input id="checkboxName4" type="checkbox" v-model="salmueras" onChange="checkDilucion(salmueras)"/>
-                                        <label for="checkboxName4" class="ta">Salmueras</label> 
-                                        <input id="checkboxName5" type="checkbox" v-model="aguas" @change="checkDilucion(aguas)"/>
-                                        <label for="checkboxName5" class="ta">Aguas</label> 
-                                        </div>
-                                    </div>
-                                </div> 
-                         </div-->
+                         </div>                                                                                                                                                                                                                                  
                          <div class="form-group col-sm-3">
                              <b-form-group id="input-group-2"  label="Tipo dilución:" label-for="input-2" >                                                              
-                                <b-form-select v-model="dilucion_tipo" class="mb-3" required @change="checkDilucion(dilucion_tipo)">
+                                <b-form-select v-model="dilucion_nombre" class="mb-3" required @change="checkDilucion(dilucion_tipo)">
                                     <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
                                     <b-form-select-option value="cristales" >Cristales</b-form-select-option>
                                     <b-form-select-option value="salmueras" >Salmueras</b-form-select-option>
@@ -238,14 +206,14 @@
                                 </b-form-select> 
                             </b-form-group>
                          </div> 
-                         <div class="form-group col-sm-3">
+                         <!--div class="form-group col-sm-3">
                              <b-form-group id="input-group-2"  label="nombre dilución:" label-for="input-2" >                                                              
                                 <b-form-select v-model="idnom_dilucion" class="mb-3" required @change="obtNombreDilucion(idnom_dilucion)">
                                     <b-form-select-option value="0" disabled>-- Seleccionar --</b-form-select-option>
                                     <b-form-select-option v-for="dilucion in arrayDilucion" :key="dilucion.id" :value="dilucion.id" v-text="dilucion.nombre_dilucion"></b-form-select-option>
                                 </b-form-select> 
                             </b-form-group>
-                         </div>                          
+                         </div-->                          
                         </div> 
                        <div class="row">
                         <div class="form-group col-sm-9">
@@ -324,8 +292,7 @@
                                     </b-dropdown>
                                     </template>
                                 </b-form-tags>
-                                </b-form-group>
-                            
+                                </b-form-group>                            
                         </div>
                         <div class="form-group col-sm-3">
                             <b-form-group id="input-group-4"  label="Código laboratorio:" label-for="input-4" >
@@ -440,7 +407,7 @@
                   { key: 'fecha_muestra', label: 'Fecha muestra', sortable: true, sortDirection: 'desc' },
                   { key: 'codigo_lab', label: 'Cod. laboratorio', sortable: true, class: 'text-justify' },                 
                   { key: 'codigo_muestra', label: 'Cod. muestra', sortable: true },                 
-                  { key: 'dilucion_tipo', label: 'Dilución', sortable: true },                 
+                  { key: 'dilucion_nombre', label: 'Dilución', sortable: true },                 
                   { key: 'acciones', label: 'Acciones',  sortable: false}
                 ],
                 perPage: 10,
